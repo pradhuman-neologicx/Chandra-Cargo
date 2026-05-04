@@ -1,0 +1,292 @@
+<div class="container-fluid salary-listing-container mb-4">
+  <!-- Header -->
+  <div class="d-md-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h1 class="page-title">Salary Management</h1>
+      <p class="page-subtitle">
+        Manage and review employee salary details across all departments.
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-export-report" (click)="exportCSV()">
+        <i class="fa-solid fa-download me-2"></i>Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row summary-cards mb-4">
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Total Payroll</p>
+            <h2 class="summary-value">{{ totalPayroll }}</h2>
+          </div>
+          <div class="summary-icon icon-blue">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Total Employees</p>
+            <h2 class="summary-value">{{ totalEmployees }}</h2>
+          </div>
+          <div class="summary-icon icon-purple">
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Paid</p>
+            <h2 class="summary-value">{{ paidCount }}</h2>
+          </div>
+          <div class="summary-icon icon-green">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Pending</p>
+            <h2 class="summary-value">{{ pendingCount }}</h2>
+          </div>
+          <div class="summary-icon icon-yellow">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Table Card -->
+  <div class="card border-0 salary-card">
+    <!-- Filters Row -->
+    <div class="filters-row d-flex flex-wrap align-items-center gap-3 p-3 pb-0">
+      <!-- Search -->
+      <div class="filter-search flex-grow-1">
+        <form [formGroup]="searchbarform" class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            class="form-control search-input"
+            placeholder="Search by name, ID, or role..."
+            formControlName="searchbar"
+            (keyup.enter)="searchfun()"
+          />
+          <button
+            class="btn btn-link reset-btn"
+            *ngIf="showreset"
+            (click)="resetsearchbar()"
+          >
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Department -->
+      <div class="filter-item">
+        <div class="filter-select-wrapper">
+          <select
+            class="form-select filter-select"
+            (change)="onDepartmentFilterChange($event)"
+          >
+            <option value="">All Departments</option>
+            <option *ngFor="let dept of departmentList" [value]="dept.id">
+              {{ dept.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Month -->
+      <div class="filter-item">
+        <div class="filter-select-wrapper">
+          <select
+            class="form-select filter-select"
+            (change)="onMonthChange($event)"
+          >
+            <option value="">Select Month</option>
+            <option *ngFor="let month of monthList" [value]="month">
+              {{ month }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table View for lg+ -->
+    <div class="table-responsive p-3">
+      <div class="d-none d-lg-block">
+        <table class="table salary-table mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>EMPLOYEE</th>
+              <th>ROLE & DEPT</th>
+              <th>NET SALARY</th>
+              <th>LAST PAID</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let emp of salaryData
+                  | paginate
+                    : {
+                        itemsPerPage:
+                          tableSize != 'all' ? tableSize : totalRecords,
+                        currentPage: page,
+                        totalItems: totalRecords,
+                      };
+                index as i
+              "
+            >
+              <td>
+                <span class="emp-id-text">{{ emp.empId }}</span>
+              </td>
+              <td>
+                <div class="employee-info">
+                  <div
+                    class="employee-avatar"
+                    [style.background-color]="emp.avatarColor"
+                  >
+                    {{ emp.initials }}
+                  </div>
+                  <div class="employee-details">
+                    <span class="employee-name">{{ emp.name }}</span>
+                    <span class="employee-email">{{ emp.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="role-dept-cell">
+                  <span class="role-text">{{ emp.role }}</span>
+                  <span class="dept-text">{{ emp.department }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="table-text fw-semibold">{{ emp.netSalary }}</span>
+              </td>
+              <td>
+                <span class="table-text">{{ emp.lastPaid }}</span>
+              </td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="getStatusClass(emp.status)"
+                >
+                  <span class="status-dot"></span>
+                  {{ emp.status }}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-view-action"
+                  (click)="viewPayslip(emp)"
+                  title="View Payslip"
+                >
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card View for below lg -->
+      <div class="d-lg-none">
+        <div
+          *ngFor="
+            let emp of salaryData
+              | paginate
+                : {
+                    itemsPerPage: tableSize != 'all' ? tableSize : totalRecords,
+                    currentPage: page,
+                    totalItems: totalRecords,
+                  };
+            index as i
+          "
+          class="card mb-3 mobile-salary-card"
+        >
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div
+                class="employee-avatar me-3"
+                [style.background-color]="emp.avatarColor"
+              >
+                {{ emp.initials }}
+              </div>
+              <div class="flex-grow-1">
+                <div class="employee-name">{{ emp.name }}</div>
+                <div class="employee-email">{{ emp.email }}</div>
+              </div>
+              <span
+                class="status-badge ms-auto"
+                [ngClass]="getStatusClass(emp.status)"
+              >
+                <span class="status-dot"></span>
+                {{ emp.status }}
+              </span>
+            </div>
+            <div class="row mobile-details">
+              <div class="col-6 mb-2"><strong>ID:</strong> {{ emp.empId }}</div>
+              <div class="col-6 mb-2">
+                <strong>Role:</strong> {{ emp.role }}
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Dept:</strong> {{ emp.department }}
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Net Salary:</strong>
+                <span class="fw-semibold">{{ emp.netSalary }}</span>
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Last Paid:</strong> {{ emp.lastPaid }}
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+              <button
+                class="btn btn-view-action-mobile"
+                (click)="viewPayslip(emp)"
+              >
+                <i class="fa-solid fa-chevron-right text-primary"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="d-md-flex justify-content-between align-items-center px-3 pb-3 pagination-row"
+    >
+      <span class="showing-text">
+        Showing
+        {{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }} to
+        {{ tableSize * page <= totalRecords ? tableSize * page : totalRecords }}
+        of {{ totalRecords }} results
+      </span>
+      <pagination-controls
+        previousLabel="Previous"
+        nextLabel="Next"
+        [responsive]="true"
+        (pageChange)="onTableDataChange($event)"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,327 @@
+<div class="container-fluid attendance-history-container mb-4">
+  <!-- Header -->
+  <div class="d-md-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h1 class="page-title">Attendance History</h1>
+      <p class="page-subtitle">
+        Track employee check-ins, work hours, and adherence.
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <!-- <button class="btn btn-outline-schedule">
+        <i class="fa-regular fa-calendar me-2"></i>Schedule
+      </button> -->
+      <button class="btn btn-export-report">
+        <i class="fa-solid fa-download me-2"></i>Export Report
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row summary-cards mb-4">
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Total Employees</p>
+            <h2 class="summary-value">{{ totalEmployees }}</h2>
+          </div>
+          <div class="summary-icon icon-blue">
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Present Today</p>
+            <h2 class="summary-value">{{ presentToday }}</h2>
+          </div>
+          <div class="summary-icon icon-green">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Late Arrivals</p>
+            <h2 class="summary-value">{{ lateArrivals }}</h2>
+          </div>
+          <div class="summary-icon icon-yellow">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <p class="summary-label">Absent</p>
+            <h2 class="summary-value">{{ absentCount }}</h2>
+          </div>
+          <div class="summary-icon icon-red">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Table Card -->
+  <div class="card border-0 attendance-card">
+    <!-- Filters Row -->
+    <div class="filters-row d-flex flex-wrap align-items-center gap-3 p-3 pb-0">
+      <!-- Search -->
+      <div class="filter-search flex-grow-1">
+        <form [formGroup]="searchbarform" class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            class="form-control search-input"
+            placeholder="Search employee name or ID..."
+            formControlName="searchbar"
+            (keyup.enter)="searchfun()"
+          />
+          <button
+            class="btn btn-link reset-btn"
+            *ngIf="showreset"
+            (click)="resetsearchbar()"
+          >
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Date Range -->
+      <div class="filter-item">
+        <div class="filter-select-wrapper">
+          <select
+            class="form-select filter-select"
+            (change)="onDateRangeChange($event)"
+          >
+            <option value="this_week">This Week</option>
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="last_week">Last Week</option>
+            <option value="this_month">This Month</option>
+            <option value="last_month">Last Month</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Department -->
+      <div class="filter-item">
+        <div class="filter-select-wrapper">
+          <select
+            class="form-select filter-select"
+            (change)="onDepartmentFilterChange($event)"
+          >
+            <option value="">All Departments</option>
+            <option *ngFor="let dept of departmentList" [value]="dept.id">
+              {{ dept.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="filter-item">
+        <div class="filter-select-wrapper">
+          <select
+            class="form-select filter-select"
+            (change)="onStatusFilterChange($event)"
+          >
+            <option value="">Status: All</option>
+            <option value="On Time">On Time</option>
+            <option value="Late">Late</option>
+            <option value="Absent">Absent</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table View for lg+ -->
+    <div class="table-responsive p-3">
+      <div class="d-none d-lg-block">
+        <table class="table attendance-table mb-0">
+          <thead>
+            <tr>
+              <th>EMPLOYEE</th>
+              <th>DATE</th>
+              <th>DEPARTMENT</th>
+              <th>CHECK IN</th>
+              <th>CHECK OUT</th>
+              <th>WORK HOURS</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let record of attendanceData
+                  | paginate
+                    : {
+                        itemsPerPage:
+                          tableSize != 'all' ? tableSize : totalRecords,
+                        currentPage: page,
+                        totalItems: totalRecords,
+                      };
+                index as i
+              "
+            >
+              <td>
+                <div class="employee-info">
+                  <div
+                    class="employee-avatar"
+                    [style.background-color]="record.avatarColor"
+                  >
+                    {{ record.initials }}
+                  </div>
+                  <div class="employee-details">
+                    <span class="employee-name">{{ record.name }}</span>
+                    <span class="employee-id">ID: {{ record.empId }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="table-text">{{ record.date }}</span>
+              </td>
+              <td>
+                <a class="department-link">{{ record.department }}</a>
+              </td>
+              <td>
+                <span class="table-text">{{ record.clockIn }}</span>
+              </td>
+              <td>
+                <span class="table-text">{{ record.clockOut }}</span>
+              </td>
+              <td>
+                <span class="table-text work-hours">{{
+                  record.workHours
+                }}</span>
+              </td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="getStatusClass(record.status)"
+                >
+                  <span class="status-dot"></span>
+                  {{ record.status }}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-view-action me-2"
+                  (click)="viewRecord(record)"
+                  title="View Details"
+                >
+                  <i class="fa-solid fa-eye text-primary"></i>
+                </button>
+                <!-- <button
+                  class="btn btn-edit-action"
+                  (click)="editRecord(record)"
+                  title="Edit Record"
+                >
+                  <i class="fa-solid fa-pen-to-square text-success"></i>
+                </button> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card View for below lg -->
+      <div class="d-lg-none">
+        <div
+          *ngFor="
+            let record of attendanceData
+              | paginate
+                : {
+                    itemsPerPage: tableSize != 'all' ? tableSize : totalRecords,
+                    currentPage: page,
+                    totalItems: totalRecords,
+                  };
+            index as i
+          "
+          class="card mb-3 mobile-attendance-card"
+        >
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div
+                class="employee-avatar me-3"
+                [style.background-color]="record.avatarColor"
+              >
+                {{ record.initials }}
+              </div>
+              <div>
+                <div class="employee-name">{{ record.name }}</div>
+                <div class="employee-id">ID: {{ record.empId }}</div>
+              </div>
+              <span
+                class="status-badge ms-auto"
+                [ngClass]="getStatusClass(record.status)"
+              >
+                <span class="status-dot"></span>
+                {{ record.status }}
+              </span>
+              <button
+                class="btn btn-view-action-mobile ms-2"
+                (click)="viewRecord(record)"
+              >
+                <i class="fa-solid fa-eye text-primary"></i>
+              </button>
+              <!-- <button
+                class="btn btn-view-action-mobile ms-2"
+                (click)="editRecord(record)"
+              >
+                <i class="fa-solid fa-pen-to-square text-success"></i>
+              </button> -->
+            </div>
+            <div class="row mobile-details">
+              <div class="col-6 mb-2">
+                <strong>Date:</strong> {{ record.date }}
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Department:</strong> {{ record.department }}
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Check-in:</strong> {{ record.clockIn }}
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Check-out:</strong> {{ record.clockOut }}
+              </div>
+              <div class="col-6 mb-2">
+                <strong>Work Hours:</strong> {{ record.workHours }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="d-md-flex justify-content-between align-items-center px-3 pb-3 pagination-row"
+    >
+      <span class="showing-text">
+        Showing
+        {{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }} to
+        {{ tableSize * page <= totalRecords ? tableSize * page : totalRecords }}
+        of {{ totalRecords }} results
+      </span>
+      <pagination-controls
+        previousLabel="Previous"
+        nextLabel="Next"
+        [responsive]="true"
+        (pageChange)="onTableDataChange($event)"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>

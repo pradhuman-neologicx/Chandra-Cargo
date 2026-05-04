@@ -5,3 +5,11 @@ p {
 .table-responsive-inner {
     overflow-x: auto;
 }
+
+@media screen and (max-width: 1024px) {
+    .mobile_menu {
+        position: absolute;
+        right: 0;
+        width: auto;
+    }
+}

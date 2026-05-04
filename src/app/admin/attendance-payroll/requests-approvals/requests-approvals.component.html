@@ -1,0 +1,328 @@
+<div class="container-fluid requests-container mb-4">
+  <!-- Header -->
+  <div class="d-md-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h1 class="page-title">Requests & Approvals</h1>
+      <p class="page-subtitle">
+        Review and manage pending leave requests and attendance manual<br />
+        adjustments from the fleet and operations staff.
+      </p>
+    </div>
+    <div class="d-flex gap-2 mt-md-0 mt-3">
+      <!-- <button class="btn btn-export" (click)="exportCSV()">
+        <i class="fa-solid fa-download me-2"></i>Export CSV
+      </button> -->
+      <button class="btn btn-bulk-approve" (click)="bulkApprove()" *ngIf="activeTab === 'leave'">
+        <i class="fa-solid fa-check-double me-2"></i>Bulk Approve
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-container mb-3">
+    <div class="tabs-row">
+      <button
+        class="tab-btn"
+        [ngClass]="{ active: activeTab === 'leave' }"
+        (click)="switchTab('leave')"
+      >
+        Leave Management
+        <span class="tab-count">{{ leaveCount }}</span>
+      </button>
+      <button
+        class="tab-btn"
+        [ngClass]="{ active: activeTab === 'attendance' }"
+        (click)="switchTab('attendance')"
+      >
+        Attendance Corrections
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Row -->
+  <div
+    class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3"
+    *ngIf="activeTab === 'leave'"
+  >
+    <div class="d-flex gap-2">
+      <div class="filter-select-wrapper">
+        <select
+          class="form-select filter-select"
+          (change)="onStatusFilterChange($event)"
+        >
+          <option value="Pending">Status: Pending</option>
+          <option value="">Status: All</option>
+          <option value="Approved">Status: Approved</option>
+          <option value="Rejected">Status: Rejected</option>
+        </select>
+      </div>
+      <div class="filter-select-wrapper">
+        <select
+          class="form-select filter-select"
+          (change)="onTypeFilterChange($event)"
+        >
+          <option value="">Type: All</option>
+          <option value="Casual Leave">Casual Leave</option>
+          <option value="Sick Leave">Sick Leave</option>
+          <option value="Vacation">Vacation</option>
+        </select>
+      </div>
+    </div>
+    <span class="showing-text">
+      Showing
+      <strong
+        >{{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }}-{{
+          tableSize * page <= totalRecords ? tableSize * page : totalRecords
+        }}</strong
+      >
+      of {{ totalRecords }} requests
+    </span>
+  </div>
+
+  <!-- Table Card -->
+  <div class="card table-card">
+    <!-- Desktop Table -->
+    <div class="table-responsive d-none d-lg-block">
+      <table class="table requests-table mb-0">
+        <thead>
+          <tr>
+            <th class="th-checkbox" *ngIf="activeTab === 'leave'">
+              <input
+                type="checkbox"
+                class="form-check-input custom-checkbox"
+                [checked]="selectAll"
+                (change)="toggleSelectAll()"
+              />
+            </th>
+            <th>EMPLOYEE</th>
+            <th>REQUEST TYPE</th>
+            <th>DATE RANGE</th>
+            <th>REASON</th>
+            <th *ngIf="activeTab === 'leave'">ATTACHMENT/PROOF</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of currentData
+                | paginate
+                  : {
+                      itemsPerPage:
+                        tableSize != 'all' ? tableSize : totalRecords,
+                      currentPage: page,
+                      totalItems: totalRecords,
+                    };
+              index as i
+            "
+          >
+            <td class="td-checkbox" *ngIf="activeTab === 'leave'">
+              <input
+                type="checkbox"
+                class="form-check-input custom-checkbox"
+                [checked]="item.selected"
+                (change)="toggleSelect(item)"
+              />
+            </td>
+            <td>
+              <div class="employee-info">
+                <div
+                  class="employee-avatar"
+                  [style.background-color]="item.avatarColor"
+                >
+                  {{ item.initials }}
+                </div>
+                <div class="employee-details">
+                  <span class="employee-name">{{ item.name }}</span>
+                  <span class="employee-role">{{ item.role }}</span>
+                  <span class="employee-id" *ngIf="item.empId">{{
+                    item.empId
+                  }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="table-text">{{ item.requestType }}</span>
+            </td>
+            <td>
+              <div class="date-range-cell">
+                <span class="date-text"
+                  >{{ item.dateFrom }} -<br />{{ item.dateTo }}</span
+                >
+                <span class="duration-badge">{{ item.duration }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="table-text reason-text">{{ item.reason }}</span>
+            </td>
+            <td *ngIf="activeTab === 'leave'">
+              <div class="attachment-cell" *ngIf="item.attachment">
+                <i
+                  [class]="item.attachmentIcon"
+                  [style.color]="item.attachmentColor"
+                  class="me-2"
+                ></i>
+                <a class="attachment-link">{{ item.attachment }}</a>
+              </div>
+              <span class="no-document" *ngIf="!item.attachment"
+                ><em>No document</em></span
+              >
+            </td>
+            <td>
+              <span
+                class="status-badge"
+                [ngClass]="getStatusClass(item.status)"
+              >
+                <span class="status-dot"></span>
+                {{ item.status }}
+              </span>
+            </td>
+            <td>
+              <!-- Action for Attendance Approvals -->
+              <div class="d-flex gap-2" *ngIf="activeTab === 'attendance'">
+                <button
+                  class="btn btn-action-approve"
+                  (click)="approveRequest(item)"
+                  title="Approve"
+                >
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button
+                  class="btn btn-action-reject"
+                  (click)="rejectRequest(item)"
+                  title="Reject"
+                >
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+
+              <!-- Action for Leave Management -->
+              <button
+                *ngIf="activeTab === 'leave'"
+                class="btn btn-view-action-text"
+                [routerLink]="[
+                  '/admin/attendance-payroll/request-details',
+                  item.id,
+                ]"
+              >
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Card View -->
+    <div class="d-lg-none p-3">
+      <div
+        *ngFor="
+          let item of currentData
+            | paginate
+              : {
+                  itemsPerPage: tableSize != 'all' ? tableSize : totalRecords,
+                  currentPage: page,
+                  totalItems: totalRecords,
+                };
+          index as i
+        "
+        class="mobile-request-card mb-3"
+      >
+        <div class="d-flex align-items-center mb-3">
+          <input
+            *ngIf="activeTab === 'leave'"
+            type="checkbox"
+            class="form-check-input custom-checkbox me-3"
+            [checked]="item.selected"
+            (change)="toggleSelect(item)"
+          />
+          <div
+            class="employee-avatar me-3"
+            [style.background-color]="item.avatarColor"
+          >
+            {{ item.initials }}
+          </div>
+          <div class="flex-grow-1">
+            <div class="employee-name">{{ item.name }}</div>
+            <div class="employee-role">
+              {{ item.role }}
+              <span *ngIf="item.empId"> {{ item.empId }}</span>
+            </div>
+          </div>
+          <span class="status-badge" [ngClass]="getStatusClass(item.status)">
+            <span class="status-dot"></span>
+            {{ item.status }}
+          </span>
+        </div>
+        <div class="row mobile-details">
+          <div class="col-6 mb-2">
+            <strong>Type:</strong> {{ item.requestType }}
+          </div>
+          <div class="col-6 mb-2">
+            <strong>Dates:</strong> {{ item.dateFrom }} - {{ item.dateTo }}
+          </div>
+          <div class="col-6 mb-2">
+            <strong>Duration:</strong> {{ item.duration }}
+          </div>
+          <div class="col-6 mb-2">
+            <strong>Reason:</strong> {{ item.reason }}
+          </div>
+          <div class="col-12 mb-2" *ngIf="activeTab === 'leave' && item.attachment">
+            <strong>Attachment:</strong>
+            <a class="attachment-link ms-1">{{ item.attachment }}</a>
+          </div>
+          <div class="col-12 mt-2">
+              <!-- Action for Attendance Approvals -->
+              <div class="d-flex gap-2" *ngIf="activeTab === 'attendance'">
+                <button
+                  class="btn btn-action-approve w-50"
+                  (click)="approveRequest(item)"
+                >
+                  <i class="fa-solid fa-check me-2"></i>Approve
+                </button>
+                <button
+                  class="btn btn-action-reject w-50"
+                  (click)="rejectRequest(item)"
+                >
+                  <i class="fa-solid fa-xmark me-2"></i>Reject
+                </button>
+              </div>
+
+              <!-- Action for Leave Management -->
+              <button
+                *ngIf="activeTab === 'leave'"
+                class="btn btn-view-action-text w-100"
+                [routerLink]="[
+                  '/admin/attendance-payroll/request-details',
+                  item.id,
+                ]"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+      <!-- Pagination -->
+      <div
+        class="d-md-flex justify-content-between align-items-center px-3 pb-3 pagination-row"
+      >
+        <span class="showing-text">
+          Showing
+          {{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }} to
+          {{
+            tableSize * page <= totalRecords ? tableSize * page : totalRecords
+          }}
+          of {{ totalRecords }} results
+        </span>
+        <pagination-controls
+          previousLabel="Previous"
+          nextLabel="Next"
+          [responsive]="true"
+          (pageChange)="onTableDataChange($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

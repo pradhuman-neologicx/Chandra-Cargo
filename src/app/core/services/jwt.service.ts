@@ -77,7 +77,7 @@ export class JwtService {
     return window.localStorage['panel_user_id'];
   }
 
-  savepanelUserId(userid: Number) {
+  savepanelUserId(userid: any) {
     window.localStorage['panel_user_id'] = userid;
   }
   getadminame(): String {

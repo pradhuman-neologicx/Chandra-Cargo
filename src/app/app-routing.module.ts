@@ -7,21 +7,31 @@ import { SigninComponent } from './admin/loginpages/signin/signin.component';
 import { LoginpagesComponent } from './admin/loginpages/loginpages.component';
 import { OtpComponent } from './admin/loginpages/otp/otp.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
-import { TestMasterComponent } from './admin/test-master/test-master.component';
 import { StaffComponent } from './admin/user-management/staff/staff.component';
+import { ViewProfileComponent } from './admin/user-management/view-profile/view-profile.component';
+import { AttendanceHistoryComponent } from './admin/attendance-payroll/attendance-history/attendance-history.component';
 
 import { AuthGuard } from './core/auth/auth-guard';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
-import { TestManagementComponent } from './admin/test-management/test-management.component';
-import { CreateTestComponent } from './admin/test-management/create-test/create-test.component';
 import { ReportComponent } from './admin/report/report.component';
-import { TestResultsComponent } from './admin/test-results/test-results.component';
-import { EquipmentStatusComponent } from './admin/equipment-status/equipment-status.component';
-import { AccountManagementComponent } from './admin/account-management/account-management.component';
 import { MastersComponent } from './admin/masters/masters.component';
-import { MaterialComponent } from './admin/masters/material/material.component';
-import { EngineerTestManagementComponent } from './admin/engineer-test-management/engineer-test-management.component';
-import { UpdateTestComponent } from './admin/test-management/update-test/update-test.component';
+import { DepartmentComponent } from './admin/masters/department/department.component';
+import { AttendancePayrollComponent } from './admin/attendance-payroll/attendance-payroll.component';
+import { AttendanceMonitorComponent } from './admin/attendance-payroll/attendance-monitor/attendance-monitor.component';
+import { RequestsApprovalsComponent } from './admin/attendance-payroll/requests-approvals/requests-approvals.component';
+import { RequestDetailsComponent } from './admin/attendance-payroll/request-details/request-details.component';
+import { PayrollGeneratorComponent } from './admin/attendance-payroll/payroll-generator/payroll-generator.component';
+import { SalarySlipComponent } from './admin/attendance-payroll/salary-slip/salary-slip.component';
+import { DesignationComponent } from './admin/masters/designation/designation.component';
+import { BranchComponent } from './admin/masters/branch/branch.component';
+import { AttendanceDetailComponent } from './admin/attendance-payroll/attendance-detail/attendance-detail.component';
+import { SalaryManagementComponent } from './admin/salary-management/salary-management.component';
+import { SalaryListingComponent } from './admin/salary-management/salary-listing/salary-listing.component';
+import { PayslipViewComponent } from './admin/salary-management/payslip-view/payslip-view.component';
+import { VehicleManufacturerComponent } from './admin/masters/vehicle-manufacturer/vehicle-manufacturer.component';
+import { VehicleModelComponent } from './admin/masters/vehicle-model/vehicle-model.component';
+import { VehicleManagementComponent } from './admin/vehicle-management/vehicle-management.component';
+import { VehicleMaintenanceComponent } from './admin/vehicle-maintenance/vehicle-maintenance.component';
 
 const routes: Routes = [
   {
@@ -62,61 +72,106 @@ const routes: Routes = [
             path: 'staff',
             component: StaffComponent,
           },
+          {
+            path: 'view-profile/:id',
+            component: ViewProfileComponent,
+          },
         ],
       },
 
       {
-        path: 'test-configuration',
-        component: TestMasterComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'engineer',
-        component: EngineerTestManagementComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'test-management',
-        component: TestManagementComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'create-test',
-        component: CreateTestComponent,
-      },
-      {
-        path: 'update-test/:id',
-        component: UpdateTestComponent,
-      },
-      {
         path: 'report',
         component: ReportComponent,
-      },
-      {
-        path: 'test-result',
-        component: TestResultsComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'equipment',
-        component: EquipmentStatusComponent,
-      },
-      {
-        path: 'accounts',
-        component: AccountManagementComponent,
-        canActivate: [AuthGuard],
       },
       {
         path: 'master',
         component: MastersComponent,
         canActivate: [AuthGuard],
         children: [
-          { path: '', redirectTo: 'category', pathMatch: 'full' },
+          { path: '', redirectTo: 'department', pathMatch: 'full' },
           {
-            path: 'material',
-            component: MaterialComponent,
+            path: 'department',
+            component: DepartmentComponent,
+          },
+          {
+            path: 'designation',
+            component: DesignationComponent,
+          },
+          {
+            path: 'branch',
+            component: BranchComponent,
+          },
+          {
+            path: 'vehicle-manufacturer',
+            component: VehicleManufacturerComponent,
+          },
+          {
+            path: 'vehicle-model',
+            component: VehicleModelComponent,
           },
         ],
+      },
+      {
+        path: 'attendance-payroll',
+        component: AttendancePayrollComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: '', redirectTo: 'attendance-monitor', pathMatch: 'full' },
+          {
+            path: 'attendance-monitor',
+            component: AttendanceMonitorComponent,
+          },
+          {
+            path: 'attendance-history',
+            component: AttendanceHistoryComponent,
+          },
+          {
+            path: 'requests-approvals',
+            component: RequestsApprovalsComponent,
+          },
+          {
+            path: 'request-details/:id',
+            component: RequestDetailsComponent,
+          },
+          {
+            path: 'attendance-detail/:id',
+            component: AttendanceDetailComponent,
+          },
+          // {
+          //   path: 'payroll-generator',
+          //   component: PayrollGeneratorComponent,
+          // },
+          // {
+          //   path: 'salary-slip/:id',
+          //   component: SalarySlipComponent,
+          // },
+        ],
+      },
+      {
+        path: 'salary-management',
+        component: SalaryManagementComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: '', redirectTo: 'salary-listing', pathMatch: 'full' },
+          {
+            path: 'salary-listing',
+            component: SalaryListingComponent,
+          },
+          {
+            path: 'payslip-view/:id',
+            component: PayslipViewComponent,
+          },
+        ],
+      },
+      {
+        path: 'vehicle-management',
+        component: VehicleManagementComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'vehicle-maintenance/:id',
+        component: VehicleMaintenanceComponent,
+        canActivate: [AuthGuard],
       },
     ],
   },

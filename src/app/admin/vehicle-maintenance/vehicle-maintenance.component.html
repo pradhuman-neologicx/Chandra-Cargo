@@ -1,0 +1,189 @@
+<div class="container-fluid mb-4 px-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 py-3 border-bottom mb-4">
+    <div>
+      <h1 class="text-primary table-heading-detail mb-1">Vehicle Maintenance</h1>
+      <p class="text-muted small mb-0">Manage service records, costs, and maintenance schedules.</p>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <div class="vehicle-selector d-flex align-items-center gap-2 px-3 py-2 bg-white rounded-3 shadow-sm border">
+        <i class="fa-solid fa-truck-moving text-primary"></i>
+        <select class="form-select border-0 bg-transparent fw-bold text-dark p-0" [(ngModel)]="selectedVehicleId" (change)="updateSelectedVehicle()">
+          <option *ngFor="let v of vehicleList" [value]="v.id">{{ v.regNo }} ({{ v.model }})</option>
+        </select>
+      </div>
+      <button class="btn btn-custom-primary px-4 py-2 shadow-sm" (click)="openServiceModal()">
+        <i class="fa-solid fa-plus me-2"></i>Add Service Record
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="row g-4 mb-4" [@fadeIn]>
+    <div class="col-md-4">
+      <div class="card stat-card border-0 shadow-sm rounded-4 h-100 bg-gradient-primary text-white">
+        <div class="card-body p-4 d-flex align-items-center justify-content-between">
+          <div>
+            <p class="small opacity-75 mb-1">Total Maintenance Cost</p>
+            <h3 class="fw-bold mb-0">₹{{ totalCost | number }}</h3>
+          </div>
+          <div class="stat-icon bg-white bg-opacity-25 rounded-circle p-3">
+            <i class="fa-solid fa-indian-rupee-sign fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card stat-card border-0 shadow-sm rounded-4 h-100 bg-white">
+        <div class="card-body p-4 d-flex align-items-center justify-content-between">
+          <div>
+            <p class="small text-muted mb-1">Last Service Date</p>
+            <h3 class="fw-bold mb-0 text-dark">{{ lastServiceDate || 'N/A' | date:'dd MMM yyyy' }}</h3>
+          </div>
+          <div class="stat-icon bg-info-subtle text-info rounded-circle p-3">
+            <i class="fa-solid fa-wrench fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card stat-card border-0 shadow-sm rounded-4 h-100 bg-white border-start border-warning border-5">
+        <div class="card-body p-4 d-flex align-items-center justify-content-between">
+          <div>
+            <p class="small text-muted mb-1 text-warning fw-bold">Next Service Due</p>
+            <h3 class="fw-bold mb-0 text-dark">{{ nextServiceDate || 'N/A' | date:'dd MMM yyyy' }}</h3>
+          </div>
+          <div class="stat-icon bg-warning-subtle text-warning rounded-circle p-3">
+            <i class="fa-solid fa-calendar-check fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Tabs -->
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-header bg-white p-0 border-bottom">
+      <ul class="nav nav-tabs border-0 px-4 pt-2">
+        <li class="nav-item">
+          <a class="nav-link px-4 py-3 fw-bold border-0" [class.active]="activeTab === 'history'" (click)="activeTab = 'history'" href="javascript:void(0)">
+            Maintenance History
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-4 py-3 fw-bold border-0" [class.active]="activeTab === 'alerts'" (click)="activeTab = 'alerts'" href="javascript:void(0)">
+            Service Alerts
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card-body p-4">
+      <div *ngIf="activeTab === 'history'" [@fadeIn]>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light-subtle">
+              <tr>
+                <th class="ps-4">Service Type</th>
+                <th>Service Date</th>
+                <th>Cost</th>
+                <th>Vendor</th>
+                <th>Reading (KM)</th>
+                <th>Next Due</th>
+                <th class="text-center pe-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let h of maintenanceHistory">
+                <td class="ps-4">
+                  <div class="fw-bold text-dark">{{ h.type }}</div>
+                </td>
+                <td>{{ h.date | date:'dd MMM yyyy' }}</td>
+                <td class="fw-bold text-primary">₹{{ h.cost | number }}</td>
+                <td class="text-secondary small">{{ h.vendor }}</td>
+                <td>{{ h.km | number }} KM</td>
+                <td>
+                  <div class="small fw-semibold text-danger">{{ h.nextDue | date:'dd MMM yyyy' }}</div>
+                  <div class="small text-muted">{{ h.nextDueKm | number }} KM</div>
+                </td>
+                <td class="text-center pe-4">
+                  <button mat-icon-button class="text-primary" (click)="editServiceRecord(h)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab === 'alerts'" [@fadeIn] class="py-5 text-center">
+        <div class="empty-state">
+          <i class="fa-solid fa-bell-slash fs-1 text-light mb-3"></i>
+          <h5 class="text-muted">No pending service alerts</h5>
+          <p class="small text-secondary">All scheduled maintenance is up to date.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Service Record -->
+<div *ngIf="serviceModalOpen" class="modal-container" role="dialog" aria-modal="true">
+  <div class="modal-content-medium" [@fadeIn]>
+    <form [formGroup]="serviceForm">
+      <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom">
+          <div>
+            <h5 class="modal-title mb-0 fw-bold text-primary">{{ isEdit ? 'Edit Service Record' : 'Add Service Record' }}</h5>
+            <p class="text-muted small mb-0">{{ selectedVehicle?.regNo }} ({{ selectedVehicle?.model }})</p>
+          </div>
+          <button class="btn-close-custom" type="button" (click)="closeModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label required">Service Type</label>
+              <select class="form-select" formControlName="type">
+                <option value="" disabled>Select Type</option>
+                <option *ngFor="let t of getServiceTypes()" [value]="t">{{ t }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label required">Service Date</label>
+              <input type="date" class="form-control" formControlName="date" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label required">Cost (₹)</label>
+              <input type="number" class="form-control" formControlName="cost" placeholder="0.00" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label required">Kilometer Reading</label>
+              <input type="number" class="form-control" formControlName="km" placeholder="Current Odometer" />
+            </div>
+            <div class="col-md-12">
+              <label class="form-label required">Vendor / Workshop Name</label>
+              <input type="text" class="form-control" formControlName="vendor" placeholder="e.g. Authorized Service Center" />
+            </div>
+            <div class="col-md-6 border-top mt-4 pt-3">
+              <label class="form-label required text-primary">Next Service Due Date</label>
+              <input type="date" class="form-control border-primary-subtle" formControlName="nextDue" />
+            </div>
+            <div class="col-md-6 border-top mt-4 pt-3">
+              <label class="form-label text-primary">Next Service KM Reading</label>
+              <input type="number" class="form-control border-primary-subtle" formControlName="nextDueKm" placeholder="Scheduled KM" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white py-3 px-4 text-end border-top">
+          <button class="btn btn-light px-4 me-2 rounded-3" type="button" (click)="closeModal()">Discard</button>
+          <button class="btn btn-custom-primary px-4 rounded-3" type="button" (click)="saveServiceRecord()">Save Record</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

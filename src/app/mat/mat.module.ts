@@ -24,6 +24,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 
@@ -32,6 +33,7 @@ import { MatSortModule } from '@angular/material/sort';
 
 
  const MaterialComponents=[
+  MatMenuModule,
   MatButtonModule,
   MatToolbarModule,
   MatIconModule,

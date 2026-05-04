@@ -1,0 +1,473 @@
+// Salary Listing Component Styles
+
+.salary-listing-container {
+    padding: 0 8px;
+}
+
+// Breadcrumb
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.breadcrumb-separator {
+    color: #94A3B8;
+    font-size: 10px;
+}
+
+.breadcrumb-current {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+// Page header
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #64748B;
+    margin-bottom: 0;
+}
+
+// Header buttons
+.btn-export-report {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    border: none;
+
+    &:hover {
+        background: var(--hover-color);
+        color: white;
+    }
+}
+
+// Summary Cards
+.summary-card {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.summary-label {
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.summary-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 0;
+}
+
+.summary-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.icon-blue {
+    background: #EBF0FF;
+    color: var(--primary-color);
+}
+
+.icon-purple {
+    background: #F0EAFF;
+    color: #8B5CF6;
+}
+
+.icon-green {
+    background: #E6F9F0;
+    color: #10B981;
+}
+
+.icon-yellow {
+    background: #FFF7E6;
+    color: #F59E0B;
+}
+
+// Salary Card
+.salary-card {
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background: white;
+}
+
+// Filters
+.filters-row {
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 280px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: #94A3B8;
+    font-size: 14px;
+    z-index: 1;
+}
+
+.search-input {
+    padding-left: 36px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 14px;
+    height: 40px;
+    color: #1E293B;
+    background: #F8FAFC;
+
+    &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(51, 102, 255, 0.1);
+        background: white;
+    }
+
+    &::placeholder {
+        color: #94A3B8;
+    }
+}
+
+.reset-btn {
+    position: absolute;
+    right: 4px;
+    color: #94A3B8;
+    padding: 4px 8px;
+    text-decoration: none;
+
+    &:hover {
+        color: #64748B;
+    }
+}
+
+.filter-select-wrapper {
+    position: relative;
+    display: inline-block;
+
+    &::after {
+        content: '\f078';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748B;
+        font-size: 11px;
+        pointer-events: none;
+    }
+}
+
+.filter-select {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 14px;
+    height: 40px;
+    color: #1E293B;
+    background: #F8FAFC;
+    padding: 0 36px 0 12px;
+    min-width: 160px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+
+    &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(51, 102, 255, 0.1);
+        outline: none;
+    }
+}
+
+// Salary Table
+.salary-table {
+    thead {
+        th {
+            background: #F8FAFC;
+            border-bottom: 1px solid #E2E8F0;
+            border-top: none;
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 16px;
+            white-space: nowrap;
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid #F1F5F9;
+            transition: background 0.15s ease;
+
+            &:hover {
+                background: #F8FAFC;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        td {
+            padding: 14px 16px;
+            vertical-align: middle;
+            border: none;
+        }
+    }
+}
+
+// Employee info cell
+.employee-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.employee-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.employee-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1E293B;
+    line-height: 1.3;
+}
+
+.employee-email {
+    font-size: 12px;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+.emp-id-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748B;
+}
+
+// Role & Department cell
+.role-dept-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.role-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E293B;
+    line-height: 1.3;
+}
+
+.dept-text {
+    font-size: 12px;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+.table-text {
+    font-size: 14px;
+    color: #475569;
+}
+
+.text-success-emphasis {
+    color: #059669 !important;
+}
+
+.text-danger-emphasis {
+    color: #DC2626 !important;
+}
+
+// Status badges
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-paid {
+    background: #E6F9F0;
+    color: #059669;
+
+    .status-dot {
+        background: #10B981;
+    }
+}
+
+.status-pending {
+    background: #FFF7E6;
+    color: #D97706;
+
+    .status-dot {
+        background: #F59E0B;
+    }
+}
+
+// Action Buttons
+.btn-view-action {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f7ff;
+    border: none;
+    transition: all 0.2s ease;
+    color: var(--primary-color);
+
+    &:hover {
+        background: var(--primary-color);
+        color: white !important;
+
+        i {
+            color: white !important;
+        }
+    }
+
+    i {
+        font-size: 14px;
+    }
+}
+
+.btn-view-action-mobile {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f7ff;
+    border: none;
+}
+
+// Pagination
+.pagination-row {
+    border-top: 1px solid #F1F5F9;
+    padding-top: 16px;
+}
+
+.showing-text {
+    font-size: 14px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+// Mobile card view
+.mobile-salary-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    .card-body {
+        padding: 16px;
+    }
+}
+
+.mobile-details {
+    font-size: 13px;
+    color: #475569;
+
+    strong {
+        color: #1E293B;
+        font-weight: 600;
+    }
+}
+
+// Responsive
+@media screen and (max-width: 768px) {
+    .page-title {
+        font-size: 22px;
+    }
+
+    .summary-value {
+        font-size: 26px;
+    }
+
+    .search-input-wrapper {
+        min-width: 100%;
+    }
+
+    .filter-select {
+        min-width: 100%;
+    }
+
+    .filters-row {
+        gap: 8px !important;
+    }
+
+    .showing-text {
+        margin-bottom: 12px;
+        display: block;
+    }
+}

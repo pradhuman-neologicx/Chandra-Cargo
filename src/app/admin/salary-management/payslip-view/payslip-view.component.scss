@@ -1,0 +1,470 @@
+// Payslip View Component Styles
+
+:host {
+    display: block;
+}
+
+.payslip-container {
+    padding: 0 8px;
+}
+
+
+
+// Page header
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+    line-height: 32px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #64748B;
+    margin-bottom: 0;
+}
+
+.btn-back {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid #E2E8F0;
+    color: #64748B;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover {
+        background: #F8FAFC;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+}
+
+.btn-outline-action {
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+    }
+}
+
+.btn-primary-action {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    border: none;
+
+    &:hover {
+        background: #2952CC;
+        color: white;
+    }
+}
+
+// Sidebar Card
+.sidebar-card {
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+}
+
+.sidebar-title {
+    font-size: 15px;
+    color: #1E293B;
+}
+
+.slip-item {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #F8FAFC;
+    }
+
+    &.active {
+        background: #EBF0FF;
+        border-color: #BFDBFE;
+
+        .slip-month {
+            color: var(--primary-color);
+        }
+    }
+}
+
+.slip-month {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.slip-net {
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.badge-paid {
+    background: #E6F9F0;
+    color: #059669;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.slip-arrow {
+    font-size: 11px;
+    color: #CBD5E1;
+    transition: color 0.2s ease;
+
+    &.active-arrow {
+        color: var(--primary-color);
+    }
+}
+
+// Employee Info Card
+.info-card {
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+}
+
+.emp-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.emp-name {
+    font-size: 20px;
+    color: #1E293B;
+    margin-bottom: 4px;
+}
+
+.emp-meta {
+    font-size: 13px;
+    color: #64748B;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    i {
+        font-size: 11px;
+        color: #94A3B8;
+    }
+}
+
+.meta-dot {
+    margin: 0 8px;
+    color: #CBD5E1;
+}
+
+.info-label {
+    font-size: 11px;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 14px;
+    color: #1E293B;
+    font-weight: 500;
+}
+
+// Mini Stat Cards
+.mini-stat-card {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.mini-stat-label {
+    font-size: 11px;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.mini-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1;
+}
+
+.mini-stat-value-sm {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-top: 6px;
+}
+
+// Breakdown Card
+.breakdown-card {
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+}
+
+.section-heading {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1E293B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dot-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-earn {
+    background: #3B82F6; // Blue dot
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.dot-deduct {
+    background: #EF4444; // Red dot
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.breakdown-list {
+    margin-bottom: 16px;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #F1F5F9;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.breakdown-label {
+    font-size: 14px;
+    color: #475569;
+}
+
+.breakdown-amount {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E293B;
+}
+
+.breakdown-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 0;
+    border-top: 1px solid #E2E8F0;
+    font-weight: 600;
+    font-size: 15px;
+    color: #1E293B;
+}
+
+.total-amount {
+    font-size: 16px;
+}
+
+.deductions-col {
+    @media (min-width: 992px) {
+        border-left: 1px dashed #E2E8F0;
+        padding-left: 32px !important;
+    }
+}
+
+// Net Salary Card
+.net-salary-card {
+    background: linear-gradient(135deg, #EBF0FF 0%, #F0F7FF 100%);
+    border: 1px solid #BFDBFE;
+    border-radius: 16px;
+    padding: 28px 32px;
+}
+
+.net-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.net-label {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.net-amount {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 0;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+.net-detail {
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1.8;
+
+    i {
+        color: #94A3B8;
+    }
+}
+
+// Note Card
+.note-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.note-icon {
+    color: #94A3B8;
+    font-size: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.note-text {
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.note-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// Color overrides (scoped)
+.text-success {
+    color: #059669 !important;
+}
+
+.text-warning {
+    color: #D97706 !important;
+}
+
+.text-danger {
+    color: #DC2626 !important;
+}
+
+.text-danger-subtle {
+    color: #64748B !important;
+}
+
+// Responsive
+@media screen and (max-width: 768px) {
+    .page-title {
+        font-size: 22px;
+    }
+
+    .emp-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 15px;
+    }
+
+    .emp-name {
+        font-size: 17px;
+    }
+
+    .meta-dot {
+        display: none;
+    }
+
+    .emp-meta span {
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .mini-stat-value {
+        font-size: 22px;
+    }
+
+    .net-salary-card {
+        padding: 20px;
+    }
+
+    .net-amount {
+        font-size: 26px;
+    }
+
+    .net-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+}

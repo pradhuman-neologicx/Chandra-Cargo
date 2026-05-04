@@ -1,0 +1,459 @@
+// Attendance Monitor Component Styles
+
+.attendance-monitor-container {
+    padding: 0 8px;
+}
+
+// Page header
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #94A3B8;
+    margin-bottom: 0;
+}
+
+// Summary Cards
+.summary-card {
+    background: white;
+    border: 1px solid #E8ECF0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: box-shadow 0.2s ease;
+    height: 100%;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.summary-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.icon-green {
+    background: #E6F9F0;
+    color: #10B981;
+}
+
+.icon-yellow {
+    background: #FFF7E6;
+    color: #F59E0B;
+}
+
+.icon-red {
+    background: #FEE7E7;
+    color: #EF4444;
+}
+
+.icon-blue {
+    background: #EBF0FF;
+    color: var(--primary-color);
+}
+
+.percent-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.percent-positive {
+    background: #E6F9F0;
+    color: #10B981;
+}
+
+.percent-negative {
+    background: #FEE7E7;
+    color: #EF4444;
+}
+
+.summary-label {
+    font-size: 13px;
+    color: #94A3B8;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.summary-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.summary-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.summary-total {
+    font-size: 16px;
+    color: #94A3B8;
+    font-weight: 500;
+}
+
+// Corrections Card
+.corrections-card {
+    border: 1px solid #E8ECF0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    background: white;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header-custom {
+    padding: 20px 24px 16px;
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 0;
+}
+
+.view-all-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// Corrections Table
+.corrections-table {
+    thead {
+        th {
+            background: #F8FAFC;
+            border-bottom: 1px solid #E8ECF0;
+            border-top: none;
+            font-size: 11px;
+            font-weight: 600;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 10px 24px;
+            white-space: nowrap;
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid #F1F5F9;
+            transition: background 0.15s ease;
+
+            &:hover {
+                background: #F8FAFC;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        td {
+            padding: 14px 24px;
+            vertical-align: middle;
+            border: none;
+        }
+    }
+}
+
+// Employee info
+.employee-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.employee-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.employee-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1E293B;
+    line-height: 1.3;
+}
+
+.employee-role {
+    font-size: 12px;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+.table-text {
+    font-size: 14px;
+    color: #475569;
+}
+
+.request-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.request-type {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E293B;
+    line-height: 1.4;
+}
+
+.request-detail {
+    font-size: 12px;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+// Action buttons
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s ease;
+}
+
+.approve-btn {
+    background: #E6F9F0;
+    color: #10B981;
+
+    &:hover {
+        background: #D1FAE5;
+    }
+}
+
+.reject-btn {
+    background: #FEE7E7;
+    color: #EF4444;
+
+    &:hover {
+        background: #FECACA;
+    }
+}
+
+// Corrections footer
+.corrections-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #F1F5F9;
+    text-align: center;
+    margin-top: auto;
+}
+
+.view-more-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// Leave Card
+.leave-card {
+    border: 1px solid #E8ECF0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    background: white;
+    overflow: hidden;
+    height: 100%;
+}
+
+.this-week-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.leave-list {
+    padding: 0 20px 20px;
+}
+
+.leave-item {
+    background: #F8FAFC;
+    border: 1px solid #E8ECF0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.leave-type-text {
+    font-size: 12px;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+.leave-status-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.status-pending {
+    background: #EBF0FF;
+    color: var(--primary-color);
+}
+
+.status-approved {
+    background: #E6F9F0;
+    color: #10B981;
+}
+
+.status-rejected {
+    background: #FEE7E7;
+    color: #EF4444;
+}
+
+.leave-details {
+    padding: 8px 0 12px;
+    border-left: 3px solid #10B981;
+    padding-left: 12px;
+    margin: 12px 0;
+}
+
+.leave-date-range {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.leave-reason {
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 0;
+    font-style: italic;
+}
+
+// Leave action buttons
+.leave-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-approve {
+    background: #10B981;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: none;
+    flex: 1;
+
+    &:hover {
+        background: #059669;
+        color: white;
+    }
+}
+
+.btn-reject-outline {
+    background: white;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    flex: 1;
+
+    &:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+    }
+}
+
+// Mobile card
+.mobile-correction-card {
+    background: #F8FAFC;
+    border: 1px solid #E8ECF0;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.mobile-details {
+    font-size: 13px;
+    color: #475569;
+    margin-top: 8px;
+
+    strong {
+        color: #1E293B;
+        font-weight: 600;
+    }
+}
+
+// Responsive
+@media screen and (max-width: 768px) {
+    .page-title {
+        font-size: 22px;
+    }
+
+    .summary-value {
+        font-size: 26px;
+    }
+
+    .card-header-custom {
+        padding: 16px;
+    }
+
+    .corrections-table tbody td {
+        padding: 12px 16px;
+    }
+}

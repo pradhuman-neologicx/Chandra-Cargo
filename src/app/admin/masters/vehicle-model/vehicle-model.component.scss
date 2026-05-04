@@ -1,0 +1,207 @@
+// Vehicle Model Master Styles
+
+.table-heading-detail {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.table-header th {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 15px;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    color: #4a5568;
+}
+
+// Status Badges
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.active-status {
+    background-color: #e6fffa;
+    color: #38a169;
+}
+
+.deactive-status {
+    background-color: #fff5f5;
+    color: #e53e3e;
+}
+
+// Search & Pagination
+.search-user {
+    border-radius: 8px;
+    padding: 8px 15px;
+    border: 1px solid #e2e8f0;
+    font-size: 14px;
+
+    &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(51, 102, 255, 0.1);
+    }
+}
+
+.search-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.show-entries-select {
+    width: 80px;
+    border-radius: 8px;
+}
+
+.show-entery-text {
+    font-size: 14px;
+    color: #718096;
+}
+
+.showalltext {
+    color: #718096;
+    font-size: 14px;
+}
+
+// Mobile View
+.mobile-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+// Modals
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.modal-content-50 {
+    width: 100%;
+    max-width: 550px;
+    position: relative;
+    z-index: 10000;
+}
+
+.btn-close-custom {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #cbd5e0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+
+    &:hover {
+        color: #e53e3e;
+        background: #fff5f5;
+    }
+}
+
+.btn-custom-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s;
+    padding: 10px 24px;
+
+    &:hover {
+        background-color: #2c7da0;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(51, 102, 255, 0.2);
+        color: white;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.form-select,
+.form-control {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: all 0.2s;
+
+    &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(51, 102, 255, 0.08);
+        outline: none;
+    }
+
+    &::placeholder {
+        color: #94a3b8;
+    }
+}
+
+.form-label {
+    font-size: 13px;
+    color: #475569;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.card-header {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.card-footer {
+    border-top: 1px solid #f1f5f9;
+    background-color: #f8fafc !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+// Ensure responsiveness
+@media (max-width: 576px) {
+    .modal-content-50 {
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .modal-container {
+        padding: 10px;
+    }
+}

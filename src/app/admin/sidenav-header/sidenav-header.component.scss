@@ -20,7 +20,7 @@
 }
 
 .notification {
-  color: #1075bc;
+  color: var(--primary-color);
   border-radius: 4px;
   font-size: 20px;
   cursor: pointer;
@@ -45,7 +45,7 @@
 
   .hedaer-content {
     margin-left: 0 !important;
-    padding: 0 !important;
+    padding: 0 0.7rem !important;
     width: auto !important;
   }
 

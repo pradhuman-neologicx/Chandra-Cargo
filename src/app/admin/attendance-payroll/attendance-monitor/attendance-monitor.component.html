@@ -1,0 +1,258 @@
+<div class="container-fluid attendance-monitor-container mb-4">
+  <!-- Header -->
+  <div class="mb-4">
+    <h1 class="page-title">Attendance Monitor</h1>
+    <p class="page-subtitle">Real-time tracking for Monday, Oct 23, 2023</p>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row summary-cards mb-4">
+    <!-- Present Today -->
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="summary-icon icon-green">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <span class="percent-badge percent-positive">{{
+            presentPercentChange
+          }}</span>
+        </div>
+        <p class="summary-label">Present Today</p>
+        <div class="summary-value-row">
+          <span class="summary-value">{{ presentToday }}</span>
+          <span class="summary-total">/ {{ totalEmployees }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- Late Arrivals -->
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="summary-icon icon-yellow">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <span class="percent-badge percent-negative">{{
+            latePercentChange
+          }}</span>
+        </div>
+        <p class="summary-label">Late Arrivals</p>
+        <div class="summary-value-row">
+          <span class="summary-value">{{ lateArrivals }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- Absent -->
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="summary-icon icon-red">
+            <i class="fa-solid fa-user-xmark"></i>
+          </div>
+          <span class="percent-badge percent-positive">{{
+            absentPercentChange
+          }}</span>
+        </div>
+        <p class="summary-label">Absent</p>
+        <div class="summary-value-row">
+          <span class="summary-value">{{
+            absentCount < 10 ? "0" + absentCount : absentCount
+          }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- Pending Approvals -->
+    <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+      <div class="summary-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="summary-icon icon-blue">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+        </div>
+        <p class="summary-label">Pending Approvals</p>
+        <div class="summary-value-row">
+          <span class="summary-value">{{ pendingApprovals }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Section: Corrections + Upcoming Leave -->
+  <div class="row">
+    <!-- Attendance Corrections -->
+    <div class="col-lg-7 mb-4">
+      <div class="card corrections-card">
+        <div
+          class="card-header-custom d-flex justify-content-between align-items-center"
+        >
+          <h2 class="section-title">Attendance Corrections</h2>
+          <a class="view-all-link" (click)="viewAllQueue()">View All Queue</a>
+        </div>
+
+        <!-- Table for lg+ -->
+        <div class="table-responsive d-none d-lg-block">
+          <table class="table corrections-table mb-0">
+            <thead>
+              <tr>
+                <th>EMPLOYEE</th>
+                <th>DATE</th>
+                <th>REQUEST</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of corrections">
+                <td>
+                  <div class="employee-info">
+                    <div
+                      class="employee-avatar"
+                      [style.background-color]="item.avatarColor"
+                    >
+                      {{ item.initials }}
+                    </div>
+                    <div class="employee-details">
+                      <span class="employee-name">{{ item.name }}</span>
+                      <span class="employee-role">{{ item.role }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="table-text">{{ item.date }}</span>
+                </td>
+                <td>
+                  <div class="request-info">
+                    <span class="request-type">{{ item.requestType }}</span>
+                    <span class="request-detail">{{ item.requestDetail }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      class="action-btn approve-btn"
+                      (click)="approveCorrection(item)"
+                    >
+                      <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button
+                      class="action-btn reject-btn"
+                      (click)="rejectCorrection(item)"
+                    >
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Card View for below lg -->
+        <div class="d-lg-none px-3 pb-3">
+          <div
+            *ngFor="let item of corrections"
+            class="mobile-correction-card mb-3"
+          >
+            <div class="d-flex align-items-center mb-2">
+              <div
+                class="employee-avatar me-3"
+                [style.background-color]="item.avatarColor"
+              >
+                {{ item.initials }}
+              </div>
+              <div class="flex-grow-1">
+                <div class="employee-name">{{ item.name }}</div>
+                <div class="employee-role">{{ item.role }}</div>
+              </div>
+              <div class="action-buttons">
+                <button
+                  class="action-btn approve-btn"
+                  (click)="approveCorrection(item)"
+                >
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button
+                  class="action-btn reject-btn"
+                  (click)="rejectCorrection(item)"
+                >
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row mobile-details">
+              <div class="col-6"><strong>Date:</strong> {{ item.date }}</div>
+              <div class="col-6">
+                <strong>Request:</strong> {{ item.requestType }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="corrections-footer">
+          <a class="view-more-link">
+            View {{ totalCorrectionRequests - corrections.length }} more
+            requests
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Leave -->
+    <div class="col-lg-5 mb-4">
+      <div class="card leave-card">
+        <div
+          class="card-header-custom d-flex justify-content-between align-items-center"
+        >
+          <h2 class="section-title">Upcoming Leave</h2>
+          <span class="this-week-badge">THIS WEEK</span>
+        </div>
+
+        <div class="leave-list">
+          <div *ngFor="let leave of upcomingLeaves" class="leave-item">
+            <div class="d-flex align-items-center mb-3">
+              <div
+                class="employee-avatar me-3"
+                [style.background-color]="leave.avatarColor"
+              >
+                {{ leave.initials }}
+              </div>
+              <div class="flex-grow-1">
+                <div class="employee-name">{{ leave.name }}</div>
+                <div class="leave-type-text">
+                  {{ leave.leaveType }} &bull; {{ leave.duration }}
+                </div>
+              </div>
+              <span
+                class="leave-status-badge"
+                [ngClass]="{
+                  'status-pending': leave.status === 'PENDING',
+                  'status-approved': leave.status === 'APPROVED',
+                  'status-rejected': leave.status === 'REJECTED',
+                }"
+              >
+                {{ leave.status }}
+              </span>
+            </div>
+
+            <div class="leave-details">
+              <p class="leave-date-range">{{ leave.dateRange }}</p>
+              <p class="leave-reason">"{{ leave.reason }}"</p>
+            </div>
+
+            <div class="leave-actions" *ngIf="leave.status === 'PENDING'">
+              <button class="btn btn-approve" (click)="approveLeave(leave)">
+                Approve
+              </button>
+              <button
+                class="btn btn-reject-outline"
+                (click)="rejectLeave(leave)"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

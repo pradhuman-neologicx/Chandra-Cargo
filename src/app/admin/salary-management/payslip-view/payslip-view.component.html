@@ -1,0 +1,219 @@
+<div class="payslip-container container-fluid mb-4">
+  <!-- Header -->
+  <div class="d-md-flex justify-content-between align-items-start mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn btn-back" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div>
+        <h1 class="page-title">Payslip Details</h1>
+        <p class="page-subtitle">
+          View and manage salary breakdown for {{ employee.name }}
+        </p>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-md-0">
+      <button class="btn btn-outline-action" (click)="printSlip()">
+        <i class="fa-solid fa-print me-2"></i>Print
+      </button>
+      <button class="btn btn-primary-action" (click)="downloadPDF()">
+        <i class="fa-solid fa-download me-2"></i>Download PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left Sidebar: Past Monthly Slips -->
+    <div class="col-lg-3 col-md-4">
+      <div class="sidebar-card bg-white p-4">
+        <h5 class="sidebar-title fw-semibold mb-3">Monthly History</h5>
+        <div class="slips-list">
+          <div
+            *ngFor="let slip of pastSlips"
+            class="slip-item d-flex justify-content-between align-items-center mb-2 p-3"
+            [class.active]="slip.active"
+            (click)="selectSlip(slip)"
+          >
+            <div>
+              <div class="slip-month" [class.fw-semibold]="slip.active">
+                {{ slip.month }}
+              </div>
+              <div class="slip-net">Net: {{ slip.net }}</div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge-paid" *ngIf="slip.status === 'PAID'">{{
+                slip.status
+              }}</span>
+              <i
+                class="fa-solid fa-chevron-right slip-arrow"
+                [class.active-arrow]="slip.active"
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-9 col-md-8">
+      <!-- Employee Info Card -->
+      <div class="info-card bg-white p-4 mb-4">
+        <div class="d-flex flex-wrap align-items-center gap-4">
+          <div
+            class="emp-avatar"
+            [style.background-color]="employee.avatarColor"
+          >
+            {{ employee.initials }}
+          </div>
+          <div class="flex-grow-1">
+            <h4 class="emp-name fw-bold">{{ employee.name }}</h4>
+            <p class="emp-meta mb-0">
+              <span>
+                <i class="fa-solid fa-id-badge me-1"></i>
+                {{ employee.empId }}
+              </span>
+              <span class="meta-dot">•</span>
+              <span>
+                <i class="fa-solid fa-building me-1"></i>
+                {{ employee.department }}
+              </span>
+              <span class="meta-dot">•</span>
+              <span>
+                <i class="fa-solid fa-briefcase me-1"></i>
+                {{ employee.designation }}
+              </span>
+            </p>
+          </div>
+          <div class="text-end d-none d-md-block">
+            <div class="info-label">Pay Period</div>
+            <div class="info-value">{{ slipDetails.payPeriod }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Row -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+          <div class="mini-stat-card">
+            <div class="mini-stat-label">Working Days</div>
+            <div class="mini-stat-value">{{ slipDetails.workingDays }}</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="mini-stat-card">
+            <div class="mini-stat-label">Days Worked</div>
+            <div class="mini-stat-value text-success">
+              {{ slipDetails.daysWorked }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="mini-stat-card">
+            <div class="mini-stat-label">Leave Taken</div>
+            <div class="mini-stat-value text-warning">
+              {{ slipDetails.leaveTaken }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="mini-stat-card">
+            <div class="mini-stat-label">Payment Mode</div>
+            <div class="mini-stat-value-sm">{{ slipDetails.paymentMode }}</div>
+          </div>
+        </div>
+      </div>
+      <!-- Net Salary Box -->
+      <div class="net-salary-card mb-4">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-between"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <div class="net-icon">
+              <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div>
+              <div class="net-label">Net Take-Home Salary</div>
+              <h2 class="net-amount">{{ slipDetails.netSalary }}</h2>
+            </div>
+          </div>
+          <div class="text-end mt-3 mt-md-0">
+            <div class="net-detail">
+              <i class="fa-regular fa-calendar me-1"></i> Disbursed on
+              {{ slipDetails.disbursedOn }}
+            </div>
+            <div class="net-detail fw-semibold">
+              <i class="fa-solid fa-building-columns me-1"></i>
+              {{ employee.bankAccount }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Earnings & Deductions -->
+      <div class="breakdown-card bg-white p-4 mb-4">
+        <div class="row">
+          <!-- Earnings -->
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <h6 class="section-heading">
+              <span class="dot-indicator dot-earn"></span>
+              Earnings
+            </h6>
+            <div class="breakdown-list">
+              <div
+                class="breakdown-item"
+                *ngFor="let earn of slipDetails.earnings"
+              >
+                <span class="breakdown-label">{{ earn.label }}</span>
+                <span class="breakdown-amount">{{ earn.amount }}</span>
+              </div>
+            </div>
+            <div class="breakdown-total">
+              <span>Total Earnings</span>
+              <span class="total-amount">{{ slipDetails.grossEarnings }}</span>
+            </div>
+          </div>
+
+          <!-- Deductions -->
+          <div class="col-lg-6 deductions-col">
+            <h6 class="section-heading">
+              <span class="dot-indicator dot-deduct"></span>
+              Deductions
+            </h6>
+            <div class="breakdown-list">
+              <div
+                class="breakdown-item"
+                *ngFor="let ded of slipDetails.deductions"
+              >
+                <span class="breakdown-label text-danger-subtle">{{
+                  ded.label
+                }}</span>
+                <span class="breakdown-amount text-danger"
+                  >-{{ ded.amount }}</span
+                >
+              </div>
+            </div>
+            <div class="breakdown-total">
+              <span>Total Deductions</span>
+              <span class="total-amount text-danger"
+                >-{{ slipDetails.totalDeductions }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Note -->
+      <div class="note-card">
+        <i class="fa-solid fa-circle-info note-icon"></i>
+        <p class="note-text">
+          This is a computer-generated document and does not require a physical
+          signature. For any discrepancies, please contact the payroll
+          department at
+          <a href="mailto:payroll@chandracargo.com" class="note-link"
+            >payroll&#64;chandracargo.com</a
+          >
+          within 5 business days.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

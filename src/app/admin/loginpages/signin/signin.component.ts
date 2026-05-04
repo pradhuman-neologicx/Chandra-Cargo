@@ -37,7 +37,7 @@ import { NotificationService } from 'src/app/core/services/notificationnew.servi
         style({
           transform: 'translateX(-30%)',
           opacity: 0,
-        })
+        }),
       ),
       transition(':enter, :leave', [
         animate('0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)'),
@@ -49,7 +49,7 @@ import { NotificationService } from 'src/app/core/services/notificationnew.servi
         style({
           transform: 'translateX(100%)',
           opacity: 0,
-        })
+        }),
       ),
       transition(':enter', [
         animate(
@@ -57,7 +57,7 @@ import { NotificationService } from 'src/app/core/services/notificationnew.servi
           style({
             transform: 'translateX(0)', // Final position for slide-in effect
             opacity: 1, // Final opacity
-          })
+          }),
         ),
       ]),
     ]),
@@ -82,7 +82,7 @@ export class SigninComponent {
     private dataService: DataService,
     private jwtService: JwtService,
     private notificationService: NotificationService,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {}
   // validation: Validations = new Validations();
   loginAS!: number;
@@ -94,14 +94,7 @@ export class SigninComponent {
         '',
         [Validators.required, Validators.pattern(this.email_pattern)],
       ],
-      Password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(16),
-        ],
-      ],
+      Otp: [''],
     });
   }
 
@@ -110,9 +103,10 @@ export class SigninComponent {
   errorMessage: any;
   showErrorMessage: boolean = false;
   submitted!: boolean;
-  isAdminLogin: boolean = false;
+  isOtpSent: boolean = false;
   loginType!: number;
   sessionId!: string;
+  otp_pattern = '^[0-9]{6}$';
 
   markAllAsTouched() {
     for (const control in this.signIn.controls) {
@@ -128,45 +122,108 @@ export class SigninComponent {
     this.openSecondsuccess = false;
   }
 
-  AdminLoginfun() {
-    // this.router.navigate(['admin/dashboard']);
+  sendOtp() {
+    this.errorMessage = '';
+    if (this.signIn.get('Email')?.valid) {
+      const formData: FormData = new FormData();
+      formData.append('email', this.signIn.get('Email')?.value);
+      // this.loginService.AdminLoginapi(formData).subscribe((response: any) => {
+      //   if (response.status === 200) {
+      //     this.isOtpSent = true;
+      //     this.notificationService.show(response.message, 'success');
+      //     this.signIn
+      //       .get('Otp')
+      //       ?.setValidators([
+      //         Validators.required,
+      //         Validators.minLength(6),
+      //         Validators.maxLength(6),
+      //         Validators.pattern(this.otp_pattern),
+      //       ]);
+      //     this.signIn.get('Otp')?.updateValueAndValidity();
+      //   } else {
+      //     this.errorMessage = response.message;
+      //   }
+      // });
+
+      // Static Mock Logic
+      this.isOtpSent = true;
+      this.notificationService.show(
+        'OTP Sent Successfully (Static)',
+        'success',
+      );
+      this.signIn
+        .get('Otp')
+        ?.setValidators([
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(6),
+          Validators.pattern(this.otp_pattern),
+        ]);
+      this.signIn.get('Otp')?.updateValueAndValidity();
+    } else {
+      this.signIn.get('Email')?.markAsTouched();
+      this.errorMessage = 'Please enter a valid email';
+    }
+  }
+
+  VerifyOtpfun() {
     this.errorMessage = '';
     if (this.signIn.valid) {
       const formData: FormData = new FormData();
       formData.append('email', this.signIn.get('Email')?.value);
-      formData.append('password', this.signIn.get('Password')?.value);
-      // formData.append('type', 'admin');
-      formData.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
-      this.loginService.AdminLoginapi(formData).subscribe((response: any) => {
-        this.errorMessage = response.message;
-        if (response.status === 200) {
-          this.closeModal();
-          this.submitted = true;
-          this.successName = 'Login';
+      formData.append('otp', this.signIn.get('Otp')?.value);
+
+      // this.loginService.VerifyOTP(formData, {}).subscribe((response: any) => {
+      //   this.errorMessage = response.message;
+      //   if (response.status === 200) {
+      //     this.closeModal();
+      //     this.submitted = true;
+      //     this.successName = 'Login';
+      //     setTimeout(() => {
+      //       this.openSecondsuccess = true;
+      //       setTimeout(() => {
+      //         this.openSecondsuccess = false;
+      //         this.jwtService.savepanelUserId(response.data.id);
+      //         this.jwtService.saveadminame(response.data.name);
+      //         this.jwtService.saveAdminToken(response.token);
+      //         this.jwtService.saveAdminRole(response.data.role.name);
+      //         this.jwtService.isLoggedIn(true);
+      //         this.ngOnInit();
+      //         this.router.navigate(['admin/dashboard']);
+      //       }, 1800);
+      //     }, 200);
+      //   } else {
+      //     this.submitted = false;
+      //   }
+      // });
+
+      // Static Mock Logic
+      if (this.signIn.get('Otp')?.value === '123456') {
+        this.closeModal();
+        this.submitted = true;
+        this.successName = 'Login';
+        setTimeout(() => {
+          this.openSecondsuccess = true;
           setTimeout(() => {
-            this.openSecondsuccess = true;
-            setTimeout(() => {
-              this.openSecondsuccess = false;
-              this.jwtService.savepanelUserId(response.data.id);
-              this.jwtService.saveadminame(response.data.name);
-              this.jwtService.saveAdminToken(response.token);
-              this.jwtService.saveAdminRole(response.data.role.name);
-              this.jwtService.isLoggedIn(true);
-              this.ngOnInit();
-              this.router.navigate(['admin/dashboard']); // Move the navigation here
-            }, 1800); // Wait for 1.8 seconds before navigating
-          }, 200); // Initial delay for showing the modal
-        } else {
-          this.submitted = false;
-        }
-      });
+            this.openSecondsuccess = false;
+            // Mocking token and user data
+            this.jwtService.savepanelUserId('1');
+            this.jwtService.saveadminame('Admin User');
+            this.jwtService.saveAdminToken('mock-token-123');
+            this.jwtService.saveAdminRole('admin');
+            this.jwtService.isLoggedIn(true);
+            this.ngOnInit();
+            this.router.navigate(['admin/dashboard']);
+          }, 1800);
+        }, 200);
+      } else {
+        this.errorMessage = 'Invalid OTP (Use 123456)';
+        this.submitted = false;
+      }
     } else {
       this.submitted = false;
-      this.errorMessage = 'please select all fields';
+      this.errorMessage = 'Please enter the OTP';
       this.signIn.markAllAsTouched();
-      console.log(this.findInvalidControls(this.signIn));
     }
   }
 
@@ -180,5 +237,12 @@ export class SigninComponent {
     }
     console.log(invalid);
     return invalid;
+  }
+
+  resetEmail() {
+    this.isOtpSent = false;
+    this.signIn.get('Otp')?.clearValidators();
+    this.signIn.get('Otp')?.updateValueAndValidity();
+    this.signIn.get('Otp')?.reset();
   }
 }

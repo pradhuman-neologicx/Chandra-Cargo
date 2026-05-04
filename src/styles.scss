@@ -12,10 +12,17 @@ body {
 }
 
 
-$primary-color: red;
-$light-primary: #1075bc;
+:root {
+  --primary-color: #468faf;
+  --hover-color: #2c7da0;
+  accent-color: var(--primary-color);
+}
 
-$light-primary: rgb(103, 58, 183);
+$primary-color: var(--primary-color);
+$hover-color: var(--hover-color);
+$light-primary: var(--primary-color);
+
+
 
 html,
 body {
@@ -73,43 +80,43 @@ body {
 .login {
   width: 100%;
   height: 100%;
-  // background-color: #1075bc;
-  // background: linear-gradient(90deg, #1075bc, #63d6b0, #a0eddf);
-  background: linear-gradient(356deg, #1075bc, rgba(54, 162, 146, 0.5));
+  // background-color: var(--primary-color);
+  // background: linear-gradient(90deg, var(--primary-color), #63d6b0, #a0eddf);
+  background: linear-gradient(356deg, var(--primary-color), rgba(54, 162, 146, 0.5));
 }
 
 .eye-button {
   position: absolute;
   right: 0;
   top: 46px;
-  color: #1075bc;
+  color: var(--primary-color);
   font-weight: 500;
 }
 
 .form-control:focus {
-  border-color: rgb(54, 162, 146);
+  border-color: var(--primary-color);
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(54, 162, 146, .10)
+  box-shadow: 0 0 0 0.25rem rgba(70, 143, 175, 0.1);
 }
 
 
 .btn-primary {
   color: #fff;
-  background-color: #1075bc;
-  border-color: #1075bc;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #1075bc;
-  border-color: #1075bc;
+  background-color: var(--hover-color) !important;
+  border-color: var(--hover-color) !important;
 }
 
 .btn-check:focus+.btn-primary,
 .btn-primary:focus {
   color: #fff;
-  background-color: #1075bc;
-  border-color: #1075bc;
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
   box-shadow: 0 0 0 0.10rem rgba(54, 162, 146, 0.796)
 }
 
@@ -120,8 +127,8 @@ body {
 .btn-primary:active,
 .show>.btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #1075bc;
-  border-color: #1075bc;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-check:active+.btn-primary:focus,
@@ -137,12 +144,16 @@ body {
 .btn.show,
 .btn:first-child:active,
 :not(.btn-check)+.btn:active {
-  background-color: #1075bc;
-  border-color: #1075bc;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .text-primary {
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
+}
+
+.bg-custom-primary {
+  background-color: var(--primary-color) !important;
 }
 
 
@@ -165,7 +176,7 @@ body {
 
 .login-border-text {
   display: inline-block;
-  border-bottom: 2px solid #1075bc;
+  border-bottom: 2px solid var(--primary-color);
   font-size: 30px !important;
 }
 
@@ -209,12 +220,12 @@ body {
 
 .modal-title {
   font-size: 22px !important;
-  color: #1075bc;
+  color: var(--primary-color);
 }
 
 .modal-title1 {
   font-size: 22px !important;
-  color: #1075bc;
+  color: var(--primary-color);
 }
 
 
@@ -348,7 +359,25 @@ body {
   padding: 8px 8px;
   display: block;
   white-space: break-spaces;
-  border: 1px solid #1075bc;
+  border: 1px solid var(--primary-color);
+}
+
+.form-input-custom:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(70, 143, 175, 0.25);
+  outline: none;
+}
+
+/* Style for multiple select options */
+select[multiple].form-input-custom option:checked {
+  background: var(--primary-color) linear-gradient(0deg, var(--primary-color) 0%, var(--primary-color) 100%);
+  color: white;
+}
+
+/* Style for checkboxes and radios */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--primary-color);
 }
 
 //   modal css end **********************************/
@@ -431,7 +460,7 @@ mat-sidenav-container {
 
 .mat-expansion-panel-header.mat-expanded .mat-expansion-indicator::after {
   font-weight: bold;
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
 }
 
 .mat-expansion-panel {
@@ -497,7 +526,7 @@ mat-sidenav-container {
 }
 
 .status-settled {
-  color: #1075bc;
+  color: var(--primary-color);
   /* Replace with the desired color for "settled" */
 }
 
@@ -524,14 +553,14 @@ mat-sidenav-container {
 }
 
 .table-new-heading {
-  color: #1075bc;
+  color: var(--primary-color);
   white-space: nowrap;
 }
 
 
 
 table.table thead.table-header th {
-  background-color: #1075bc;
+  background-color: var(--primary-color);
   /* Specificity override */
   color: white;
   font-weight: 400;
@@ -556,8 +585,8 @@ table.table thead.table-header th {
   // border-radius: 3px;
   font-size: 16px !important;
   // margin-bottom: 8px;
-  border: 1px solid#1075bc;
-  background-color: #1075bc;
+  border: 1px solid var(--primary-color);
+  background-color: var(--primary-color);
 }
 
 .btn-custom-primary:hover {
@@ -567,8 +596,8 @@ table.table thead.table-header th {
   // border-radius: 3px;
   font-size: 16px !important;
   // margin-bottom: 8px;
-  border: 1px solid#1075bc;
-  background-color: #1075bc;
+  border: 1px solid var(--hover-color);
+  background-color: var(--hover-color);
 }
 
 .btn-custom-primary .btn-check:checked+.btn,
@@ -577,8 +606,8 @@ table.table thead.table-header th {
 .btn:first-child:active,
 :not(.btn-check)+.btn:active {
   margin-bottom: 8px;
-  border: 1px solid#1075bc !important;
-  background-color: #1075bc;
+  border: 1px solid var(--primary-color) !important;
+  background-color: var(--primary-color);
 }
 
 
@@ -587,8 +616,8 @@ table.table thead.table-header th {
 .nav-pills .nav-link.active,
 .nav-pills .show>.nav-link,
 .nav-link.active {
-  background-color: #1075bc !important;
-  // color: #1075bc !important;
+  background-color: var(--primary-color) !important;
+  // color: var(--primary-color) !important;
 
   // width: 100%;
   // height: 81px;
@@ -599,15 +628,15 @@ table.table thead.table-header th {
 .nav-pills .hide>.nav-link,
 .nav-link.active {
   background-color: #fff !important;
-  // color: #1075bc !important;
+  // color: var(--primary-color) !important;
 }
 
 .nav-pills .nav-link {
-  color: #1075bc;
+  color: var(--primary-color);
 }
 
 .tt-color {
-  color: #1075bc;
+  color: var(--primary-color);
 }
 
 .attendance-m-heading {
@@ -747,5 +776,5 @@ input[type="file"] {
 }
 
 .ngx-pagination .current {
-  background: #1075bc !important;
+  background: var(--primary-color) !important;
 }

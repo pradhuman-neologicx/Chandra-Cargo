@@ -35,7 +35,7 @@
 .profileborder {
   height: 135px;
   width: 135px;
-  border: 6px solid #1075bc;
+  border: 6px solid var(--primary-color);
   border-radius: 50%;
   position: relative;
 }
@@ -73,7 +73,7 @@
 .shortname-big-b {
   height: 135px;
   width: 135px;
-  border: 6px solid #1075bc;
+  border: 6px solid var(--primary-color);
   border-radius: 50%;
   position: relative;
 }
@@ -96,7 +96,7 @@
 .shortname-small-b {
   height: 38px;
   width: 38px;
-  border: 3px solid #1075bc;
+  border: 3px solid var(--primary-color);
   border-radius: 50%;
   position: relative;
   margin-right: 15px;
@@ -146,15 +146,15 @@
 }
 
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded .submenu-list {
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
 }
 
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded .submenu-list mat-icon {
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
 }
 
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded .submenu-list span {
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
 }
 
 :host ::ng-deep .mat-expansion-indicator::after {
@@ -163,7 +163,7 @@
 }
 
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded .mat-expansion-indicator::after {
-  border-color: #1075bc;
+  border-color: var(--primary-color);
   border-style: inset !important;
 }
 
@@ -221,8 +221,8 @@ mat-sidenav-content {
 
 .selected-menu-items {
   border-left: 3px solid;
-  border-left-color: #1075bc;
-  background-color: #1075bc !important;
+  border-left-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
   border-radius: 0 !important;
   margin-bottom: 10px;
 }
@@ -241,11 +241,11 @@ mat-sidenav-content {
 }
 
 .selected-submenu span {
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
 }
 
 .selected-submenu .mat-icon {
-  color: #1075bc !important;
+  color: var(--primary-color) !important;
 }
 
 .mdc-list-item__primary-text {

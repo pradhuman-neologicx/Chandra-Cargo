@@ -1,0 +1,178 @@
+// Payroll Generator SCSS
+
+.payroll-container {
+    padding: 0 8px;
+    color: #1E293B;
+}
+
+// Header
+.breadcrumb-nav {
+    font-size: 13px;
+    color: #64748B;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #0F172A;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #64748B;
+    margin-bottom: 0;
+}
+
+.btn-generate {
+    background: #2563EB;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #1D4ED8;
+    }
+}
+
+// Cards Common
+.card {
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+// Summary Card
+.summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #64748B;
+}
+
+.summary-period {
+    font-size: 13px;
+}
+
+.summary-amount {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #0F172A;
+}
+
+.summary-trend {
+    font-size: 14px;
+}
+
+.budget-box {
+    background: #EFF6FF;
+    border-radius: 12px;
+    width: 140px;
+    height: 120px;
+    align-self: center;
+
+    i {
+        color: #93C5FD;
+    }
+
+    .budget-label {
+        font-size: 11px;
+        color: #3B82F6;
+        letter-spacing: 0.5px;
+    }
+}
+
+// Filter Card
+.filter-title {
+    color: #1E293B;
+}
+
+.filter-select-wrapper {
+    position: relative;
+
+    &::after {
+        content: '\f107'; // FontAwesome chevron-down
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #94A3B8;
+    }
+}
+
+.filter-select {
+    appearance: none;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    padding: 10px 36px 10px 12px;
+    cursor: pointer;
+
+    &:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+}
+
+// Table
+.table-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.uppercase-headers th {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #64748B;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.table> :not(caption)>*>* {
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #F1F5F9;
+        border-color: #E2E8F0;
+    }
+}
+
+.bg-primary-subtle {
+    background-color: #EFF6FF !important;
+}

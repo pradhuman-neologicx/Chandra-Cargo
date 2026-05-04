@@ -1,0 +1,129 @@
+// Salary Slip SCSS
+
+.salary-slip-container {
+    background: #F8FAFC;
+    min-height: calc(100vh - 80px);
+}
+
+.past-slips-card,
+.slip-details-card {
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+// Sidebar
+.sidebar-title {
+    color: #1E293B;
+}
+
+.search-box {
+    position: relative;
+
+    .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: #94A3B8;
+    }
+
+    .filter-input {
+        padding-left: 36px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        font-size: 13px;
+
+        &:focus {
+            background: white;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    }
+}
+
+.slip-item {
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #F8FAFC;
+    }
+
+    &.active {
+        background: #EFF6FF;
+        border-color: #BFDBFE;
+
+        .slip-month {
+            color: #1D4ED8;
+        }
+
+        .slip-net {
+            color: #64748B;
+        }
+    }
+}
+
+.slip-month {
+    font-size: 14px;
+    color: #334155;
+}
+
+.badge-paid {
+    background: #ECFDF5;
+    color: #059669;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+}
+
+// Main Details
+.fs-11 {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.border-light {
+    border-color: #E2E8F0 !important;
+}
+
+@media (min-width: 992px) {
+    .border-start-lg {
+        border-left: 1px dashed #E2E8F0;
+    }
+}
+
+.text-secondary {
+    color: #475569 !important;
+}
+
+.net-salary-box {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 12px;
+
+    .icon-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .net-amount {
+        font-size: 32px;
+        letter-spacing: -0.5px;
+    }
+}
+
+.note-box {
+    background-color: #F8FAFC;
+    border-radius: 8px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

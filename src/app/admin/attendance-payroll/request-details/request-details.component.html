@@ -1,0 +1,222 @@
+<div class="container-fluid request-details-container mb-4">
+  <!-- Header -->
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-icon-back me-3" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <h1 class="page-title mb-0 me-auto">REQUEST DETAILS</h1>
+
+    <div class="header-badges d-none d-md-flex align-items-center">
+      <span class="badge-req-id me-2">REQ-2023-942</span>
+      <span
+        class="badge-status"
+        [ngClass]="{
+          'status-pending': requestStatus === 'PENDING APPROVAL',
+          'status-approved': requestStatus === 'APPROVED',
+          'status-rejected': requestStatus === 'REJECTED',
+        }"
+        >{{ requestStatus }}</span
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Left Column: Details -->
+    <div class="col-lg-8 mb-4">
+      <div class="card details-card p-4 h-100">
+        <!-- Employee Info -->
+        <div
+          class="employee-header d-flex align-items-center mb-4 pb-4 border-bottom"
+        >
+          <div
+            class="employee-avatar me-4"
+            [style.background-color]="employee.avatarColor"
+          >
+            <img
+              src="assets/images/placeholder-avatar.png"
+              *ngIf="false"
+              alt="Avatar"
+            />
+            <span>{{ employee.avatarLetter }}</span>
+          </div>
+          <div>
+            <h2 class="employee-name mb-1">{{ employee.name }}</h2>
+            <div class="employee-meta text-muted mb-1">
+              {{ employee.role }} &bull; Emp ID: {{ employee.empId }}
+            </div>
+            <div class="employee-dept">
+              <span class="dept-dot"></span> Department:
+              {{ employee.department }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Request Details Grid -->
+        <div class="row mb-4">
+          <div class="col-md-6 mb-4">
+            <div class="detail-label text-muted mb-2">REQUEST TYPE</div>
+            <div class="detail-value d-flex align-items-center">
+              <i class="fa-solid fa-calendar text-primary me-2"></i>
+              {{ requestDetails.type }}
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="detail-label text-muted mb-2">DURATION</div>
+            <div class="detail-value d-flex align-items-center">
+              <i class="fa-solid fa-clock text-primary me-2"></i>
+              {{ requestDetails.duration }}
+            </div>
+          </div>
+          <div class="col-md-6 mb-4 mb-md-0">
+            <div class="detail-label text-muted mb-2">DATE RANGE</div>
+            <div class="detail-value">{{ requestDetails.dateRange }}</div>
+          </div>
+          <div class="col-md-6">
+            <div class="detail-label text-muted mb-2">REASON</div>
+            <div class="detail-value">{{ requestDetails.reason }}</div>
+          </div>
+        </div>
+
+        <!-- Attachment -->
+        <div
+          class="attachment-box mt-2 p-3 d-flex align-items-center justify-content-between"
+        >
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-file-pdf text-danger fs-4 me-3"></i>
+            <span class="attachment-name fw-medium">{{
+              requestDetails.attachment
+            }}</span>
+          </div>
+          <a
+            class="view-link cursor-pointer text-primary fw-medium text-decoration-none"
+            >View</a
+          >
+        </div>
+
+        <!-- Approval Flow -->
+        <div class="approval-flow mt-5 pt-4 border-top">
+          <div class="d-flex align-items-center mb-4">
+            <i class="fa-solid fa-rotate-right text-primary me-2"></i>
+            <h3 class="flow-title mb-0 fs-5 fw-semibold">Approval Flow</h3>
+          </div>
+
+          <div class="timeline">
+            <!-- Completed Step -->
+            <div class="timeline-step completed">
+              <div class="timeline-indicator">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div class="timeline-content">
+                <div class="step-title fw-semibold">
+                  {{ approvalFlow[0].role }}
+                </div>
+                <div class="step-date text-muted small">
+                  {{ approvalFlow[0].date }}
+                </div>
+              </div>
+            </div>
+            <!-- Pending Step -->
+            <div class="timeline-step pending">
+              <div class="timeline-indicator">
+                <div class="inner-dot"></div>
+              </div>
+              <div class="timeline-content">
+                <div class="step-title fw-semibold">
+                  {{ approvalFlow[1].role }}
+                </div>
+                <div class="step-date text-muted small">
+                  {{ approvalFlow[1].date }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Balance & Actions -->
+    <div class="col-lg-4">
+      <!-- Leave Balance -->
+      <div class="card balance-card p-4 mb-4">
+        <h3 class="card-title text-muted fs-6 fw-semibold mb-4 text-uppercase">
+          Leave Balance
+        </h3>
+
+        <div class="balance-item mb-4">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="leave-type fw-medium text-secondary"
+              >Annual Leave</span
+            >
+            <span class="leave-count fw-bold"
+              >{{ leaveBalance.annualUsed }} /
+              {{ leaveBalance.annualTotal }} Days</span
+            >
+          </div>
+          <div class="progress" style="height: 6px">
+            <div
+              class="progress-bar bg-primary"
+              role="progressbar"
+              [style.width]="leaveBalance.annualPercentage + '%'"
+            ></div>
+          </div>
+        </div>
+
+        <div class="balance-item mb-4">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="leave-type fw-medium text-secondary">Sick Leave</span>
+            <span class="leave-count fw-bold"
+              >{{ leaveBalance.sickUsed }} /
+              {{ leaveBalance.sickTotal }} Days</span
+            >
+          </div>
+          <div class="progress" style="height: 6px">
+            <div
+              class="progress-bar bg-warning"
+              role="progressbar"
+              [style.width]="leaveBalance.sickPercentage + '%'"
+            ></div>
+          </div>
+        </div>
+
+        <div class="balance-note text-muted small fst-italic mt-2">
+          This request will deduct 3 days from Annual Leave balance.
+        </div>
+      </div>
+
+      <!-- Action Panel -->
+      <div class="card action-card p-4">
+        <h3 class="card-title text-muted fs-6 fw-semibold mb-3 text-uppercase">
+          Action Panel
+        </h3>
+
+        <div class="mb-4">
+          <label class="form-label text-muted small fw-medium"
+            >Remarks / Rejection Reason</label
+          >
+          <textarea
+            class="form-control remarks-input"
+            rows="3"
+            placeholder="Add a comment or reason for rejection..."
+            [(ngModel)]="remarks"
+          ></textarea>
+        </div>
+
+        <button class="btn btn-approve w-100 mb-3" (click)="approveRequest()">
+          <i class="fa-solid fa-check-circle me-2"></i> Approve Request
+        </button>
+
+        <button class="btn btn-reject w-100 mb-4" (click)="rejectRequest()">
+          <i class="fa-regular fa-times-circle me-2"></i> Reject Request
+        </button>
+
+        <div class="text-center">
+          <a
+            class="forward-link text-muted text-decoration-none small cursor-pointer hover-primary"
+          >
+            Forward to HR
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

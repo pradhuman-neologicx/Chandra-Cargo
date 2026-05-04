@@ -22,25 +22,10 @@ import { SigninComponent } from './admin/loginpages/signin/signin.component';
 import { OtpComponent } from './admin/loginpages/otp/otp.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { EmployeeService } from './core/services/Employee.service';
-import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-
 import { NgSelectModule } from '@ng-select/ng-select';
-
-import { UserManagementComponent } from './admin/user-management/user-management.component';
-import { StaffComponent } from './admin/user-management/staff/staff.component';
-import { TestMasterComponent } from './admin/test-master/test-master.component';
-import { TestManagementComponent } from './admin/test-management/test-management.component';
-import { CreateTestComponent } from './admin/test-management/create-test/create-test.component';
 import { ReportComponent } from './admin/report/report.component';
-import { TestResultsComponent } from './admin/test-results/test-results.component';
-import { EquipmentStatusComponent } from './admin/equipment-status/equipment-status.component';
-import { AccountManagementComponent } from './admin/account-management/account-management.component';
 import { NavbarComponent } from './website/navbar/navbar.component';
-import { MastersComponent } from './admin/masters/masters.component';
-import { MaterialComponent } from './admin/masters/material/material.component';
-import { EngineerTestManagementComponent } from './admin/engineer-test-management/engineer-test-management.component';
-import { UpdateTestComponent } from './admin/test-management/update-test/update-test.component';
 
 @NgModule({
   declarations: [
@@ -53,22 +38,10 @@ import { UpdateTestComponent } from './admin/test-management/update-test/update-
     SigninComponent,
     OtpComponent,
     SpinnerComponent,
-    DashboardComponent,
-    UserManagementComponent,
-    StaffComponent,
-    TestMasterComponent,
-    TestManagementComponent,
-    CreateTestComponent,
     ReportComponent,
-    TestResultsComponent,
-    EquipmentStatusComponent,
-    AccountManagementComponent,
     HomeComponent,
     NavbarComponent,
-    MastersComponent,
-    MaterialComponent,
-    EngineerTestManagementComponent,
-    UpdateTestComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,238 @@
+// Vehicle Management Styles
+
+.table-heading-detail {
+    font-size: 26px;
+    font-weight: 700 !important;
+    letter-spacing: -0.5px;
+    line-height: 32px;
+    color: var(--text-color-primary);
+}
+
+// Search & Actions
+.search-input {
+    border-radius: 10px;
+    padding: 10px 15px 10px 40px;
+    border: 1px solid #e2e8f0;
+    font-size: 14px;
+    width: 300px;
+    transition: all 0.2s;
+
+    &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(51, 102, 255, 0.08);
+        outline: none;
+    }
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.action-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Table Styles
+.table {
+    thead th {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 16px 12px;
+    }
+
+    tbody td {
+        padding: 16px 12px;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+    }
+}
+
+// Status Badges
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.draft-status {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.active-status {
+    background-color: #e6fffa;
+    color: #0d9488;
+}
+
+// Alert Indicators
+.alert-indicator {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+}
+
+.badge-light {
+    background: #f8fafc;
+    color: #94a3b8;
+}
+
+.badge-danger {
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+.badge-warning {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.badge-info {
+    background: #f0f9ff;
+    color: #0284c7;
+}
+
+// Modals
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 40px;
+}
+
+.modal-content-large {
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body-scroll {
+    overflow-y: auto;
+    max-height: calc(90vh - 140px);
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+}
+
+.required:after {
+    content: " *";
+    color: #ef4444;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+
+    &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(51, 102, 255, 0.08);
+    }
+}
+
+.btn-close-custom {
+    background: transparent;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #94a3b8;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+}
+
+.btn-custom-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: #2c7da0;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(51, 102, 255, 0.2);
+    }
+}
+
+.btn-outline-custom {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    background-color: transparent;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+// Mobile
+@media (max-width: 992px) {
+    .modal-container {
+        padding: 10px;
+    }
+
+    .modal-content-large {
+        max-height: 100vh;
+    }
+
+    .modal-body-scroll {
+        max-height: calc(100vh - 140px);
+    }
+
+    .search-input {
+        width: 100%;
+    }
+}

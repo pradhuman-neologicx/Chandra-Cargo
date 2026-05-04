@@ -8,7 +8,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "standalone":false
+          "standalone": false
         },
         "@schematics/angular:directive": {
           "standalone": false
@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/lab-testing",
+            "outputPath": "dist/chandra-cargo",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -42,17 +42,14 @@
               "src/styles.scss",
               "node_modules/@ng-select/ng-select/themes/default.theme.css"
             ],
-            "scripts": [
-
-       
-            ],
+            "scripts": [],
             "allowedCommonJsDependencies": [
-        "canvg",
-        "html2canvas",
-        "raf",
-        "rgbcolor",
-        "core-js"
-      ]
+              "canvg",
+              "html2canvas",
+              "raf",
+              "rgbcolor",
+              "core-js"
+            ]
           },
           "configurations": {
             "production": {

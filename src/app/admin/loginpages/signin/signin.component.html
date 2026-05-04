@@ -20,6 +20,7 @@
           class="d-block form-control form-input-custom"
           formControlName="Email"
           placeholder="Enter Your Email"
+          [readonly]="isOtpSent"
           [ngClass]="{
             'is-invalid':
               signIn.controls['Email'].errors &&
@@ -49,78 +50,67 @@
         </div>
       </div>
 
-      <div class="mb-3 position-relative">
+      <div class="mb-3 position-relative" *ngIf="isOtpSent">
         <label
           class="d-block text-capitalize form-label form-lable-custom"
-          for="Password"
-          >Enter Your Password</label
+          for="Otp"
+          >Enter OTP</label
         >
         <input
           type="text"
-          autocomplete="off"
-          #passwordfield
-          [type]="password"
-          class="d-block form-control form-input-custom erro-icon"
-          formControlName="Password"
-          placeholder="Enter Your Password"
+          class="d-block form-control form-input-custom"
+          formControlName="Otp"
+          placeholder="Enter 6 Digit OTP"
+          maxlength="6"
           [ngClass]="{
             'is-invalid':
-              signIn.controls['Password'].errors &&
-              (signIn.controls['Password'].touched ||
-                signIn.controls['Password'].dirty)
+              signIn.controls['Otp'].errors &&
+              (signIn.controls['Otp'].touched ||
+                signIn.controls['Otp'].dirty)
           }"
         />
-        <span
-          (click)="
-            passwordfield.type =
-              passwordfield.type == 'password' ? 'text' : 'password'
-          "
-          class="fa fa-fw field-icon password-btn toggle-password me-3 eye-button"
-          [ngClass]="
-            passwordfield.type == 'password' ? ' fa-eye' : ' fa-eye-slash'
-          "
-          autocomplete="off"
-        ></span>
         <div
           class="text-danger error-message"
           *ngIf="
-            signIn.controls['Password'].errors &&
-            (signIn.controls['Password'].touched ||
-              signIn.controls['Password'].dirty)
+            signIn.controls['Otp'].errors &&
+            (signIn.controls['Otp'].touched ||
+              signIn.controls['Otp'].dirty)
           "
         >
           <p
             class="fw-light text-danger"
-            *ngIf="signIn.controls['Password'].errors['required']"
+            *ngIf="signIn.controls['Otp'].errors['required']"
           >
-            Password is required
+            OTP is required
           </p>
           <p
             class="fw-light text-danger"
-            *ngIf="signIn.controls['Password'].errors['minlength']"
+            *ngIf="signIn.controls['Otp'].errors['minlength'] || signIn.controls['Otp'].errors['maxlength']"
           >
-            Please enter Correct Password
-          </p>
-          <p
-            class="fw-light text-danger"
-            *ngIf="signIn.controls['Password'].errors['maxlength']"
-          >
-            Please enter Correct Password
+            OTP must be 6 digits
           </p>
         </div>
         <p
           class="text-end text-primary cursor mt-1"
-          routerLink="/forgot_password"
+          (click)="resetEmail()"
         >
-          Forgot Password
+          Change Email?
         </p>
       </div>
       <div>
         <button
+          *ngIf="!isOtpSent"
           class="btn btn-custom-primary px-5 mt-3 w-100 text-white"
-          (click)="AdminLoginfun()"
+          (click)="sendOtp()"
         >
-          Continue
+          Send OTP
+        </button>
+        <button
+          *ngIf="isOtpSent"
+          class="btn btn-custom-primary px-5 mt-3 w-100 text-white"
+          (click)="VerifyOtpfun()"
+        >
+          Verify & Login
         </button>
         <div class="text-end error-message" *ngIf="!submitted">
           <p class="fw-light text-danger">{{ errorMessage }}</p>
