@@ -1,0 +1,139 @@
+<div class="calendar-container" @fadeIn>
+  <!-- Calendar Header -->
+  <div
+    class="calendar-header d-md-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="header-left mb-3 mb-md-0">
+      <h1 class="page-title mb-1">Corporate Session Calendar</h1>
+      <p class="text-muted small mb-0">
+        Manage holidays and operational sessions for the year.
+      </p>
+    </div>
+
+    <div class="header-actions d-flex flex-wrap gap-2">
+      <button class="btn btn-sunday" (click)="markAllSundaysAsHoliday()">
+        <i class="fa-solid fa-sun me-2"></i> Mark All Sundays
+      </button>
+      <button class="btn btn-add-holiday" (click)="addHoliday()">
+        <i class="fa-solid fa-calendar-plus me-2"></i> Add Holiday
+      </button>
+    </div>
+  </div>
+
+  <!-- Calendar Card -->
+  <div class="card calendar-card shadow-sm border-0">
+    <!-- Controls -->
+    <div
+      class="calendar-controls p-3 d-flex align-items-center justify-content-between border-bottom"
+    >
+      <div class="month-nav d-flex align-items-center">
+        <button class="btn btn-nav" (click)="prevMonth()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <h2 class="current-month mx-4 mb-0">
+          {{ monthNames[currentDate.getMonth()] }}
+          {{ currentDate.getFullYear() }}
+        </h2>
+        <button class="btn btn-nav" (click)="nextMonth()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="view-actions d-flex align-items-center gap-4">
+        <div class="calendar-legend d-flex align-items-center gap-3">
+          <div class="legend-item"><span class="dot today"></span> Today</div>
+          <div class="legend-item">
+            <span class="dot holiday-sunday"></span> Holiday / Sunday
+          </div>
+        </div>
+        <button class="btn btn-today" (click)="goToToday()">Today</button>
+      </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid">
+      <!-- Weekday Headers -->
+      <div class="weekday-header">
+        <div *ngFor="let day of weekDays" class="weekday-cell">{{ day }}</div>
+      </div>
+
+      <!-- Days Grid -->
+      <div class="days-grid">
+        <div
+          *ngFor="let day of days"
+          class="day-cell"
+          [class.other-month]="!day.isCurrentMonth"
+          [class.today]="day.isToday"
+          [class.holiday]="day.isHoliday"
+          [class.sunday]="day.isSunday"
+          [class.disabled-day]="day.isPast && !day.isHoliday"
+          (click)="onDayClick(day)"
+        >
+          <div class="day-number">{{ day.date.getDate() }}</div>
+          <div class="day-events" *ngIf="day.isHoliday">
+            <span class="holiday-tag text-truncate">{{ day.holidayName }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Custom Holiday Modal -->
+<div class="modal-overlay" *ngIf="showHolidayModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()" @fadeIn>
+    <div class="modal-header">
+      <h3 class="mb-0">{{ isEditing ? "Edit Holiday" : "Add New Holiday" }}</h3>
+      <button class="btn-close-modal" (click)="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body p-4">
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-muted text-uppercase"
+          >Holiday Date</label
+        >
+        <input
+          type="date"
+          class="form-control custom-input"
+          [(ngModel)]="modalDate"
+          [disabled]="isEditing"
+          [min]="minDate"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-muted text-uppercase"
+          >Holiday Name</label
+        >
+        <input
+          type="text"
+          class="form-control custom-input"
+          [(ngModel)]="modalHolidayName"
+          placeholder="e.g. Diwali, Independence Day"
+        />
+      </div>
+    </div>
+
+    <div class="modal-footer p-3 d-flex gap-2">
+      <button
+        class="btn btn-delete flex-grow-1"
+        *ngIf="isEditing"
+        (click)="deleteHoliday()"
+      >
+        <i class="fa-solid fa-trash-can me-2"></i> Delete
+      </button>
+      <button class="btn btn-cancel flex-grow-1" (click)="closeModal()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-save flex-grow-1"
+        [disabled]="!modalHolidayName || !modalDate"
+        (click)="saveHoliday()"
+      >
+        {{ isEditing ? "Update" : "Save" }}
+      </button>
+    </div>
+  </div>
+</div>

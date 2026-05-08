@@ -1,0 +1,189 @@
+<div class="bulk-upload-container" [@fadeIn]>
+  <!-- Header -->
+  <div class="header-row d-flex align-items-center mb-5">
+    <button class="btn-back shadow-sm" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div class="title-group ms-4">
+      <h1 class="page-title mb-1">Bulk Vehicle Import</h1>
+      <p class="text-muted small mb-0">
+        Follow the 2-step process to import your vehicle data efficiently.
+      </p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-xxl-12 col-xl-12">
+      <div class="main-upload-card shadow-lg border-0">
+        <div class="row g-0 flex-column flex-lg-row">
+          <!-- Left Column: Instructions & Sample -->
+          <div class="col-lg-5 border-end-lg bg-light-gradient">
+            <div class="p-4 p-lg-5 h-100 d-flex flex-column">
+              <div class="step-indicator mb-4">
+                <span class="badge-step">Step 1</span>
+                <h4 class="fw-bold mt-2">Download Template</h4>
+              </div>
+
+              <div class="instruction-content">
+                <p class="text-muted small">
+                  Start by downloading our standardized Excel template. This
+                  ensures all your vehicle data is mapped correctly to our
+                  system.
+                </p>
+
+                <div
+                  class="template-preview my-4 p-3 p-lg-4 rounded-4 bg-white shadow-sm border"
+                >
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="file-icon-circle">
+                      <i class="fa-solid fa-file-excel"></i>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                      <h6 class="mb-1 fw-bold text-truncate">vehicle_template.xlsx</h6>
+                      <span class="text-muted tiny"
+                        >Standard Format • 24 KB</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <ul class="guidelines-list p-0 mb-4 mb-lg-5">
+                  <li>
+                    <i class="fa-solid fa-check-circle me-2 text-success"></i>
+                    Keep column headers unchanged
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-check-circle me-2 text-success"></i>
+                    Registration No. is mandatory
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-check-circle me-2 text-success"></i>
+                    Use DD-MM-YYYY for dates
+                  </li>
+                </ul>
+              </div>
+
+              <div class="mt-auto">
+                <button
+                  class="btn-download-full w-100 shadow-sm"
+                  (click)="downloadSample()"
+                >
+                  <i class="fa-solid fa-cloud-arrow-down me-2"></i> Download Template
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Upload Area -->
+          <div class="col-lg-7">
+            <div class="p-4 p-lg-5">
+              <div class="step-indicator mb-4">
+                <span class="badge-step secondary">Step 2</span>
+                <h4 class="fw-bold mt-2">Upload Data</h4>
+              </div>
+
+              <div class="upload-wrapper mt-4">
+                <div
+                  class="drop-zone-premium"
+                  [class.dragging]="isDragging"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onFileDropped($event)"
+                  (click)="fileInput.click()"
+                >
+                  <input
+                    type="file"
+                    #fileInput
+                    hidden
+                    (change)="onFileSelected($event)"
+                    accept=".xlsx, .xls, .csv"
+                  />
+
+                  <div class="drop-content-v2" *ngIf="!selectedFile">
+                    <div class="animated-icon mb-3">
+                      <div class="pulse-ring"></div>
+                      <i class="fa-solid fa-upload"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Drop your file here</h5>
+                    <p class="text-muted">
+                      or
+                      <span class="text-primary fw-bold">browse files</span>
+                    </p>
+                    <div class="supported-formats mt-3 d-flex justify-content-center flex-wrap gap-2">
+                      <span class="format-tag">XLSX</span>
+                      <span class="format-tag">CSV</span>
+                      <span class="format-tag">XLS</span>
+                    </div>
+                  </div>
+
+                  <!-- Success State -->
+                  <div
+                    class="file-success-view"
+                    *ngIf="selectedFile"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <div class="success-icon-box mb-3">
+                      <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h5 class="fw-bold mb-1 text-truncate px-3">{{ selectedFile.name }}</h5>
+                    <p class="text-muted small mb-4">
+                      Ready for processing •
+                      {{ (selectedFile.size / 1024).toFixed(2) }} KB
+                    </p>
+
+                    <div class="d-flex gap-2 justify-content-center">
+                      <button
+                        class="btn-action-outline sm"
+                        (click)="removeFile()"
+                      >
+                        <i class="fa-solid fa-xmark me-1"></i> Change File
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Final Actions -->
+              <div
+                class="mt-4 mt-lg-5 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3"
+              >
+                <div class="file-status text-muted small" *ngIf="selectedFile">
+                  <i class="fa-solid fa-shield-check text-success me-1"></i>
+                  File is valid and secure
+                </div>
+                <div class="ms-md-auto d-flex flex-column flex-sm-row gap-3 w-100 w-md-auto">
+                  <button class="btn-glass-cancel order-2 order-sm-1" (click)="goBack()">
+                    Cancel
+                  </button>
+                  <button
+                    class="btn-process-primary shadow order-1 order-sm-2"
+                    [disabled]="!selectedFile"
+                    (click)="uploadFile()"
+                  >
+                    Confirm & Process
+                    <i class="fa-solid fa-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warning Banner -->
+      <div
+        class="info-banner mt-4 p-4 rounded-4 d-flex align-items-start gap-3"
+      >
+        <i class="fa-solid fa-triangle-exclamation text-warning mt-1"></i>
+        <div>
+          <h6 class="fw-bold mb-1 text-dark">Data Validation Notice</h6>
+          <p class="mb-0 text-muted small">
+            Our system will automatically validate your data. Any duplicate
+            Registration Numbers or invalid formats will be flagged after the
+            processing step.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

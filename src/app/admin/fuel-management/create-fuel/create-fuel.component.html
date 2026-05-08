@@ -1,0 +1,187 @@
+<div class="page-container" [@fadeIn]>
+  <!-- Header Section -->
+  <div
+    class="header-section d-flex justify-content-between align-items-end flex-wrap gap-3"
+  >
+    <div>
+      <h1 class="page-title">Add Fuel Entry</h1>
+      <div class="breadcrumb-custom">
+        <a routerLink="/admin/fuel-management">Fuel Management</a>
+        <span class="separator">/</span>
+        <span>Add Entry</span>
+      </div>
+    </div>
+    <button
+      class="btn btn-custom btn-custom-light shadow-sm"
+      (click)="goBack()"
+    >
+      <i class="fa-solid fa-chevron-left"></i> Back to List
+    </button>
+  </div>
+
+  <div class="main-card">
+    <div class="card-header-custom">
+      <div class="icon-wrapper">
+        <i class="fa-solid fa-gas-pump"></i>
+      </div>
+      <h5>Fuel Entry Details</h5>
+    </div>
+
+    <form [formGroup]="fuelForm" (ngSubmit)="saveEntry()">
+      <div class="card-body-custom">
+        <!-- Section: Vehicle & Personnel -->
+        <div class="form-section-title">Vehicle & Personnel</div>
+        <div class="row g-3 g-md-4 mb-4">
+          <div class="col-md-6">
+            <div class="form-group-custom">
+              <label class="label-custom required">Select Vehicle</label>
+              <ng-select
+                [items]="vehicles"
+                bindLabel="regNo"
+                bindValue="id"
+                placeholder="Search by Reg No."
+                class="custom-select"
+                formControlName="vehicleId"
+              >
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="d-flex flex-column">
+                    <span class="fw-bold">{{ item.regNo }}</span>
+                    <small class="text-muted">{{ item.model }}</small>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group-custom">
+              <label class="label-custom required">Driver Name</label>
+              <ng-select
+                [items]="drivers"
+                placeholder="Select Driver"
+                class="custom-select"
+                formControlName="driver"
+              >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Fuel Transaction -->
+        <div class="form-section-title">Fuel Transaction</div>
+        <div class="row g-3 g-md-4">
+          <div class="col-md-4">
+            <div class="form-group-custom">
+              <label class="label-custom required">Transaction Date</label>
+              <input type="date" class="input-style" formControlName="date" />
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-group-custom">
+              <label class="label-custom">Fuel Station (Optional)</label>
+              <input
+                type="text"
+                class="input-style"
+                formControlName="station"
+                placeholder="Enter station name or location"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group-custom">
+              <label class="label-custom required">Quantity (Liters)</label>
+              <div class="position-relative">
+                <input
+                  type="number"
+                  step="0.01"
+                  class="input-style"
+                  formControlName="qty"
+                  placeholder="0.00"
+                />
+                <span
+                  class="position-absolute end-0 top-50 translate-middle-y me-3 text-muted small fw-bold"
+                  >LTR</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group-custom">
+              <label class="label-custom required">Total Amount</label>
+              <div class="position-relative">
+                <span
+                  class="position-absolute start-0 top-50 translate-middle-y ms-3 text-muted small fw-bold"
+                  >₹</span
+                >
+                <input
+                  type="number"
+                  class="input-style ps-5"
+                  formControlName="amount"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group-custom">
+              <label class="label-custom required">Fuel Type</label>
+              <select
+                class="input-style form-select"
+                formControlName="fuelType"
+              >
+                <option *ngFor="let t of fuelTypes" [value]="t">{{ t }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Odometer Reading -->
+        <div class="form-section-title mt-4">Odometer Reading</div>
+        <div class="row g-3 g-md-4">
+          <div class="col-md-12">
+            <div class="form-group-custom mb-0">
+              <label class="label-custom required">Current Reading (KM)</label>
+              <div class="position-relative">
+                <input
+                  type="number"
+                  class="input-style"
+                  formControlName="odometer"
+                  placeholder="e.g. 45200"
+                />
+                <span
+                  class="position-absolute end-0 top-50 translate-middle-y me-3 text-muted small fw-bold"
+                  >KM</span
+                >
+              </div>
+              <div class="info-banner mt-3">
+                <i class="fa-solid fa-circle-info fs-5"></i>
+                <div>
+                  <strong>Auto-calculation:</strong> Mileage will be calculated
+                  automatically based on the previous odometer record for this
+                  vehicle. Please ensure the reading is accurate.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer-custom">
+        <button
+          class="btn btn-custom btn-custom-light"
+          type="button"
+          (click)="goBack()"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-custom btn-custom-primary shadow-sm"
+          type="submit"
+          [disabled]="fuelForm.invalid"
+        >
+          <i class="fa-solid fa-check"></i> Save Entry
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

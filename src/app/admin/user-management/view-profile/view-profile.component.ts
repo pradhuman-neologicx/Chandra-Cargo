@@ -50,7 +50,9 @@ export class ViewProfileComponent implements OnInit {
 
   // Edit Modal State
   isEditModalOpen: boolean = false;
+  isUploadModalOpen: boolean = false;
   editForm!: FormGroup;
+  uploadForm!: FormGroup;
 
   // Mock document data
   employeeDocuments = [
@@ -87,7 +89,6 @@ export class ViewProfileComponent implements OnInit {
   ];
 
   // Mock reference data for form dropdowns
-  employmentTypes = ['Permanent', 'Contractual'];
   employmentStatuses = ['Active', 'Probation', 'Notice Period', 'Terminated'];
   branchesList = ['Jaipur', 'Delhi', 'Mumbai', 'Ahmedabad', 'Pune'];
   designationsList = ['Manager', 'Supervisor', 'Clerk', 'Driver', 'Loader'];
@@ -117,9 +118,14 @@ export class ViewProfileComponent implements OnInit {
       joining_date: ['', Validators.required],
       department: ['', Validators.required],
       designation: ['', Validators.required],
-      employment_type: ['', Validators.required],
       status: ['', Validators.required],
       branches: [[]],
+    });
+
+    this.uploadForm = this.fb.group({
+      docName: ['', Validators.required],
+      docType: ['pdf', Validators.required],
+      file: [null, Validators.required]
     });
   }
 
@@ -141,7 +147,6 @@ export class ViewProfileComponent implements OnInit {
         branches: ['Jaipur', 'Delhi'],
         department: { name: 'Operations' },
         role: { name: 'Manager' },
-        employment_type: 'Permanent',
         reporting_manager: 'John Doe',
         assigned_station: 'Station Alpha',
         check_in: '09:00 AM',
@@ -194,19 +199,44 @@ export class ViewProfileComponent implements OnInit {
       department: this.staffData.department?.name || '',
       designation:
         this.staffData.designation || this.staffData.role?.name || '',
-      employment_type: this.staffData.employment_type || 'Permanent',
       status: this.staffData.status || 'Active',
       branches: this.staffData.branches || [],
     });
     this.isEditModalOpen = true;
   }
 
+  openUploadModal() {
+    this.uploadForm.reset({ docType: 'pdf' });
+    this.isUploadModalOpen = true;
+  }
+
   closeModal() {
     this.isEditModalOpen = false;
+    this.isUploadModalOpen = false;
+  }
+
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.uploadForm.get('file')?.setValue(file);
+    }
   }
 
   onModalClickTarget(event: MouseEvent) {
-    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop') || (event.target as HTMLElement).classList.contains('custom-modal')) {
+      this.closeModal();
+    }
+  }
+
+  saveUpload() {
+    if (this.uploadForm.valid) {
+      const formVal = this.uploadForm.value;
+      this.employeeDocuments.unshift({
+        name: formVal.docName + (formVal.docType === 'pdf' ? '.pdf' : '.jpg'),
+        type: formVal.docType,
+        size: '1.5 MB', // Mock size
+        uploadDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      });
       this.closeModal();
     }
   }
@@ -228,7 +258,6 @@ export class ViewProfileComponent implements OnInit {
         department: { name: formValue.department },
         role: { name: formValue.designation },
         designation: formValue.designation,
-        employment_type: formValue.employment_type,
         status: formValue.status,
         branches: formValue.branches,
       };

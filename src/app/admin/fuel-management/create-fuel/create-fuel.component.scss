@@ -1,0 +1,236 @@
+:host {
+    display: block;
+    // background: #f8fafc;
+    min-height: 100vh;
+}
+
+.page-container {
+    padding: 0 2rem;
+    // max-width: 1200px;
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+// Header Section
+.header-section {
+    margin-bottom: 2rem;
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #2c7da0;
+        line-height: 32px;
+        margin-bottom: 0.1rem;
+    }
+
+    .breadcrumb-custom {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #64748b;
+
+        a {
+            color: #2c7da0;
+            text-decoration: none;
+            font-weight: 500;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .separator {
+            color: #cbd5e1;
+        }
+    }
+}
+
+// Modern Card
+.main-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.card-header-custom {
+    padding: 1.5rem 2rem;
+    background: #fff;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .icon-wrapper {
+        width: 40px;
+        height: 40px;
+        background: rgba(44, 125, 160, 0.1);
+        color: #2c7da0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 1.25rem;
+    }
+
+    h5 {
+        margin: 0;
+        font-weight: 700;
+        color: #2c7da0;
+    }
+}
+
+.card-body-custom {
+    padding: 2rem;
+
+    @media (max-width: 768px) {
+        padding: 1.25rem;
+    }
+}
+
+// Section Styling
+.form-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #f1f5f9;
+    }
+}
+
+// Input Styling
+.form-group-custom {
+    margin-bottom: 1.5rem;
+
+    .label-custom {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 0.5rem;
+
+        &.required::after {
+            content: "*";
+            color: #ef4444;
+            margin-left: 4px;
+        }
+    }
+}
+
+.input-style {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+
+    &:focus {
+        background: #fff;
+        border-color: #2c7da0;
+        box-shadow: 0 0 0 4px rgba(44, 125, 160, 0.1);
+        outline: none;
+    }
+}
+
+// Ng-Select Customization
+::ng-deep .ng-select.custom-select {
+    .ng-select-container {
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        background: #f8fafc !important;
+        min-height: 48px !important;
+        box-shadow: none !important;
+    }
+
+    &.ng-select-opened .ng-select-container {
+        border-color: #2c7da0 !important;
+        background: #fff !important;
+    }
+}
+
+// Footer Styling
+.card-footer-custom {
+    padding: 1.5rem 2rem;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    @media (max-width: 576px) {
+        flex-direction: column-reverse;
+
+        .btn {
+            width: 100%;
+        }
+    }
+}
+
+.btn-custom {
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &-primary {
+        background: #2c7da0;
+        color: white;
+        border: none;
+
+        &:hover {
+            background: #236480;
+            transform: translateY(-2px);
+        }
+
+        &:disabled {
+            background: #cbd5e1;
+            transform: none;
+        }
+    }
+
+    &-light {
+        background: white;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+
+        &:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+    }
+}
+
+.info-banner {
+    background: rgba(44, 125, 160, 0.05);
+    border: 1px solid rgba(44, 125, 160, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    color: #2c7da0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+}

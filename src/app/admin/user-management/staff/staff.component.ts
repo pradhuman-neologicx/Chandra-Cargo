@@ -37,7 +37,6 @@ interface Staff {
   branches: string[];
   department: string;
   designation: string;
-  employment_type: string;
   is_active: any;
   image?: string;
 }
@@ -130,7 +129,6 @@ export class StaffComponent implements OnInit {
   selectedUploadFileName: string = '';
 
   // Mock Data
-  employmentTypes = ['Permanent', 'Contractual'];
   employmentStatuses = ['Active', 'Probation', 'Notice Period', 'Terminated'];
   branchesList = ['Jaipur', 'Delhi', 'Mumbai', 'Ahmedabad', 'Pune'];
   designationsList = ['Manager', 'Supervisor', 'Clerk', 'Driver', 'Loader'];
@@ -149,7 +147,6 @@ export class StaffComponent implements OnInit {
       branches: ['Jaipur'],
       department: 'Operations',
       designation: 'Manager',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -165,7 +162,6 @@ export class StaffComponent implements OnInit {
       branches: ['Delhi', 'Jaipur'],
       department: 'Logistics',
       designation: 'Supervisor',
-      employment_type: 'Contractual',
       is_active: 1,
     },
     {
@@ -181,7 +177,6 @@ export class StaffComponent implements OnInit {
       branches: ['Mumbai'],
       department: 'Accounts',
       designation: 'Clerk',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -197,7 +192,6 @@ export class StaffComponent implements OnInit {
       branches: ['Ahmedabad'],
       department: 'Operations',
       designation: 'Supervisor',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -213,7 +207,6 @@ export class StaffComponent implements OnInit {
       branches: ['Pune'],
       department: 'HR',
       designation: 'Manager',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -229,7 +222,6 @@ export class StaffComponent implements OnInit {
       branches: ['Jaipur'],
       department: 'Logistics',
       designation: 'Driver',
-      employment_type: 'Contractual',
       is_active: 1,
     },
     {
@@ -245,7 +237,6 @@ export class StaffComponent implements OnInit {
       branches: ['Delhi'],
       department: 'Accounts',
       designation: 'Manager',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -261,7 +252,6 @@ export class StaffComponent implements OnInit {
       branches: ['Mumbai'],
       department: 'Operations',
       designation: 'Loader',
-      employment_type: 'Contractual',
       is_active: 1,
     },
     {
@@ -277,7 +267,6 @@ export class StaffComponent implements OnInit {
       branches: ['Ahmedabad'],
       department: 'HR',
       designation: 'Supervisor',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -293,7 +282,6 @@ export class StaffComponent implements OnInit {
       branches: ['Pune'],
       department: 'Logistics',
       designation: 'Clerk',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -309,7 +297,6 @@ export class StaffComponent implements OnInit {
       branches: ['Jaipur'],
       department: 'Operations',
       designation: 'Manager',
-      employment_type: 'Permanent',
       is_active: 1,
     },
     {
@@ -325,7 +312,6 @@ export class StaffComponent implements OnInit {
       branches: ['Delhi'],
       department: 'Accounts',
       designation: 'Supervisor',
-      employment_type: 'Permanent',
       is_active: 1,
     },
   ];
@@ -359,7 +345,6 @@ export class StaffComponent implements OnInit {
       branches: [[], [Validators.required]],
       department: ['', [Validators.required]],
       designation: ['', [Validators.required]],
-      employment_type: ['Permanent', [Validators.required]],
       status: ['', [Validators.required]],
     });
     this.staffupdate = this.formBuilder.group({
@@ -378,7 +363,6 @@ export class StaffComponent implements OnInit {
       branches: [[], [Validators.required]],
       department: ['', [Validators.required]],
       designation: ['', [Validators.required]],
-      employment_type: ['', [Validators.required]],
     });
     this.staffview = this.formBuilder.group({
       image: [''],
@@ -393,7 +377,6 @@ export class StaffComponent implements OnInit {
       branches: [[]],
       department: [''],
       designation: [''],
-      employment_type: [''],
     });
     this.uploadForm = this.formBuilder.group({
       file: ['', Validators.required],
@@ -832,8 +815,15 @@ export class StaffComponent implements OnInit {
       branches: staff.branches,
       department: staff.department,
       designation: staff.designation,
-      employment_type: staff.employment_type,
+      image: staff.image,
     });
+    if (staff.image) {
+      this.selectedImages = [
+        { imageSrc: staff.image, id: this.generateUniqueId() },
+      ];
+    } else {
+      this.selectedImages = [];
+    }
   }
 
   async OpenviewModal(staff: any) {
@@ -851,7 +841,7 @@ export class StaffComponent implements OnInit {
       branches: staff.branches,
       department: staff.department,
       designation: staff.designation,
-      employment_type: staff.employment_type,
+      image: staff.image,
     });
   }
 
@@ -1112,5 +1102,23 @@ export class StaffComponent implements OnInit {
       },
     });
     */
+  }
+  downloadSampleFile() {
+    const headers =
+      'Name,Email,Mobile,Address,DOB,EmergencyContact,JoiningDate,Department,Designation,Status\n';
+    const sampleData =
+      'John Doe,john@example.com,9876543210,Sample Address,1990-01-01,9988776655,2023-01-01,Operations,Manager,Active';
+    const blob = new Blob([headers + sampleData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'staff_bulk_upload_sample.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    this.notificationService.show(
+      'Sample file downloaded successfully',
+      'success',
+      2000,
+    );
   }
 }

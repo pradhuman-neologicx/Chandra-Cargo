@@ -1,0 +1,131 @@
+<div class="page-container" [@fadeIn]>
+  <!-- Header Section -->
+  <div class="header-section mb-4 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div class="ms-3">
+        <h1 class="page-title mb-0">Vehicle - Driver Mapping</h1>
+        <p class="text-muted small mb-0">Assign drivers to your fleet and manage active shifts.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Mapping Form Column -->
+    <div class="col-lg-5">
+      <div class="mapping-card shadow-sm p-4 h-100">
+        <h5 class="fw-bold mb-4 d-flex align-items-center">
+          <i class="fa-solid fa-id-card-clip text-primary me-2"></i> New Assignment
+        </h5>
+        
+        <form [formGroup]="mappingForm">
+          <div class="mb-4">
+            <label class="form-label">Select Vehicle</label>
+            <ng-select [items]="unmappedVehicles" 
+                       bindLabel="regNo" 
+                       bindValue="id" 
+                       placeholder="Search Vehicle No."
+                       formControlName="vehicleId">
+              <ng-template ng-option-tmp let-item="item">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold">{{item.regNo}}</span>
+                  <small class="text-muted">{{item.model}}</small>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <div class="mapping-separator text-center my-4">
+            <div class="line"></div>
+            <div class="icon-link"><i class="fa-solid fa-link"></i></div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Assign Driver</label>
+            <ng-select [items]="drivers" 
+                       bindLabel="name" 
+                       bindValue="id" 
+                       placeholder="Select Driver Name"
+                       formControlName="driverId">
+              <ng-template ng-option-tmp let-item="item">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold">{{item.name}}</span>
+                  <small class="text-muted">Lic: {{item.license}}</small>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-6 col-md-6">
+              <label class="form-label">Assignment Date</label>
+              <input type="date" class="form-control" formControlName="assignmentDate">
+            </div>
+            <div class="col-6 col-md-6">
+              <label class="form-label">Select Shift</label>
+              <select class="form-select" formControlName="shift">
+                <option value="Full Day">Full Day</option>
+                <option value="Day Shift">Day Shift</option>
+                <option value="Night Shift">Night Shift</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <button class="btn-save-final w-100 shadow" (click)="submitMapping()">
+              <i class="fa-solid fa-link me-2"></i> Confirm Assignment
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Recent Assignments Column -->
+    <div class="col-lg-7">
+      <div class="history-card shadow-sm p-4 h-100">
+        <h5 class="fw-bold mb-4 d-flex align-items-center">
+          <i class="fa-solid fa-clock-rotate-left text-muted me-2"></i> Recent Assignments
+        </h5>
+        
+        <div class="table-responsive">
+          <table class="table table-hover align-middle custom-mapping-table">
+            <thead>
+              <tr>
+                <th>Vehicle No.</th>
+                <th>Assigned Driver</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let map of recentMappings" [@fadeIn]>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="v-icon me-2"><i class="fa-solid fa-truck"></i></div>
+                    <span class="fw-bold">{{map.vehicle}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex flex-column">
+                    <span class="fw-bold">{{map.driver}}</span>
+                    <small class="text-muted">Primary Driver</small>
+                  </div>
+                </td>
+                <td>{{map.date}}</td>
+                <td>
+                  <span class="badge bg-soft-success">Active</span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-light text-danger"><i class="fa-solid fa-unlink"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -34,10 +34,11 @@
 
 // Page header
 .page-title {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
-    color: #1E293B;
+    color: var(--text-color-primary);
     margin-bottom: 4px;
+    line-height: 32px;
 }
 
 .page-subtitle {
@@ -393,23 +394,77 @@
 
 // Mobile card view
 .mobile-attendance-card {
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    border: 1px solid #F1F5F9;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    background: white;
 
     .card-body {
-        padding: 16px;
+        padding: 20px;
+    }
+
+    .status-badge {
+        font-size: 11px;
+        padding: 4px 10px;
     }
 }
 
-.mobile-details {
-    font-size: 13px;
-    color: #475569;
+.mobile-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 4px;
+    padding-top: 16px;
+    border-top: 1px dashed #E2E8F0;
+}
 
-    strong {
-        color: #1E293B;
-        font-weight: 600;
-    }
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.detail-icon {
+    width: 32px;
+    height: 32px;
+    background: #F8FAFC;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748B;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94A3B8;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.detail-value {
+    font-size: 14px;
+    color: #1E293B;
+    font-weight: 500;
+}
+
+.work-hours-badge {
+    font-size: 11px;
+    background: #F1F5F9;
+    color: #64748B;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
 }
 
 // Responsive
@@ -439,6 +494,7 @@
         display: block;
     }
 }
+
 // Action Buttons
 .btn-view-action {
     width: 34px;

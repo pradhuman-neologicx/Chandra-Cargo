@@ -1,8 +1,11 @@
 <div class="container mb-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+  <div
+    class="d-flex justify-content-between align-items-center flex-wrap gap-2"
+  >
     <h1 class="text-primary table-heading-detail">Vehicle Model Management</h1>
-    <button class="btn btn-custom-primary px-4 py-2" (click)="openAddModal()">
-      <i class="fa-solid fa-plus me-2"></i>Add Model
+    <button class="btn-action-header shadow-sm" (click)="openAddModal()">
+      <div class="icon-box"><i class="fa-solid fa-plus"></i></div>
+      <span>Add Model</span>
     </button>
   </div>
 
@@ -10,22 +13,39 @@
     <div class="d-md-flex justify-content-between align-items-center my-3">
       <div class="d-flex align-items-center mb-md-0 mb-3">
         <span class="me-1 show-entery-text">Show</span>
-        <select class="form-control form-select show-entries-select" (change)="onTableSizeChange($event)">
-          <option *ngFor="let size of tableSizes" [ngValue]="size">{{ size }}</option>
+        <select
+          class="form-control form-select show-entries-select"
+          (change)="onTableSizeChange($event)"
+        >
+          <option *ngFor="let size of tableSizes" [ngValue]="size">
+            {{ size }}
+          </option>
         </select>
         <span class="ms-1 show-entery-text">entries</span>
       </div>
 
       <div class="d-flex align-items-center">
-        <form [formGroup]="searchbarform" class="d-flex align-items-center gap-2">
+        <form
+          [formGroup]="searchbarform"
+          class="d-flex align-items-center gap-2"
+        >
           <span>Search:</span>
           <div class="position-relative">
-            <input type="text" class="form-control search-user" placeholder="Search model or manufacturer..." formControlName="searchbar" />
+            <input
+              type="text"
+              class="form-control search-user"
+              placeholder="Search model or manufacturer..."
+              formControlName="searchbar"
+            />
           </div>
           <button class="btn btn-primary search-btn" (click)="searchfun()">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
-          <button class="btn btn-primary search-btn" (click)="resetsearchbar()" *ngIf="showreset">
+          <button
+            class="btn btn-primary search-btn"
+            (click)="resetsearchbar()"
+            *ngIf="showreset"
+          >
             <i class="fa-solid fa-rotate-right"></i>
           </button>
         </form>
@@ -37,41 +57,79 @@
       <div class="d-none d-lg-block">
         <table class="table table-bordered table-hover table-striped mb-0">
           <thead class="table-header">
-            <tr *ngFor="let head of table_heading">
-              <th>{{ head.heading0 }}</th>
-              <th>{{ head.heading1 }}</th>
-              <th>{{ head.heading2 }}</th>
-              <th>{{ head.heading3 }}</th>
-              <th>{{ head.heading4 }}</th>
-              <th>{{ head.heading5 }}</th>
+            <tr>
+              <th class="ps-4">Sr No.</th>
+              <th>Manufacturer</th>
+              <th>Model Name</th>
+              <th>Vehicle Type</th>
+              <th class="text-center">Status</th>
+              <th class="text-center pe-4">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of modelList | paginate: { itemsPerPage: tableSize != 'all' ? tableSize : totalRecords, currentPage: page, totalItems: totalRecords }; index as i">
+            <tr
+              *ngFor="
+                let item of modelList
+                  | paginate
+                    : {
+                        itemsPerPage:
+                          tableSize != 'all' ? tableSize : totalRecords,
+                        currentPage: page,
+                        totalItems: totalRecords,
+                      };
+                index as i
+              "
+            >
               <td>{{ tableSize * (page - 1) + i + 1 }}</td>
               <td>{{ item.manufacturerName }}</td>
               <td>{{ item.name }}</td>
               <td>
-                <span class="badge" [ngClass]="item.type === 'Bus' ? 'bg-info-subtle text-info' : 'bg-warning-subtle text-warning-emphasis'" style="font-size: 11px; padding: 5px 10px; border-radius: 6px;">
+                <span
+                  class="badge"
+                  [ngClass]="
+                    item.type === 'Bus'
+                      ? 'bg-info-subtle text-info'
+                      : 'bg-warning-subtle text-warning-emphasis'
+                  "
+                  style="font-size: 11px; padding: 5px 10px; border-radius: 6px"
+                >
                   {{ item.type }}
                 </span>
               </td>
               <td>
-                <span class="status-badge" [ngClass]="item.is_active == 1 ? 'active-status' : 'deactive-status'">
-                  {{ item.is_active == 1 ? 'Active' : 'Inactive' }}
+                <span
+                  class="status-badge"
+                  [ngClass]="
+                    item.is_active == 1 ? 'active-status' : 'deactive-status'
+                  "
+                >
+                  {{ item.is_active == 1 ? "Active" : "Inactive" }}
                 </span>
               </td>
-              <td>
-                <button mat-icon-button [matMenuTriggerFor]="menu">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="openEditModal(item)">Edit</button>
-                  <button mat-menu-item (click)="openViewModal(item)">View Details</button>
-                  <button mat-menu-item (click)="toggleStatus(item.id, item.is_active == 1 ? 0 : 1)">
-                    {{ item.is_active == 1 ? 'Deactivate' : 'Activate' }}
+              <td class="text-center pe-4">
+                <div class="d-flex justify-content-center gap-2">
+                  <button
+                    class="btn-action-table edit"
+                    (click)="openEditModal(item)"
+                    matTooltip="Edit Model"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                </mat-menu>
+                  <button
+                    class="btn-action-table status"
+                    (click)="toggleStatus(item.id, item.is_active == 1 ? 0 : 1)"
+                    [matTooltip]="
+                      item.is_active == 1 ? 'Deactivate' : 'Activate'
+                    "
+                  >
+                    <i
+                      class="fa-solid"
+                      [ngClass]="
+                        item.is_active == 1 ? 'fa-toggle-on' : 'fa-toggle-off'
+                      "
+                    ></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -80,7 +138,19 @@
 
       <!-- Mobile Cards -->
       <div class="d-lg-none space-y-4">
-        <div *ngFor="let item of modelList | paginate: { itemsPerPage: tableSize != 'all' ? tableSize : totalRecords, currentPage: page, totalItems: totalRecords }; index as i" class="mobile-card">
+        <div
+          *ngFor="
+            let item of modelList
+              | paginate
+                : {
+                    itemsPerPage: tableSize != 'all' ? tableSize : totalRecords,
+                    currentPage: page,
+                    totalItems: totalRecords,
+                  };
+            index as i
+          "
+          class="mobile-card"
+        >
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="fw-bold">#{{ tableSize * (page - 1) + i + 1 }}</span>
             <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
@@ -88,20 +158,36 @@
             </button>
             <mat-menu #mobileMenu="matMenu">
               <button mat-menu-item (click)="openEditModal(item)">Edit</button>
-              <button mat-menu-item (click)="openViewModal(item)">View Details</button>
-              <button mat-menu-item (click)="toggleStatus(item.id, item.is_active == 1 ? 0 : 1)">
-                {{ item.is_active == 1 ? 'Deactivate' : 'Activate' }}
+              <button mat-menu-item (click)="openViewModal(item)">
+                View Details
+              </button>
+              <button
+                mat-menu-item
+                (click)="toggleStatus(item.id, item.is_active == 1 ? 0 : 1)"
+              >
+                {{ item.is_active == 1 ? "Deactivate" : "Activate" }}
               </button>
             </mat-menu>
           </div>
           <div class="row g-2">
-            <div class="col-12 mb-1"><strong>Manufacturer:</strong> {{ item.manufacturerName }}</div>
-            <div class="col-12 mb-1"><strong>Model:</strong> {{ item.name }}</div>
-            <div class="col-12 mb-1"><strong>Type:</strong> {{ item.type }}</div>
+            <div class="col-12 mb-1">
+              <strong>Manufacturer:</strong> {{ item.manufacturerName }}
+            </div>
+            <div class="col-12 mb-1">
+              <strong>Model:</strong> {{ item.name }}
+            </div>
+            <div class="col-12 mb-1">
+              <strong>Type:</strong> {{ item.type }}
+            </div>
             <div class="col-12">
               <strong>Status:</strong>
-              <span class="status-badge ms-2" [ngClass]="item.is_active == 1 ? 'active-status' : 'deactive-status'">
-                {{ item.is_active == 1 ? 'Active' : 'Inactive' }}
+              <span
+                class="status-badge ms-2"
+                [ngClass]="
+                  item.is_active == 1 ? 'active-status' : 'deactive-status'
+                "
+              >
+                {{ item.is_active == 1 ? "Active" : "Inactive" }}
               </span>
             </div>
           </div>
@@ -111,21 +197,39 @@
       <!-- Pagination -->
       <div class="d-md-flex justify-content-between align-items-center py-3">
         <span class="showalltext">
-          Showing {{ tableSize * (page - 1) + 1 }} to {{ tableSize * page <= totalRecords ? tableSize * page : totalRecords }} of {{ totalRecords }} entries
+          Showing {{ tableSize * (page - 1) + 1 }} to
+          {{
+            tableSize * page <= totalRecords ? tableSize * page : totalRecords
+          }}
+          of {{ totalRecords }} entries
         </span>
-        <pagination-controls previousLabel="Prev" nextLabel="Next" [responsive]="true" (pageChange)="onTableDataChange($event)"></pagination-controls>
+        <pagination-controls
+          previousLabel="Prev"
+          nextLabel="Next"
+          [responsive]="true"
+          (pageChange)="onTableDataChange($event)"
+        ></pagination-controls>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Modals -->
-<div *ngIf="createModalOpen" class="modal-container" role="dialog" aria-modal="true">
+<div
+  *ngIf="createModalOpen"
+  class="modal-container"
+  role="dialog"
+  aria-modal="true"
+>
   <div class="modal-content-50" [@fadeIn]>
     <form [formGroup]="createForm">
       <div class="card shadow-lg border-0 overflow-hidden">
-        <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-          <h5 class="modal-title mb-0 fw-bold text-primary">Add Vehicle Model</h5>
+        <div
+          class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="modal-title mb-0 fw-bold text-primary">
+            Add Vehicle Model
+          </h5>
           <button class="btn-close-custom" type="button" (click)="closeModal()">
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -135,36 +239,66 @@
             <label class="form-label fw-semibold">Select Manufacturer</label>
             <select class="form-select" formControlName="ManufacturerId">
               <option value="" selected disabled>Select Manufacturer</option>
-              <option *ngFor="let m of manufacturerList" [value]="m.id">{{ m.name }}</option>
+              <option *ngFor="let m of manufacturerList" [value]="m.id">
+                {{ m.name }}
+              </option>
             </select>
           </div>
           <div class="mb-4">
             <label class="form-label fw-semibold">Model Name</label>
-            <input type="text" class="form-control" formControlName="Name" placeholder="e.g. LPT 1613, Starbus..." />
+            <input
+              type="text"
+              class="form-control"
+              formControlName="Name"
+              placeholder="e.g. LPT 1613, Starbus..."
+            />
           </div>
           <div class="mb-2">
             <label class="form-label fw-semibold">Vehicle Type</label>
             <select class="form-select" formControlName="VehicleType">
               <option value="" selected disabled>Select Type</option>
-              <option *ngFor="let type of vehicleTypes" [value]="type">{{ type }}</option>
+              <option *ngFor="let type of vehicleTypes" [value]="type">
+                {{ type }}
+              </option>
             </select>
           </div>
         </div>
         <div class="card-footer py-3 px-4 text-end">
-          <button class="btn btn-light px-4 me-2" type="button" (click)="closeModal()">Cancel</button>
-          <button class="btn btn-custom-primary" type="button" (click)="createModel()">Save Model</button>
+          <button
+            class="btn btn-light px-4 me-2"
+            type="button"
+            (click)="closeModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-custom-primary"
+            type="button"
+            (click)="createModel()"
+          >
+            Save Model
+          </button>
         </div>
       </div>
     </form>
   </div>
 </div>
 
-<div *ngIf="updateModalOpen" class="modal-container" role="dialog" aria-modal="true">
+<div
+  *ngIf="updateModalOpen"
+  class="modal-container"
+  role="dialog"
+  aria-modal="true"
+>
   <div class="modal-content-50" [@fadeIn]>
     <form [formGroup]="updateForm">
       <div class="card shadow-lg border-0 overflow-hidden">
-        <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-          <h5 class="modal-title mb-0 fw-bold text-primary">Update Vehicle Model</h5>
+        <div
+          class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="modal-title mb-0 fw-bold text-primary">
+            Update Vehicle Model
+          </h5>
           <button class="btn-close-custom" type="button" (click)="closeModal()">
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -174,7 +308,9 @@
             <label class="form-label fw-semibold">Manufacturer</label>
             <select class="form-select" formControlName="ManufacturerId">
               <option value="" disabled>Select Manufacturer</option>
-              <option *ngFor="let m of manufacturerList" [value]="m.id">{{ m.name }}</option>
+              <option *ngFor="let m of manufacturerList" [value]="m.id">
+                {{ m.name }}
+              </option>
             </select>
           </div>
           <div class="mb-4">
@@ -185,49 +321,93 @@
             <label class="form-label fw-semibold">Vehicle Type</label>
             <select class="form-select" formControlName="VehicleType">
               <option value="" disabled>Select Type</option>
-              <option *ngFor="let type of vehicleTypes" [value]="type">{{ type }}</option>
+              <option *ngFor="let type of vehicleTypes" [value]="type">
+                {{ type }}
+              </option>
             </select>
           </div>
         </div>
         <div class="card-footer py-3 px-4 text-end">
-          <button class="btn btn-light px-4 me-2" type="button" (click)="closeModal()">Cancel</button>
-          <button class="btn btn-custom-primary" type="button" (click)="updateModel()">Update</button>
+          <button
+            class="btn btn-light px-4 me-2"
+            type="button"
+            (click)="closeModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-custom-primary"
+            type="button"
+            (click)="updateModel()"
+          >
+            Update
+          </button>
         </div>
       </div>
     </form>
   </div>
 </div>
 
-<div *ngIf="viewModalOpen" class="modal-container" role="dialog" aria-modal="true">
+<div
+  *ngIf="viewModalOpen"
+  class="modal-container"
+  role="dialog"
+  aria-modal="true"
+>
   <div class="modal-content-50" [@fadeIn]>
     <form [formGroup]="viewForm">
       <div class="card shadow-lg border-0 overflow-hidden">
-        <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-          <h5 class="modal-title mb-0 fw-bold text-primary">View Model Details</h5>
+        <div
+          class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="modal-title mb-0 fw-bold text-primary">
+            View Model Details
+          </h5>
           <button class="btn-close-custom" type="button" (click)="closeModal()">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
         <div class="card-body p-4">
           <div class="mb-4">
-            <label class="form-label fw-semibold text-muted">Manufacturer</label>
-            <select class="form-select bg-light" formControlName="ManufacturerId">
-              <option *ngFor="let m of manufacturerList" [value]="m.id">{{ m.name }}</option>
+            <label class="form-label fw-semibold text-muted"
+              >Manufacturer</label
+            >
+            <select
+              class="form-select bg-light"
+              formControlName="ManufacturerId"
+            >
+              <option *ngFor="let m of manufacturerList" [value]="m.id">
+                {{ m.name }}
+              </option>
             </select>
           </div>
           <div class="mb-4">
             <label class="form-label fw-semibold text-muted">Model Name</label>
-            <input type="text" class="form-control bg-light" formControlName="Name" />
+            <input
+              type="text"
+              class="form-control bg-light"
+              formControlName="Name"
+            />
           </div>
           <div class="mb-2">
-            <label class="form-label fw-semibold text-muted">Vehicle Type</label>
+            <label class="form-label fw-semibold text-muted"
+              >Vehicle Type</label
+            >
             <select class="form-select bg-light" formControlName="VehicleType">
-              <option *ngFor="let type of vehicleTypes" [value]="type">{{ type }}</option>
+              <option *ngFor="let type of vehicleTypes" [value]="type">
+                {{ type }}
+              </option>
             </select>
           </div>
         </div>
         <div class="card-footer py-3 px-4 text-end">
-          <button class="btn btn-custom-primary px-4" type="button" (click)="closeModal()">Close</button>
+          <button
+            class="btn btn-custom-primary px-4"
+            type="button"
+            (click)="closeModal()"
+          >
+            Close
+          </button>
         </div>
       </div>
     </form>

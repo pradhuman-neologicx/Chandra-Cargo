@@ -1,6 +1,8 @@
 <div class="container-fluid attendance-history-container mb-4">
   <!-- Header -->
-  <div class="d-md-flex justify-content-between align-items-start mb-4">
+  <div
+    class="d-md-flex justify-content-between align-items-start mb-4 flex-wrap gap-2"
+  >
     <div>
       <h1 class="page-title">Attendance History</h1>
       <p class="page-subtitle">
@@ -284,21 +286,32 @@
                 <i class="fa-solid fa-pen-to-square text-success"></i>
               </button> -->
             </div>
-            <div class="row mobile-details">
-              <div class="col-6 mb-2">
-                <strong>Date:</strong> {{ record.date }}
+            <div class="mobile-details-list">
+              <div class="detail-item">
+                <i class="fa-regular fa-calendar detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Date</span>
+                  <span class="detail-value">{{ record.date }}</span>
+                </div>
               </div>
-              <div class="col-6 mb-2">
-                <strong>Department:</strong> {{ record.department }}
+              <div class="detail-item">
+                <i class="fa-solid fa-building-user detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Department</span>
+                  <span class="detail-value">{{ record.department }}</span>
+                </div>
               </div>
-              <div class="col-6 mb-2">
-                <strong>Check-in:</strong> {{ record.clockIn }}
-              </div>
-              <div class="col-6 mb-2">
-                <strong>Check-out:</strong> {{ record.clockOut }}
-              </div>
-              <div class="col-6 mb-2">
-                <strong>Work Hours:</strong> {{ record.workHours }}
+              <div class="detail-item">
+                <i class="fa-regular fa-clock detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Hours</span>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="detail-value"
+                      >{{ record.clockIn }} - {{ record.clockOut }}</span
+                    >
+                    <span class="work-hours-badge">{{ record.workHours }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

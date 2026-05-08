@@ -456,3 +456,72 @@
         }
     }
 }
+
+// Mobile Responsive
+@media screen and (max-width: 768px) {
+    .attendance-detail-container {
+        padding: 0 4px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+
+    .status-card {
+        padding: 16px;
+        
+        .d-flex {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .calendar-card {
+        padding: 16px;
+
+        .calendar-header {
+            flex-direction: column;
+            gap: 16px;
+            align-items: stretch;
+
+            .controls {
+                justify-content: space-between;
+                
+                select {
+                    flex: 1;
+                    min-width: 0;
+                }
+            }
+
+            .btn-today {
+                width: 100%;
+            }
+        }
+
+        .calendar-grid {
+            .days-nums {
+                gap: 4px;
+                
+                .day {
+                    aspect-ratio: 1 / 1;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+
+    .list-card {
+        padding: 16px;
+    }
+
+    .modal-content-card {
+        margin: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}

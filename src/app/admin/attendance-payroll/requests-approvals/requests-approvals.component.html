@@ -56,17 +56,6 @@
           <option value="Rejected">Status: Rejected</option>
         </select>
       </div>
-      <div class="filter-select-wrapper">
-        <select
-          class="form-select filter-select"
-          (change)="onTypeFilterChange($event)"
-        >
-          <option value="">Type: All</option>
-          <option value="Casual Leave">Casual Leave</option>
-          <option value="Sick Leave">Sick Leave</option>
-          <option value="Vacation">Vacation</option>
-        </select>
-      </div>
     </div>
     <span class="showing-text">
       Showing
@@ -95,10 +84,8 @@
               />
             </th>
             <th>EMPLOYEE</th>
-            <th>REQUEST TYPE</th>
             <th>DATE RANGE</th>
             <th>REASON</th>
-            <th *ngIf="activeTab === 'leave'">ATTACHMENT/PROOF</th>
             <th>STATUS</th>
             <th>ACTION</th>
           </tr>
@@ -143,9 +130,6 @@
               </div>
             </td>
             <td>
-              <span class="table-text">{{ item.requestType }}</span>
-            </td>
-            <td>
               <div class="date-range-cell">
                 <span class="date-text"
                   >{{ item.dateFrom }} -<br />{{ item.dateTo }}</span
@@ -155,19 +139,6 @@
             </td>
             <td>
               <span class="table-text reason-text">{{ item.reason }}</span>
-            </td>
-            <td *ngIf="activeTab === 'leave'">
-              <div class="attachment-cell" *ngIf="item.attachment">
-                <i
-                  [class]="item.attachmentIcon"
-                  [style.color]="item.attachmentColor"
-                  class="me-2"
-                ></i>
-                <a class="attachment-link">{{ item.attachment }}</a>
-              </div>
-              <span class="no-document" *ngIf="!item.attachment"
-                ><em>No document</em></span
-              >
             </td>
             <td>
               <span
@@ -255,34 +226,36 @@
             {{ item.status }}
           </span>
         </div>
-        <div class="row mobile-details">
-          <div class="col-6 mb-2">
-            <strong>Type:</strong> {{ item.requestType }}
+        <div class="mobile-details-list">
+          <div class="detail-item">
+            <i class="fa-regular fa-calendar detail-icon"></i>
+            <div class="detail-content">
+              <span class="detail-label">Dates</span>
+              <div class="d-flex align-items-center gap-2">
+                <span class="detail-value">{{ item.dateFrom }} - {{ item.dateTo }}</span>
+                <span class="duration-badge-small">{{ item.duration }}</span>
+              </div>
+            </div>
           </div>
-          <div class="col-6 mb-2">
-            <strong>Dates:</strong> {{ item.dateFrom }} - {{ item.dateTo }}
+          <div class="detail-item">
+            <i class="fa-regular fa-comment-dots detail-icon"></i>
+            <div class="detail-content">
+              <span class="detail-label">Reason</span>
+              <span class="detail-value">{{ item.reason }}</span>
+            </div>
           </div>
-          <div class="col-6 mb-2">
-            <strong>Duration:</strong> {{ item.duration }}
-          </div>
-          <div class="col-6 mb-2">
-            <strong>Reason:</strong> {{ item.reason }}
-          </div>
-          <div class="col-12 mb-2" *ngIf="activeTab === 'leave' && item.attachment">
-            <strong>Attachment:</strong>
-            <a class="attachment-link ms-1">{{ item.attachment }}</a>
-          </div>
-          <div class="col-12 mt-2">
+          
+          <div class="col-12 mt-3">
               <!-- Action for Attendance Approvals -->
               <div class="d-flex gap-2" *ngIf="activeTab === 'attendance'">
                 <button
-                  class="btn btn-action-approve w-50"
+                  class="btn btn-action-approve-mobile flex-grow-1"
                   (click)="approveRequest(item)"
                 >
                   <i class="fa-solid fa-check me-2"></i>Approve
                 </button>
                 <button
-                  class="btn btn-action-reject w-50"
+                  class="btn btn-action-reject-mobile flex-grow-1"
                   (click)="rejectRequest(item)"
                 >
                   <i class="fa-solid fa-xmark me-2"></i>Reject
@@ -292,7 +265,7 @@
               <!-- Action for Leave Management -->
               <button
                 *ngIf="activeTab === 'leave'"
-                class="btn btn-view-action-text w-100"
+                class="btn btn-view-action-mobile w-100"
                 [routerLink]="[
                   '/admin/attendance-payroll/request-details',
                   item.id,
@@ -301,7 +274,7 @@
                 View Details
               </button>
             </div>
-          </div>
+        </div>
         </div>
 
       <!-- Pagination -->

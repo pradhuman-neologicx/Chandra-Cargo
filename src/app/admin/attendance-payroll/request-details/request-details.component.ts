@@ -32,6 +32,7 @@ export class RequestDetailsComponent implements OnInit {
     sickTotal: 10,
     sickUsed: 5,
     sickPercentage: 50,
+    totalTaken: 17
   };
 
   requestDetails = {

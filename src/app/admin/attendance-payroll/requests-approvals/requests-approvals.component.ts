@@ -17,7 +17,6 @@ import { NotificationService } from 'src/app/core/services/notificationnew.servi
 export class RequestsApprovalsComponent implements OnInit {
   activeTab: string = 'leave';
   selectedStatus: string = 'Pending';
-  selectedType: string = '';
   selectAll: boolean = false;
 
   leaveCount: number = 12;
@@ -184,10 +183,6 @@ export class RequestsApprovalsComponent implements OnInit {
     // Future: filter API call
   }
 
-  onTypeFilterChange(event: any) {
-    this.selectedType = event.target.value;
-    // Future: filter API call
-  }
 
   toggleSelectAll() {
     this.selectAll = !this.selectAll;

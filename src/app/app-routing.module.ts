@@ -28,10 +28,22 @@ import { AttendanceDetailComponent } from './admin/attendance-payroll/attendance
 import { SalaryManagementComponent } from './admin/salary-management/salary-management.component';
 import { SalaryListingComponent } from './admin/salary-management/salary-listing/salary-listing.component';
 import { PayslipViewComponent } from './admin/salary-management/payslip-view/payslip-view.component';
+import { VehicleManagementComponent } from './admin/vehicle-management/vehicle-management.component';
+import { BulkUploadComponent } from './admin/vehicle-management/bulk-upload/bulk-upload.component';
+import { CreateVehicleComponent } from './admin/vehicle-management/create-vehicle/create-vehicle.component';
 import { VehicleManufacturerComponent } from './admin/masters/vehicle-manufacturer/vehicle-manufacturer.component';
 import { VehicleModelComponent } from './admin/masters/vehicle-model/vehicle-model.component';
-import { VehicleManagementComponent } from './admin/vehicle-management/vehicle-management.component';
 import { VehicleMaintenanceComponent } from './admin/vehicle-maintenance/vehicle-maintenance.component';
+import { VehicleTypeComponent } from './admin/masters/vehicle-type/vehicle-type.component';
+import { FuelManagementComponent } from './admin/fuel-management/fuel-management.component';
+import { CreateFuelComponent } from './admin/fuel-management/create-fuel/create-fuel.component';
+import { EditFuelComponent } from './admin/fuel-management/edit-fuel/edit-fuel.component';
+import { EditVehicleComponent } from './admin/vehicle-management/edit-vehicle/edit-vehicle.component';
+import { VehicleDetailsComponent } from './admin/vehicle-management/vehicle-details/vehicle-details.component';
+import { VehicleMappingComponent } from './admin/vehicle-management/vehicle-mapping/vehicle-mapping.component';
+import { VehicleDocumentComponent } from './admin/vehicle-management/vehicle-document/vehicle-document.component';
+import { SessionCalendarComponent } from './admin/session-calendar/session-calendar.component';
+import { FuelDetailsComponent } from './admin/fuel-management/fuel-details/fuel-details.component';
 
 const routes: Routes = [
   {
@@ -109,6 +121,14 @@ const routes: Routes = [
             path: 'vehicle-model',
             component: VehicleModelComponent,
           },
+          {
+            path: 'vehicle-type',
+            component: VehicleTypeComponent,
+          },
+          {
+            path: 'session-calendar',
+            component: SessionCalendarComponent,
+          },
         ],
       },
       {
@@ -165,13 +185,32 @@ const routes: Routes = [
       },
       {
         path: 'vehicle-management',
-        component: VehicleManagementComponent,
         canActivate: [AuthGuard],
+        children: [
+          { path: '', component: VehicleManagementComponent },
+          { path: 'create', component: CreateVehicleComponent },
+          { path: 'bulk-upload', component: BulkUploadComponent },
+          { path: 'edit/:id', component: EditVehicleComponent },
+          { path: 'view/:id', component: VehicleDetailsComponent },
+          { path: 'mapping', component: VehicleMappingComponent },
+          { path: 'update-docs/:id', component: VehicleDocumentComponent },
+        ],
       },
       {
         path: 'vehicle-maintenance/:id',
         component: VehicleMaintenanceComponent,
         canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'fuel-management',
+        canActivate: [AuthGuard],
+        children: [
+          { path: '', component: FuelManagementComponent },
+          { path: 'create', component: CreateFuelComponent },
+          { path: 'edit/:id', component: EditFuelComponent },
+          { path: 'details/:id', component: FuelDetailsComponent },
+        ],
       },
     ],
   },

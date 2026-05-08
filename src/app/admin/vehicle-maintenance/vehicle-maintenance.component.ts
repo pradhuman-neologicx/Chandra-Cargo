@@ -5,12 +5,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { MaterialModule } from 'src/app/mat/mat.module';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NotificationService } from 'src/app/core/services/notificationnew.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-maintenance',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, MaterialModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, MaterialModule, RouterModule],
   templateUrl: './vehicle-maintenance.component.html',
   styleUrl: './vehicle-maintenance.component.scss',
   animations: [
@@ -75,9 +75,11 @@ export class VehicleMaintenanceComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.selectedVehicleId = params['id'];
-        this.updateSelectedVehicle();
+        this.selectedVehicleId = Number(params['id']);
+      } else if (this.vehicleList.length > 0) {
+        this.selectedVehicleId = this.vehicleList[0].id;
       }
+      this.updateSelectedVehicle();
     });
     this.initForm();
     this.calculateStats();

@@ -1,0 +1,245 @@
+<div class="page-container" [@fadeIn] *ngIf="vehicle">
+  <!-- Header Section -->
+  <div class="header-section mb-4 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div class="ms-3">
+        <h1 class="page-title mb-0">{{vehicle.regNo}}</h1>
+        <div class="d-flex align-items-center mt-1">
+          <span class="status-badge active me-3">
+            <i class="fa-solid fa-circle dot"></i> {{vehicle.status}}
+          </span>
+          <span class="text-muted small">Vehicle ID: {{vehicle.id}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-3">
+      <button type="button" class="btn-action-outline" (click)="editVehicle()">
+        <i class="fa-solid fa-pen-to-square me-2"></i> Edit Details
+      </button>
+      <button type="button" class="btn-action-primary shadow">
+        <i class="fa-solid fa-download me-2"></i> Export PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Main Content Column -->
+    <div class="col-lg-12">
+      
+      <!-- Section 1: General Details -->
+      <div class="detail-card mb-4 shadow-sm">
+        <div class="card-header d-flex align-items-center">
+          <div class="icon-box"><i class="fa-solid fa-truck-moving"></i></div>
+          <h5 class="mb-0 ms-3">General Vehicle Details</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-4">
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Vehicle Type</label>
+              <p class="detail-value">{{vehicle.general.vehicleType}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Body Type</label>
+              <p class="detail-value">{{vehicle.general.bodyType}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Maker's Name</label>
+              <p class="detail-value">{{vehicle.general.makerName}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Model Name</label>
+              <p class="detail-value">{{vehicle.general.modelName}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Registration Date</label>
+              <p class="detail-value">{{vehicle.general.registrationDate}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Fuel Type</label>
+              <p class="detail-value">{{vehicle.general.fuelType}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Chassis No.</label>
+              <p class="detail-value font-monospace text-truncate">{{vehicle.general.chassisNo}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Engine No.</label>
+              <p class="detail-value font-monospace text-truncate">{{vehicle.general.engineNo}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Emission Standard</label>
+              <p class="detail-value"><span class="badge bg-soft-primary">{{vehicle.general.emission}}</span></p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Laden Weight</label>
+              <p class="detail-value">{{vehicle.general.ladenWeight}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Gross Weight</label>
+              <p class="detail-value">{{vehicle.general.grossWeight}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Capacity</label>
+              <p class="detail-value">{{vehicle.general.capacity}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Driver Mapping Info -->
+      <div class="detail-card mb-4 shadow-sm border-left-driver">
+        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div class="d-flex align-items-center">
+            <div class="icon-box driver"><i class="fa-solid fa-id-card"></i></div>
+            <h5 class="mb-0 ms-3">Driver Assignment</h5>
+          </div>
+          <button class="btn-action-outline-sm" (click)="goToMapping()">
+            <i class="fa-solid fa-shuffle me-1"></i> Change
+          </button>
+        </div>
+        <div class="card-body p-4">
+          <div class="row align-items-center g-4">
+            <div class="col-12 col-md-4">
+              <div class="d-flex align-items-center">
+                <div class="driver-avatar shadow-sm">
+                  <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div class="ms-3">
+                  <h6 class="mb-0 fw-bold">{{vehicle.mapping.driverName}}</h6>
+                  <span class="small text-muted">Lic No: {{vehicle.mapping.licenseNo}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-8">
+              <div class="row g-3">
+                <div class="col-6 col-md-4">
+                  <label class="detail-label">Mobile</label>
+                  <p class="detail-value text-truncate">{{vehicle.mapping.mobile}}</p>
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="detail-label">Assigned</label>
+                  <p class="detail-value">{{vehicle.mapping.assignedOn}}</p>
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="detail-label">Shift</label>
+                  <p class="detail-value"><span class="badge bg-soft-info">{{vehicle.mapping.shift}}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Invoice & Values -->
+      <div class="detail-card mb-4 shadow-sm">
+        <div class="card-header d-flex align-items-center">
+          <div class="icon-box"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+          <h5 class="mb-0 ms-3">Invoice & Valuation</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-4">
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Invoice No.</label>
+              <p class="detail-value">{{vehicle.invoice.dealerInvoiceNo}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Invoice Date</label>
+              <p class="detail-value">{{vehicle.invoice.invoiceDate}}</p>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="detail-label">Hypothecation</label>
+              <p class="detail-value text-primary fw-bold text-truncate">{{vehicle.invoice.hypothecation}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">Base Price</label>
+              <p class="detail-value">₹{{vehicle.invoice.basePrice}}</p>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="detail-label">IGST</label>
+              <p class="detail-value">₹{{vehicle.invoice.igst}}</p>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="detail-label">Invoice Price</label>
+              <p class="detail-value highlight-value">₹{{vehicle.invoice.invoicePrice}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Grid -->
+      <div class="row g-4 mb-4">
+        <!-- AMC -->
+        <div class="col-12 col-md-4">
+          <div class="detail-card h-100 shadow-sm border-left-amc">
+            <div class="card-header border-0 pb-0">
+              <h6 class="text-muted small fw-bold mb-0">AMC DETAILS</h6>
+            </div>
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="mini-icon amc"><i class="fa-solid fa-wrench"></i></div>
+                <div class="ms-3">
+                  <p class="mb-0 fw-bold">{{vehicle.amc.issuedBy}}</p>
+                  <span class="small text-muted">Expires: {{vehicle.amc.validUpto}}</span>
+                </div>
+              </div>
+              <div class="mt-2 p-2 bg-light rounded-3 d-flex justify-content-between">
+                <span class="small">Cost</span>
+                <span class="fw-bold">₹{{vehicle.amc.cost}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Insurance -->
+        <div class="col-12 col-md-4">
+          <div class="detail-card h-100 shadow-sm border-left-ins">
+            <div class="card-header border-0 pb-0">
+              <h6 class="text-muted small fw-bold mb-0">INSURANCE</h6>
+            </div>
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="mini-icon ins"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="ms-3">
+                  <p class="mb-0 fw-bold text-truncate" style="max-width: 150px;">{{vehicle.insurance.issuer}}</p>
+                  <span class="small text-muted">Expiry: {{vehicle.insurance.expiry}}</span>
+                </div>
+              </div>
+              <div class="mt-2 p-2 bg-light rounded-3 d-flex justify-content-between">
+                <span class="small">Policy No</span>
+                <span class="fw-bold text-truncate ms-2 small">{{vehicle.insurance.policyNo}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document Attachments Quick View -->
+        <div class="col-12 col-md-4">
+          <div class="detail-card h-100 shadow-sm">
+            <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+              <h6 class="text-muted small fw-bold mb-0">DOCUMENTS</h6>
+              <span class="badge bg-success rounded-pill">4 Files</span>
+            </div>
+            <div class="card-body">
+              <div class="file-link-mini mb-2 d-flex align-items-center">
+                <i class="fa-solid fa-file-pdf text-danger"></i>
+                <span class="ms-2 small text-truncate">Reg_Cert.pdf</span>
+              </div>
+              <div class="file-link-mini mb-2 d-flex align-items-center">
+                <i class="fa-solid fa-file-pdf text-danger"></i>
+                <span class="ms-2 small text-truncate">Insurance.pdf</span>
+              </div>
+              <div class="file-link-mini d-flex align-items-center">
+                <i class="fa-solid fa-file-image text-primary"></i>
+                <span class="ms-2 small text-truncate">Photo.jpg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

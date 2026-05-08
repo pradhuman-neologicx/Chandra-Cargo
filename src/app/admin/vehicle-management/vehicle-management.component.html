@@ -1,79 +1,94 @@
-<div class="container-fluid mb-4 px-4">
+<div class="page-container" [@fadeIn]>
+  <!-- Header Section -->
   <div
-    class="d-flex justify-content-between align-items-center flex-wrap gap-2 py-3"
+    class="header-section d-flex justify-content-between align-items-center mb-5"
   >
     <div>
-      <h1 class="text-primary table-heading-detail mb-1">
-        Vehicle Fleet Management
-      </h1>
+      <h1 class="page-title">Vehicle Management</h1>
       <p class="text-muted small mb-0">
-        Track vehicle status, documents, and compliance alerts.
+        Manage your vehicle fleet with comprehensive tracking and management
+        tools.
       </p>
     </div>
-    <button class="btn btn-custom-primary px-4 py-2" (click)="openAddModal()">
-      <i class="fa-solid fa-plus me-2"></i>Add Vehicle
-    </button>
+
+    <div class="header-actions d-flex gap-3">
+      <!-- Bulk Upload Button -->
+      <button
+        class="btn-action-header bulk-btn shadow-sm"
+        (click)="openBulkUpload()"
+      >
+        <div class="icon-box"><i class="fa-solid fa-file-excel"></i></div>
+        <span>Bulk Upload</span>
+      </button>
+
+      <!-- Add Vehicle Button -->
+      <button
+        class="btn-action-header add-btn shadow-sm"
+        (click)="openAddVehicle()"
+      >
+        <div class="icon-box"><i class="fa-solid fa-plus"></i></div>
+        <span>Add Vehicle</span>
+      </button>
+
+      <!-- Driver Mapping (Optional placeholder if you want) -->
+      <button
+        class="btn-action-header mapping-btn shadow-sm"
+        (click)="openMapping()"
+      >
+        <div class="icon-box"><i class="fa-solid fa-user-gear"></i></div>
+        <span>Driver Mapping</span>
+      </button>
+    </div>
   </div>
 
-  <div class="card border-0 shadow-sm my-4 px-4 py-4 rounded-4">
-    <div class="d-md-flex justify-content-between align-items-center my-3">
-      <div class="d-flex align-items-center mb-md-0 mb-3">
-        <span class="me-2 text-secondary small">Show</span>
-        <select
-          class="form-select show-entries-select"
-          (change)="onTableSizeChange($event)"
-        >
-          <option *ngFor="let size of tableSizes" [ngValue]="size">
-            {{ size }}
-          </option>
-        </select>
-        <span class="ms-2 text-secondary small">entries</span>
+  <!-- Table Section -->
+  <div class="main-card shadow-sm mt-4">
+    <!-- Filter Row -->
+    <div
+      class="filter-row px-4 py-3 border-bottom d-flex flex-wrap align-items-center gap-3"
+    >
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search vehicle..."
+          [(ngModel)]="searchQuery"
+          (input)="searchVehicles()"
+        />
       </div>
-
-      <div class="d-flex align-items-center">
-        <form
-          [formGroup]="searchbarform"
-          class="d-flex align-items-center gap-2"
-        >
-          <div class="position-relative">
-            <input
-              type="text"
-              class="form-control search-input"
-              placeholder="Search Registration / Chassis..."
-              formControlName="searchbar"
-            />
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          </div>
-          <button
-            class="btn btn-primary action-btn"
-            (click)="searchfun()"
-            matTooltip="Search"
+      <div class="ms-auto d-flex align-items-center gap-3 flex-wrap">
+        <div class="filter-group">
+          <span class="filter-label">Filter by</span>
+          <select
+            class="form-select-sm border-0 bg-transparent fw-bold text-primary"
           >
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-          <button
-            class="btn btn-outline-secondary action-btn"
-            (click)="resetsearchbar()"
-            *ngIf="showreset"
-            matTooltip="Reset"
-          >
-            <i class="fa-solid fa-rotate-right"></i>
-          </button>
-        </form>
+            <option>All statuses</option>
+            <option>Active</option>
+            <option>Draft</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+        <div class="divider-v"></div>
+        <button class="btn-filter-link">
+          <i class="fa-solid fa-file-export me-1"></i> Export
+        </button>
       </div>
     </div>
 
-    <div class="table-responsive mt-2">
-      <table class="table table-hover mb-0 align-middle">
-        <thead class="bg-light">
+    <!-- Desktop Table (Visible on md and up) -->
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-hover align-middle custom-table mb-0">
+        <thead>
           <tr>
-            <th class="ps-4">Registration No.</th>
-            <th>Manufacturer & Model</th>
+            <th>Sr. No</th>
+            <th>Vehicle Number</th>
+            <th>Owner Name</th>
+            <th>Model Name</th>
             <th>Vehicle Type</th>
-            <th>Ownership</th>
+            <th>Emission</th>
             <th>Status</th>
-            <th>Expiry Alerts</th>
-            <th class="text-center pe-4">Actions</th>
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -82,555 +97,147 @@
               let v of vehicles
                 | paginate
                   : {
-                      itemsPerPage:
-                        tableSize != 'all' ? tableSize : totalRecords,
+                      itemsPerPage: tableSize,
                       currentPage: page,
                       totalItems: totalRecords,
-                    }
+                    };
+              let i = index
             "
           >
-            <td class="ps-4">
-              <div class="fw-bold text-dark">{{ v.regNo }}</div>
-              <div class="small text-muted">Chassis: {{ v.chassisNo }}</div>
+            <td class="text-muted small">
+              0{{ (page - 1) * tableSize + i + 1 }}
             </td>
             <td>
-              <div class="fw-semibold">{{ v.manufacturer }}</div>
-              <div class="small text-secondary">{{ v.model }}</div>
+              <span class="vehicle-pill">{{ v.regNo }}</span>
             </td>
+            <td class="fw-semibold">Pradhuman Singh</td>
+            <td class="text-muted">{{ v.model }}</td>
             <td>
-              <span class="badge bg-info-subtle text-info px-2 py-1">{{
-                v.type
-              }}</span>
+              <span class="type-badge">{{ v.type }}</span>
             </td>
-            <td>{{ v.ownership }}</td>
+            <td class="text-muted">BSVI</td>
             <td>
-              <span
-                class="status-badge"
-                [ngClass]="
-                  v.status === 'Draft' ? 'draft-status' : 'active-status'
-                "
-              >
-                {{ v.status }}
+              <span class="status-indicator" [ngClass]="v.status.toLowerCase()">
+                <i class="fa-solid fa-circle dot"></i> {{ v.status }}
               </span>
             </td>
-            <td>
-              <div
-                class="alert-indicator"
-                [ngClass]="getAlertClass(v.expiryAlert)"
-              >
-                <i class="fa-solid fa-circle-exclamation me-1"></i>
-                {{ v.expiryAlert }}
-              </div>
-            </td>
-            <td class="text-center pe-4">
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
+            <td class="text-center">
+              <button class="btn-action" [matMenuTriggerFor]="menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
               </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="openViewModal(v)">
-                  View Details
+              <mat-menu #menu="matMenu" class="modern-menu">
+                <button mat-menu-item (click)="openViewDetail(v)">
+                  <i class="fa-solid fa-eye me-2 text-primary"></i> View Detail
+                </button>
+                <button mat-menu-item (click)="openEditVehicle(v)">
+                  <i class="fa-solid fa-pen-to-square me-2 text-warning"></i>
+                  Edit Vehicle
+                </button>
+                <button mat-menu-item (click)="openUpdateDocs(v)">
+                  <i class="fa-solid fa-file-shield me-2 text-success"></i>
+                  Update Docs
                 </button>
                 <button mat-menu-item (click)="goToMaintenance(v)">
-                  Maintenance History
-                </button>
-                <button mat-menu-item (click)="openUpdateDocsModal(v)">
-                  Update Documents
-                </button>
-                <button mat-menu-item class="text-danger">
-                  Delete Vehicle
+                  <i class="fa-solid fa-wrench me-2 text-info"></i> Maintenance
                 </button>
               </mat-menu>
             </td>
           </tr>
         </tbody>
       </table>
-
-      <!-- Pagination -->
-      <div
-        class="d-md-flex justify-content-between align-items-center py-4 px-2"
-      >
-        <span class="text-muted small">
-          Showing {{ tableSize * (page - 1) + 1 }} to
-          {{
-            tableSize * page <= totalRecords ? tableSize * page : totalRecords
-          }}
-          of {{ totalRecords }} entries
-        </span>
-        <pagination-controls
-          previousLabel="Prev"
-          nextLabel="Next"
-          [responsive]="true"
-          (pageChange)="onTableDataChange($event)"
-        ></pagination-controls>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- Modal for Add Vehicle -->
-<div
-  *ngIf="createModalOpen"
-  class="modal-container"
-  role="dialog"
-  aria-modal="true"
->
-  <div class="modal-content-large" [@fadeIn]>
-    <form [formGroup]="vehicleForm">
-      <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
-        <div
-          class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom sticky-top"
-        >
-          <div>
-            <h5 class="modal-title mb-0 fw-bold text-primary">
-              Register New Vehicle
-            </h5>
-            <p class="text-muted small mb-0">Fields with * are mandatory</p>
-          </div>
-          <button class="btn-close-custom" type="button" (click)="closeModal()">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+    <!-- Mobile Card View (Visible on sm and down) -->
+    <div class="mobile-card-container d-md-none">
+      <div
+        class="mobile-card"
+        *ngFor="
+          let v of vehicles
+            | paginate
+              : {
+                  itemsPerPage: tableSize,
+                  currentPage: page,
+                  totalItems: totalRecords,
+                };
+          let i = index
+        "
+      >
+        <div class="card-header-flex">
+          <span class="vehicle-pill">{{ v.regNo }}</span>
+          <span class="status-indicator" [ngClass]="v.status.toLowerCase()">
+            <i class="fa-solid fa-circle dot"></i> {{ v.status }}
+          </span>
         </div>
 
-        <div class="card-body p-0 modal-body-scroll">
-          <!-- Section 1: Basic Details -->
-          <div class="p-4 bg-light-subtle border-bottom">
-            <h6 class="section-title mb-3">
-              <i class="fa-solid fa-info-circle me-2"></i>Basic Information
-            </h6>
-            <div class="row g-3">
-              <div class="col-md-4">
-                <label class="form-label required">Chassis Number</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="chassisNo"
-                  placeholder="Unique Chassis ID"
-                />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label required">Registration Number</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="regNo"
-                  placeholder="e.g. RJ-14-XX-0000"
-                />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label required">Manufacturing Year</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="mfgYear"
-                  placeholder="YYYY"
-                />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label required">Manufacturer</label>
-                <select
-                  class="form-select"
-                  formControlName="manufacturerId"
-                  (change)="onManufacturerChange()"
-                >
-                  <option value="" disabled>Select Manufacturer</option>
-                  <option *ngFor="let m of manufacturerList" [value]="m.id">
-                    {{ m.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label required">Model</label>
-                <select
-                  class="form-select"
-                  formControlName="modelId"
-                  (change)="onModelChange()"
-                >
-                  <option value="" disabled>Select Model</option>
-                  <option *ngFor="let m of filteredModels" [value]="m.id">
-                    {{ m.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Vehicle Type (Auto)</label>
-                <input
-                  type="text"
-                  class="form-control bg-light"
-                  formControlName="vehicleType"
-                  readonly
-                />
-              </div>
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="card-detail-item">
+              <span class="detail-label">Owner</span>
+              <span class="detail-value text-truncate">Pradhuman Singh</span>
             </div>
           </div>
-
-          <!-- Section 2: Specifications -->
-          <div class="p-4 border-bottom">
-            <h6 class="section-title mb-3">
-              <i class="fa-solid fa-gears me-2"></i>Specifications & Ownership
-            </h6>
-            <div class="row g-3">
-              <div class="col-md-3">
-                <label class="form-label required">Fuel Type</label>
-                <select class="form-select" formControlName="fuelType">
-                  <option value="" disabled>Select Fuel</option>
-                  <option *ngFor="let f of fuelTypes" [value]="f">
-                    {{ f }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label required">Ownership Type</label>
-                <select class="form-select" formControlName="ownershipType">
-                  <option value="" disabled>Select Ownership</option>
-                  <option *ngFor="let o of ownershipTypes" [value]="o">
-                    {{ o }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label required">Condition</label>
-                <select class="form-select" formControlName="condition">
-                  <option value="" disabled>Select Condition</option>
-                  <option *ngFor="let c of conditions" [value]="c">
-                    {{ c }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label required">Capacity (Tons/Seats)</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="capacity"
-                  placeholder="e.g. 10 Tons"
-                />
-              </div>
+          <div class="col-6">
+            <div class="card-detail-item text-end">
+              <span class="detail-label">Type</span>
+              <span class="type-badge">{{ v.type }}</span>
             </div>
           </div>
-
-          <!-- Section 3: Document Management -->
-          <div class="p-4">
-            <h6 class="section-title mb-3 text-danger">
-              <i class="fa-solid fa-file-invoice me-2"></i>Mandatory Documents &
-              Expiry
-            </h6>
-            <div class="table-responsive">
-              <table class="table table-bordered align-middle mb-2">
-                <thead class="table-light small">
-                  <tr>
-                    <th>Document Label</th>
-                    <th style="width: 35%">Upload File</th>
-                    <th style="width: 25%">Expiry Date</th>
-                    <th style="width: 5%" class="text-center">#</th>
-                  </tr>
-                </thead>
-                <tbody formArrayName="documents">
-                  <tr
-                    *ngFor="let doc of docArray.controls; index as i"
-                    [formGroupName]="i"
-                  >
-                    <td class="fw-semibold small">
-                      <span *ngIf="!doc.get('isOther')?.value"
-                        >{{ doc.get("label")?.value }}*</span
-                      >
-                      <input
-                        *ngIf="doc.get('isOther')?.value"
-                        type="text"
-                        class="form-control form-control-sm"
-                        formControlName="label"
-                        placeholder="Enter doc name..."
-                      />
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <label
-                          class="btn btn-outline-custom btn-sm mb-0 px-3 cursor-pointer"
-                        >
-                          <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload
-                          <input
-                            type="file"
-                            class="d-none"
-                            (change)="onFileChange($event, i)"
-                          />
-                        </label>
-                        <span
-                          class="small text-muted text-truncate"
-                          style="max-width: 120px"
-                        >
-                          {{
-                            doc.get("file")?.value
-                              ? doc.get("file")?.value.name
-                              : "No file chosen"
-                          }}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <input
-                        type="date"
-                        class="form-control form-control-sm"
-                        formControlName="expiryDate"
-                      />
-                    </td>
-                    <td class="text-center">
-                      <button
-                        *ngIf="doc.get('isOther')?.value"
-                        type="button"
-                        class="btn btn-link text-danger p-0"
-                        (click)="removeDoc(i)"
-                      >
-                        <i class="fa-solid fa-trash-can"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <button
-                type="button"
-                class="btn btn-link btn-sm text-primary p-0 text-decoration-none fw-bold"
-                (click)="addOtherDoc()"
-              >
-                <i class="fa-solid fa-plus-circle me-1"></i> Add Other Document
-              </button>
+          <div class="col-6">
+            <div class="card-detail-item">
+              <span class="detail-label">Model</span>
+              <span class="detail-value">{{ v.model }}</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-detail-item text-end">
+              <span class="detail-label">Emission</span>
+              <span class="detail-value">BSVI</span>
             </div>
           </div>
         </div>
 
-        <div class="card-footer bg-white py-3 px-4 text-end border-top">
+        <div class="card-footer-actions">
           <button
-            class="btn btn-light px-4 me-2 rounded-3"
-            type="button"
-            (click)="closeModal()"
+            class="btn btn-outline-primary btn-sm me-2 rounded-pill px-3"
+            (click)="openViewDetail(v)"
           >
-            Discard
+            View
           </button>
           <button
-            class="btn btn-custom-primary px-4 rounded-3"
-            type="button"
-            (click)="saveVehicle()"
+            class="btn btn-light btn-sm rounded-circle shadow-sm"
+            [matMenuTriggerFor]="mobileMenu"
           >
-            Save Vehicle
+            <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Modal for View Vehicle Details -->
-<div
-  *ngIf="viewModalOpen"
-  class="modal-container"
-  role="dialog"
-  aria-modal="true"
->
-  <div class="modal-content-large" [@fadeIn]>
-    <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
-      <div
-        class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom"
-      >
-        <div>
-          <h5 class="modal-title mb-0 fw-bold text-primary">
-            Vehicle Details: {{ selectedVehicle?.regNo }}
-          </h5>
-        </div>
-        <button class="btn-close-custom" type="button" (click)="closeModal()">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="card-body p-0 modal-body-scroll">
-        <div class="p-4">
-          <div class="row g-4">
-            <div class="col-md-3">
-              <label class="text-muted small d-block">Manufacturer</label>
-              <div class="fw-bold">{{ selectedVehicle?.manufacturer }}</div>
-            </div>
-            <div class="col-md-3">
-              <label class="text-muted small d-block">Model</label>
-              <div class="fw-bold">{{ selectedVehicle?.model }}</div>
-            </div>
-            <div class="col-md-3">
-              <label class="text-muted small d-block">Status</label>
-              <div class="status-badge active-status d-inline-block">
-                {{ selectedVehicle?.status }}
-              </div>
-            </div>
-            <div class="col-md-3">
-              <label class="text-muted small d-block">Alert Status</label>
-              <div class="alert-indicator badge-info">
-                {{ selectedVehicle?.expiryAlert }}
-              </div>
-            </div>
-          </div>
-          <hr class="my-4" />
-          <h6 class="section-title mb-3">Document Compliance</h6>
-          <div class="table-responsive">
-            <table class="table table-sm table-bordered">
-              <thead class="bg-light">
-                <tr>
-                  <th>Document</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Registration Certificate (RC)</td>
-                  <td>
-                    <span class="text-success small"
-                      ><i class="fa-solid fa-check-circle me-1"></i> Valid</span
-                    >
-                  </td>
-                  <td>
-                    <button class="btn btn-link btn-sm p-0 text-primary">
-                      View File
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Insurance Policy</td>
-                  <td>
-                    <span class="text-success small"
-                      ><i class="fa-solid fa-check-circle me-1"></i> Valid</span
-                    >
-                  </td>
-                  <td>
-                    <button class="btn btn-link btn-sm p-0 text-primary">
-                      View File
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer bg-white py-3 px-4 text-end border-top">
-        <button
-          class="btn btn-custom-primary px-4 rounded-3"
-          type="button"
-          (click)="closeModal()"
-        >
-          Close Details
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for Update Documents -->
-<div
-  *ngIf="updateDocsModalOpen"
-  class="modal-container"
-  role="dialog"
-  aria-modal="true"
->
-  <div class="modal-content-large" [@fadeIn]>
-    <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
-      <div
-        class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom"
-      >
-        <div>
-          <h5 class="modal-title mb-0 fw-bold text-primary">
-            Renew Documents: {{ selectedVehicle?.regNo }}
-          </h5>
-          <p class="text-muted small mb-0">
-            Upload renewed documents and update expiry dates.
-          </p>
-        </div>
-        <button class="btn-close-custom" type="button" (click)="closeModal()">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="card-body p-4">
-        <div class="alert alert-warning border-0 small mb-4">
-          <i class="fa-solid fa-circle-info me-2"></i> Only upload documents
-          that require renewal or are expiring soon.
-        </div>
-        <form [formGroup]="updateDocsForm">
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle mb-2">
-              <thead class="table-light small">
-                <tr>
-                  <th>Document Type</th>
-                  <th style="width: 35%">New File</th>
-                  <th style="width: 25%">New Expiry Date</th>
-                  <th style="width: 5%" class="text-center">#</th>
-                </tr>
-              </thead>
-              <tbody formArrayName="documents">
-                <tr
-                  *ngFor="let doc of updateDocArray.controls; index as i"
-                  [formGroupName]="i"
-                >
-                  <td class="fw-semibold small">
-                    <span *ngIf="!doc.get('isOther')?.value">{{
-                      doc.get("label")?.value
-                    }}</span>
-                    <input
-                      *ngIf="doc.get('isOther')?.value"
-                      type="text"
-                      class="form-control form-control-sm"
-                      formControlName="label"
-                      placeholder="Enter doc name..."
-                    />
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <label
-                        class="btn btn-outline-custom btn-sm mb-0 px-3 cursor-pointer"
-                      >
-                        <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload
-                        <input type="file" class="d-none" />
-                      </label>
-                      <span class="small text-muted">No file chosen</span>
-                    </div>
-                  </td>
-                  <td>
-                    <input
-                      type="date"
-                      class="form-control form-control-sm"
-                      formControlName="expiryDate"
-                    />
-                  </td>
-                  <td class="text-center">
-                    <button
-                      *ngIf="doc.get('isOther')?.value"
-                      type="button"
-                      class="btn btn-link text-danger p-0"
-                      (click)="removeUpdateDoc(i)"
-                    >
-                      <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button
-              type="button"
-              class="btn btn-link btn-sm text-primary p-0 text-decoration-none fw-bold"
-              (click)="addUpdateOtherDoc()"
-            >
-              <i class="fa-solid fa-plus-circle me-1"></i> Add Other Document
+          <mat-menu #mobileMenu="matMenu" class="modern-menu">
+            <button mat-menu-item (click)="openEditVehicle(v)">
+              <i class="fa-solid fa-pen-to-square me-2 text-warning"></i> Edit
             </button>
-          </div>
-        </form>
+            <button mat-menu-item (click)="openUpdateDocs(v)">
+              <i class="fa-solid fa-file-shield me-2 text-success"></i> Docs
+            </button>
+            <button mat-menu-item (click)="goToMaintenance(v)">
+              <i class="fa-solid fa-wrench me-2 text-info"></i> Maintenance
+            </button>
+          </mat-menu>
+        </div>
       </div>
-      <div class="card-footer bg-white py-3 px-4 text-end border-top">
-        <button
-          class="btn btn-light px-4 me-2 rounded-3"
-          type="button"
-          (click)="closeModal()"
-        >
-          Cancel
-        </button>
-        <button
-          class="btn btn-custom-primary px-4 rounded-3"
-          type="button"
-          (click)="closeModal()"
-        >
-          Update All
-        </button>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="pagination-footer px-4 py-3 d-flex flex-wrap justify-content-between align-items-center bg-light gap-2"
+    >
+      <div class="small text-muted text-center text-md-start w-100 w-md-auto">
+        Showing {{ (page - 1) * tableSize + 1 }} to
+        {{ page * tableSize > totalRecords ? totalRecords : page * tableSize }}
+        of {{ totalRecords }} vehicles
+      </div>
+      <div class="w-100 w-md-auto d-flex justify-content-center">
+        <pagination-controls
+          (pageChange)="onTableDataChange($event)"
+          class="my-pagination"
+        ></pagination-controls>
       </div>
     </div>
   </div>

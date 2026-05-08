@@ -1,0 +1,151 @@
+<div class="page-container" [@fadeIn]>
+  <!-- Header Section -->
+  <div
+    class="header-section mb-4 d-flex align-items-center justify-content-between"
+  >
+    <div class="d-flex align-items-center">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div class="ms-3">
+        <h1 class="page-title mb-0">Update Vehicle Documents</h1>
+        <p class="text-muted small mb-0">
+          Manage and upload supplementary documents for Vehicle ID:
+          {{ vehicleId }}
+        </p>
+      </div>
+    </div>
+    <div class="d-flex gap-3">
+      <button type="button" class="btn-add-row" (click)="addDocument()">
+        <i class="fa-solid fa-plus me-2"></i> Add More Document
+      </button>
+      <button
+        type="button"
+        class="btn-save-final shadow"
+        (click)="saveDocuments()"
+      >
+        <i class="fa-solid fa-cloud-arrow-up me-2"></i> Save Changes
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="main-card shadow-sm p-4">
+        <form [formGroup]="docForm">
+          <div formArrayName="documents">
+            <div
+              *ngFor="let doc of documents.controls; let i = index"
+              [formGroupName]="i"
+              class="doc-row mb-4 p-4 border rounded-4 shadow-sm"
+              [@fadeIn]
+            >
+              <div class="row g-3 align-items-center">
+                <!-- Row Index -->
+                <div class="col-auto">
+                  <label class="form-label d-none d-md-block" style="visibility: hidden;">Spacer</label>
+                  <div class="row-number">{{ i + 1 }}</div>
+                </div>
+
+                <!-- Document Title Input -->
+                <div class="col">
+                  <label class="form-label small fw-bold"
+                    >Document Title <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="title"
+                    placeholder="e.g. Pollution Certificate"
+                  />
+                  <div
+                    *ngIf="
+                      doc.get('title')?.touched &&
+                      doc.get('title')?.errors?.['required']
+                    "
+                    class="text-danger tiny-msg"
+                  >
+                    Title is required
+                  </div>
+                </div>
+
+                <!-- File Upload Zone -->
+                <div class="col-md-5">
+                  <label class="form-label small fw-bold">Document File</label>
+                  <div class="upload-trigger" (click)="fileInput.click()">
+                    <input
+                      type="file"
+                      #fileInput
+                      hidden
+                      (change)="onFileSelected($event, i)"
+                    />
+
+                    <div
+                      class="d-flex align-items-center"
+                      *ngIf="!doc.get('fileName')?.value"
+                    >
+                      <i
+                        class="fa-solid fa-cloud-arrow-up text-primary me-2"
+                      ></i>
+                      <span class="small text-muted">Click to select file</span>
+                    </div>
+
+                    <div
+                      class="d-flex align-items-center justify-content-between w-100"
+                      *ngIf="doc.get('fileName')?.value"
+                    >
+                      <div class="d-flex align-items-center overflow-hidden">
+                        <i class="fa-solid fa-file-pdf text-danger me-2"></i>
+                        <span class="small fw-bold text-truncate">{{
+                          doc.get("fileName")?.value
+                        }}</span>
+                      </div>
+                      <span
+                        class="badge rounded-pill"
+                        [ngClass]="
+                          doc.get('isExisting')?.value
+                            ? 'bg-soft-success'
+                            : 'bg-soft-primary'
+                        "
+                      >
+                        {{ doc.get("isExisting")?.value ? "Existing" : "New" }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Remove Button -->
+                <div class="col-auto">
+                  <label class="form-label d-none d-md-block" style="visibility: hidden;">Spacer</label>
+                  <button
+                    type="button"
+                    class="btn-remove"
+                    (click)="removeDocument(i)"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="documents.length === 0" class="text-center py-5">
+            <div class="empty-icon mb-3">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h6 class="text-muted fw-bold">No documents added yet.</h6>
+            <p class="text-muted small mb-4">Click below to start adding supplementary documents.</p>
+            <button
+              type="button"
+              class="btn-add-row"
+              (click)="addDocument()"
+            >
+              <i class="fa-solid fa-plus me-2"></i> Add First Document
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

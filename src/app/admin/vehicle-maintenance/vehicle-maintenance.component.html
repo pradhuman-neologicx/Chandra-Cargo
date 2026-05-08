@@ -1,19 +1,28 @@
 <div class="container-fluid mb-4 px-4">
   <!-- Header -->
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 py-3 border-bottom mb-4">
-    <div>
-      <h1 class="text-primary table-heading-detail mb-1">Vehicle Maintenance</h1>
-      <p class="text-muted small mb-0">Manage service records, costs, and maintenance schedules.</p>
-    </div>
     <div class="d-flex align-items-center gap-3">
-      <div class="vehicle-selector d-flex align-items-center gap-2 px-3 py-2 bg-white rounded-3 shadow-sm border">
-        <i class="fa-solid fa-truck-moving text-primary"></i>
-        <select class="form-select border-0 bg-transparent fw-bold text-dark p-0" [(ngModel)]="selectedVehicleId" (change)="updateSelectedVehicle()">
-          <option *ngFor="let v of vehicleList" [value]="v.id">{{ v.regNo }} ({{ v.model }})</option>
-        </select>
+      <button class="btn-back shadow-sm" routerLink="/admin/vehicle-management">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div>
+        <h1 class="text-primary table-heading-detail mb-1">Vehicle Maintenance</h1>
+        <p class="text-muted small mb-0">Manage service records, costs, and maintenance schedules.</p>
       </div>
-      <button class="btn btn-custom-primary px-4 py-2 shadow-sm" (click)="openServiceModal()">
-        <i class="fa-solid fa-plus me-2"></i>Add Service Record
+    </div>
+    <div class="d-flex align-items-center gap-3 header-actions flex-wrap flex-md-nowrap">
+      <!-- Static Vehicle Info -->
+      <div class="vehicle-info-badge d-flex align-items-center gap-3 px-3 py-2 border rounded-3 bg-white shadow-sm">
+        <div class="icon-circle bg-primary-subtle text-primary">
+          <i class="fa-solid fa-truck-moving"></i>
+        </div>
+        <div class="d-flex flex-column text-start">
+          <span class="fw-bold text-dark lh-base">{{ selectedVehicle?.regNo }}</span>
+          <span class="small text-muted" style="font-size: 11px;">{{ selectedVehicle?.model }} ({{ selectedVehicle?.manufacturer }})</span>
+        </div>
+      </div>
+      <button class="btn btn-custom-primary px-4 py-2 shadow-sm whitespace-nowrap" (click)="openServiceModal()">
+        <i class="fa-solid fa-plus me-2"></i>Add Record
       </button>
     </div>
   </div>
@@ -80,7 +89,8 @@
 
     <div class="card-body p-4">
       <div *ngIf="activeTab === 'history'" [@fadeIn]>
-        <div class="table-responsive">
+        <!-- Desktop Table -->
+        <div class="table-responsive d-none d-lg-block">
           <table class="table table-hover align-middle mb-0">
             <thead class="bg-light-subtle">
               <tr>
@@ -114,6 +124,55 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- Mobile History View -->
+        <div class="d-lg-none">
+          <div *ngFor="let h of maintenanceHistory" class="mobile-maintenance-card mb-3">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="service-type-main">
+                <div class="type-text">{{ h.type }}</div>
+                <div class="vendor-text text-muted small">{{ h.vendor }}</div>
+              </div>
+              <button mat-icon-button class="text-primary mobile-edit-btn" (click)="editServiceRecord(h)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+
+            <div class="mobile-details-list">
+              <div class="detail-item">
+                <i class="fa-solid fa-calendar-day detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Service Date</span>
+                  <span class="detail-value">{{ h.date | date:'dd MMM yyyy' }}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i class="fa-solid fa-indian-rupee-sign detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Cost</span>
+                  <span class="detail-value fw-bold text-primary">₹{{ h.cost | number }}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i class="fa-solid fa-gauge-high detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Reading</span>
+                  <span class="detail-value">{{ h.km | number }} KM</span>
+                </div>
+              </div>
+              <div class="detail-item next-due-item">
+                <i class="fa-solid fa-hourglass-half detail-icon"></i>
+                <div class="detail-content">
+                  <span class="detail-label">Next Service Due</span>
+                  <div class="d-flex flex-column">
+                    <span class="detail-value text-danger fw-bold">{{ h.nextDue | date:'dd MMM yyyy' }}</span>
+                    <span class="detail-value text-muted small">At {{ h.nextDueKm | number }} KM</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

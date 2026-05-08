@@ -1,0 +1,1348 @@
+<div class="page-container" [@fadeIn]>
+  <!-- Header Section -->
+  <div
+    class="header-section mb-4 d-flex align-items-center justify-content-between"
+  >
+    <div class="d-flex align-items-center">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div class="ms-3">
+        <h1 class="page-title mb-0">Edit Vehicle</h1>
+        <p class="text-muted small mb-0">
+          Modify vehicle information and update document records for ID:
+          {{ vehicleId }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-xl-12">
+      <form [formGroup]="vehicleForm">
+        <!-- Section 1: General Vehicle Details -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('general')"
+        >
+          <div class="section-header" (click)="toggleSection('general')">
+            <div class="header-left">
+              <div class="icon-box">
+                <i class="fa-solid fa-truck-moving"></i>
+              </div>
+              <h5 class="mb-0">General Vehicle Details</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="general"
+            *ngIf="isSectionActive('general')"
+            [@fadeIn]
+          >
+            <div class="row g-4">
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Select Vehicle Type <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="vehicleTypes"
+                  formControlName="vehicleType"
+                  placeholder="Select Type"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Vehicle Body Type <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="bodyTypes"
+                  formControlName="bodyType"
+                  placeholder="Select Body Type"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Vehicle Length</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="vehicleLength"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Select Condition <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="conditions"
+                  formControlName="condition"
+                ></ng-select>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Select Maker's Name <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="manufacturers"
+                  formControlName="makerName"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Select Model Name <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="models"
+                  formControlName="modelName"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Registration Date <span class="text-danger">*</span></label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="registrationDate"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Body Total Volumetric Capacity</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="capacity"
+                />
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">Colour</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="color"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Chassis No. <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control uppercase"
+                  formControlName="chassisNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Engine No. <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control uppercase"
+                  formControlName="engineNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Wheelbase (in mm)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="wheelbase"
+                />
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Select Emission <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="emissions"
+                  formControlName="emission"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Horse Power/BHP</label>
+                <input type="text" class="form-control" formControlName="hp" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Laden Weight (Kgs)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="ladenWeight"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">UnLaden Weight (Kgs)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="unladenWeight"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Gross Vehicle Weight (Kgs)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="grossWeight"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label"
+                  >Select Fuel Used <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="fuelTypes"
+                  formControlName="fuelType"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update General Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Vehicle Invoice -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('invoice')"
+        >
+          <div class="section-header" (click)="toggleSection('invoice')">
+            <div class="header-left">
+              <div class="icon-box">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <h5 class="mb-0">Vehicle Invoice</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="invoice"
+            *ngIf="isSectionActive('invoice')"
+            [@fadeIn]
+          >
+            <h6 class="fw-bold mb-3 sub-heading">General Information</h6>
+            <div class="row g-4 mb-4">
+              <div class="col-md-3">
+                <label class="form-label">Dealer invoice No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="dealerInvoiceNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">InvoiceDate</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="invoiceDate"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">GRN Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="grnDate"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Hypothecation/Financed by</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="hypothecation"
+                />
+              </div>
+            </div>
+
+            <h6 class="fw-bold mb-3 sub-heading">Invoice Value Details</h6>
+            <div class="row g-4">
+              <div class="col-md-3">
+                <label class="form-label">Vehicle Base Price</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="basePrice"
+                  />
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">GST Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="gstType"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">IGST</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="igst"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">TCS</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="tcs"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Vehicle Invoice price</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="invoicePrice"
+                />
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Invoice Amount (In Words)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="amountInWords"
+                />
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update Invoice Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: AMC -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('amc')"
+        >
+          <div class="section-header" (click)="toggleSection('amc')">
+            <div class="header-left">
+              <div class="icon-box"><i class="fa-solid fa-wrench"></i></div>
+              <h5 class="mb-0">AMC (Annual Maintenance Contract)</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="amc"
+            *ngIf="isSectionActive('amc')"
+            [@fadeIn]
+          >
+            <div class="row g-4">
+              <div class="col-md-3">
+                <label class="form-label">AMC Issued By</label>
+                <ng-select
+                  [items]="amcProviders"
+                  formControlName="issuedBy"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">AMC No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="amcNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">AMC Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="amcType"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid from</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validFrom"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid upto</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validUpto"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Avg. Running /Year</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="avgRunningPerYear"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">AMC cost /Year (without Tax)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="costWithoutTax"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">GST on AMC</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="gstOnAmc"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">TCS on AMC</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="tcsOnAmc"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Total ( AMC + GST + TCS )</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="totalAmount"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Select Payment schedule</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="paymentSchedule"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Payment starts date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="paymentStartDate"
+                />
+              </div>
+            </div>
+            <div class="upload-zone mt-4">
+              <input
+                type="file"
+                #amcInput
+                hidden
+                (change)="onFileSelected($event, 'amc')"
+              />
+              <div
+                class="drop-area py-4 text-center border-dashed rounded-3"
+                (click)="amcInput.click()"
+              >
+                <ng-container *ngIf="!uploadedFiles['amc']">
+                  <i class="fa-solid fa-cloud-arrow-up mb-2 text-muted"></i>
+                  <p class="mb-0 small">
+                    Drop files to Attach or
+                    <span class="text-primary fw-bold clickable">Browse</span>
+                  </p>
+                </ng-container>
+                <div class="file-preview-mini" *ngIf="uploadedFiles['amc']">
+                  <i class="fa-solid fa-file-pdf text-danger me-2"></i>
+                  <span class="small fw-bold">{{
+                    uploadedFiles["amc"].name
+                  }}</span>
+                  <button
+                    class="btn-remove-file ms-2"
+                    (click)="removeFile('amc', $event)"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update AMC Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: National Permit -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('np')"
+        >
+          <div class="section-header" (click)="toggleSection('np')">
+            <div class="header-left">
+              <div class="icon-box"><i class="fa-solid fa-globe"></i></div>
+              <h5 class="mb-0">National Permit</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="np"
+            *ngIf="isSectionActive('np')"
+            [@fadeIn]
+          >
+            <h6 class="fw-bold mb-3 sub-heading">General Information</h6>
+            <div class="row g-4 mb-4">
+              <div class="col-md-3">
+                <label class="form-label">NP Authorization Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="npAuthNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">N.P. Dated</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="npDated"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Permit Category</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="permitCategory"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Nature of Goods to be carried</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="natureOfGoods"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Document Charges (INR)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="docCharges"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Total Charge</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="totalCharge"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid From</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validFrom"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid Upto</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validUpto"
+                />
+              </div>
+            </div>
+            <div class="upload-zone">
+              <input
+                type="file"
+                #npInput
+                hidden
+                (change)="onFileSelected($event, 'np')"
+              />
+              <div
+                class="drop-area py-4 text-center border-dashed rounded-3"
+                (click)="npInput.click()"
+              >
+                <ng-container *ngIf="!uploadedFiles['np']">
+                  <i class="fa-solid fa-cloud-arrow-up mb-2 text-muted"></i>
+                  <p class="mb-0 small">
+                    Drop files to Attach or
+                    <span class="text-primary fw-bold clickable">Browse</span>
+                  </p>
+                </ng-container>
+                <div class="file-preview-mini" *ngIf="uploadedFiles['np']">
+                  <i class="fa-solid fa-file-shield text-success me-2"></i>
+                  <span class="small fw-bold">{{
+                    uploadedFiles["np"].name
+                  }}</span>
+                  <button
+                    class="btn-remove-file ms-2"
+                    (click)="removeFile('np', $event)"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update National Permit
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: State Permit (A) -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('statePermit')"
+        >
+          <div class="section-header" (click)="toggleSection('statePermit')">
+            <div class="header-left">
+              <div class="icon-box">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </div>
+              <h5 class="mb-0">State Permit</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="statePermit"
+            *ngIf="isSectionActive('statePermit')"
+            [@fadeIn]
+          >
+            <h6 class="fw-bold mb-3 sub-heading">General Information</h6>
+            <div class="row g-4 mb-4">
+              <div class="col-md-4">
+                <label class="form-label">Permit No</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="permitNo"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Name Of Permit Holder</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="permitHolderName"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Father's Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="fathersName"
+                />
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="address"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">The Permit Is Valid For</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="validFor"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label"
+                  >State /UT where permit is valid</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="validInState"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Date of Registration</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="registrationDate"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Payment Terms</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="paymentTerms"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Compliance Document Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="complianceDocType"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Document Charges (INR)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="docCharges"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid From</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validFrom"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid Upto</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validUpto"
+                />
+              </div>
+            </div>
+            <div class="upload-zone">
+              <input
+                type="file"
+                #stateInput
+                hidden
+                (change)="onFileSelected($event, 'statePermit')"
+              />
+              <div
+                class="drop-area py-4 text-center border-dashed rounded-3"
+                (click)="stateInput.click()"
+              >
+                <ng-container *ngIf="!uploadedFiles['statePermit']">
+                  <i class="fa-solid fa-cloud-arrow-up mb-2 text-muted"></i>
+                  <p class="mb-0 small">
+                    Drop files to Attach or
+                    <span class="text-primary fw-bold clickable">Browse</span>
+                  </p>
+                </ng-container>
+                <div
+                  class="file-preview-mini"
+                  *ngIf="uploadedFiles['statePermit']"
+                >
+                  <i class="fa-solid fa-map text-primary me-2"></i>
+                  <span class="small fw-bold">{{
+                    uploadedFiles["statePermit"].name
+                  }}</span>
+                  <button
+                    class="btn-remove-file ms-2"
+                    (click)="removeFile('statePermit', $event)"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update State Permit
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Vehicle Insurance -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('insurance')"
+        >
+          <div class="section-header" (click)="toggleSection('insurance')">
+            <div class="header-left">
+              <div class="icon-box">
+                <i class="fa-solid fa-file-shield"></i>
+              </div>
+              <h5 class="mb-0">Vehicle Insurance</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="insurance"
+            *ngIf="isSectionActive('insurance')"
+            [@fadeIn]
+          >
+            <h6 class="fw-bold mb-3 sub-heading">General Information</h6>
+            <div class="row g-4 mb-5">
+              <div class="col-md-4">
+                <label class="form-label">Policy No</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="policyNo"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Policy Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="policyType"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Issuer Name</label>
+                <ng-select
+                  [items]="issuers"
+                  formControlName="issuerName"
+                ></ng-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid From</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validFrom"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid Upto</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validUpto"
+                />
+              </div>
+            </div>
+            <h6 class="fw-bold mb-3 sub-heading">Premium Details</h6>
+            <div class="row g-4 mb-5">
+              <!-- OD Details -->
+              <div class="col-md-3">
+                <label class="form-label">Basic OD Premium</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="basicOD"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Deductions</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="deductionsOD"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Additions</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="additionsOD"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label text-primary">Total OD Premium</label
+                ><input
+                  type="number"
+                  class="form-control bg-light fw-bold"
+                  formControlName="totalOD"
+                />
+              </div>
+              <!-- TP Details -->
+              <div class="col-md-3">
+                <label class="form-label">Basic TP premium</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="basicTP"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Deductions</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="deductionsTP"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Additions</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="additionsTP"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label text-primary">Total TP premium</label
+                ><input
+                  type="number"
+                  class="form-control bg-light fw-bold"
+                  formControlName="totalTP"
+                />
+              </div>
+              <!-- Final Combined -->
+              <div class="col-md-3">
+                <label class="form-label">Total (OD + TP) Premium</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="totalCombined"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">GST</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="gst"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Cess</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  formControlName="cess"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label text-success">Grand Total</label
+                ><input
+                  type="number"
+                  class="form-control border-success fw-bold"
+                  formControlName="grandTotal"
+                />
+              </div>
+            </div>
+            <h6 class="fw-bold mb-3 sub-heading">Nomination Details</h6>
+            <div class="row g-4">
+              <div class="col-md-4">
+                <label class="form-label">Nominee Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="nomineeName"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Relation</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="relation"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Age</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="age"
+                />
+              </div>
+            </div>
+
+            <div class="upload-zone mt-4">
+              <input
+                type="file"
+                #insInput
+                hidden
+                (change)="onFileSelected($event, 'insurance')"
+              />
+              <div
+                class="drop-area py-4 text-center border-dashed rounded-3"
+                (click)="insInput.click()"
+              >
+                <ng-container *ngIf="!uploadedFiles['insurance']">
+                  <i class="fa-solid fa-cloud-arrow-up mb-2 text-muted"></i>
+                  <p class="mb-0 small">
+                    Drop files to Attach or
+                    <span class="text-primary fw-bold clickable">Browse</span>
+                  </p>
+                </ng-container>
+                <div
+                  class="file-preview-mini"
+                  *ngIf="uploadedFiles['insurance']"
+                >
+                  <i class="fa-solid fa-file-contract text-info me-2"></i>
+                  <span class="small fw-bold">{{
+                    uploadedFiles["insurance"].name
+                  }}</span>
+                  <button
+                    class="btn-remove-file ms-2"
+                    (click)="removeFile('insurance', $event)"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update Insurance
+                Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: PUCC -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('pucc')"
+        >
+          <div class="section-header" (click)="toggleSection('pucc')">
+            <div class="header-left">
+              <div class="icon-box"><i class="fa-solid fa-smog"></i></div>
+              <h5 class="mb-0">PUCC (Pollution Under Control Certificate)</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="pucc"
+            *ngIf="isSectionActive('pucc')"
+            [@fadeIn]
+          >
+            <h6 class="fw-bold mb-3 sub-heading">General Information</h6>
+            <div class="row g-4 mb-4">
+              <div class="col-md-3">
+                <label class="form-label">PUCC No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="puccNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Customer No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="customerNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Customer Mobile No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="customerMobileNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Test Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="testDate"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Test Time</label>
+                <input
+                  type="time"
+                  class="form-control"
+                  formControlName="testTime"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Center Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="centerName"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Center Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="centerAddress"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">License No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="licenseNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Document Charges</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="docCharges"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid From</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validFrom"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid Upto</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validUpto"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Issuer Name</label>
+                <ng-select
+                  [items]="issuers"
+                  formControlName="issuerName"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="upload-zone">
+              <input
+                type="file"
+                #puccInput
+                hidden
+                (change)="onFileSelected($event, 'pucc')"
+              />
+              <div
+                class="drop-area py-4 text-center border-dashed rounded-3"
+                (click)="puccInput.click()"
+              >
+                <ng-container *ngIf="!uploadedFiles['pucc']">
+                  <i class="fa-solid fa-cloud-arrow-up mb-2 text-muted"></i>
+                  <p class="mb-0 small">
+                    Drop files to Attach or
+                    <span class="text-primary fw-bold clickable">Browse</span>
+                  </p>
+                </ng-container>
+                <div class="file-preview-mini" *ngIf="uploadedFiles['pucc']">
+                  <i class="fa-solid fa-smog text-warning me-2"></i>
+                  <span class="small fw-bold">{{
+                    uploadedFiles["pucc"].name
+                  }}</span>
+                  <button
+                    class="btn-remove-file ms-2"
+                    (click)="removeFile('pucc', $event)"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update PUCC Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 8: Vehicle Fitness -->
+        <div
+          class="form-section shadow-sm mb-2"
+          [class.active]="isSectionActive('fitness')"
+        >
+          <div class="section-header" (click)="toggleSection('fitness')">
+            <div class="header-left">
+              <div class="icon-box">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+              <h5 class="mb-0">Vehicle Fitness</h5>
+            </div>
+            <div class="toggle-icon">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div
+            class="section-body p-4"
+            formGroupName="fitness"
+            *ngIf="isSectionActive('fitness')"
+            [@fadeIn]
+          >
+            <div class="row g-4 mb-4">
+              <div class="col-md-3">
+                <label class="form-label">Application No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="applicationNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Inspection Fee receipt No.</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="inspectionFeeReceiptNo"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Receipt Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="receiptDate"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Inspected On</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="inspectedOn"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Payment Terms</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="paymentTerms"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Compliance Doc Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="complianceDocType"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid From</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validFrom"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Valid Upto</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="validUpto"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Issuer Name</label>
+                <ng-select
+                  [items]="issuers"
+                  formControlName="issuerName"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="upload-zone">
+              <input
+                type="file"
+                #fitnessInput
+                hidden
+                (change)="onFileSelected($event, 'fitness')"
+              />
+              <div
+                class="drop-area py-4 text-center border-dashed rounded-3"
+                (click)="fitnessInput.click()"
+              >
+                <ng-container *ngIf="!uploadedFiles['fitness']">
+                  <i class="fa-solid fa-cloud-arrow-up mb-2 text-muted"></i>
+                  <p class="mb-0 small">
+                    Drop files to Attach or
+                    <span class="text-primary fw-bold clickable">Browse</span>
+                  </p>
+                </ng-container>
+                <div class="file-preview-mini" *ngIf="uploadedFiles['fitness']">
+                  <i class="fa-solid fa-heart-pulse text-danger me-2"></i>
+                  <span class="small fw-bold">{{
+                    uploadedFiles["fitness"].name
+                  }}</span>
+                  <button
+                    class="btn-remove-file ms-2"
+                    (click)="removeFile('fitness', $event)"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="section-footer mt-4">
+              <button
+                type="button"
+                class="btn-section-save"
+                (click)="saveVehicle()"
+              >
+                <i class="fa-solid fa-check-double"></i> Update Vehicle & Finish
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

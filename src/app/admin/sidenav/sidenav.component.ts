@@ -93,6 +93,18 @@ export class SidenavComponent {
               label: 'Vehicle Model',
               route: '/admin/master/vehicle-model',
             },
+            {
+              index: 6,
+              icon: 'category',
+              label: 'Vehicle Type',
+              route: '/admin/master/vehicle-type',
+            },
+            {
+              index: 7,
+              icon: 'calendar_today',
+              label: 'Session Calendar',
+              route: '/admin/master/session-calendar',
+            },
           ],
         },
         {
@@ -133,17 +145,23 @@ export class SidenavComponent {
             // },
           ],
         },
-        {
-          index: 5,
-          icon: 'payments',
-          label: 'Salary Management',
-          route: '/admin/salary-management/salary-listing',
-        },
+        // {
+        //   index: 5,
+        //   icon: 'payments',
+        //   label: 'Salary Management',
+        //   route: '/admin/salary-management/salary-listing',
+        // },
         {
           index: 6,
           icon: 'local_shipping',
           label: 'Vehicle Management',
           route: '/admin/vehicle-management',
+        },
+        {
+          index: 7,
+          icon: 'local_gas_station',
+          label: 'Fuel Management',
+          route: '/admin/fuel-management',
         },
       ];
     } else if (this.roles == 'Engineer') {

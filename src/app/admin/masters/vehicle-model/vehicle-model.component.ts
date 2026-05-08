@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MaterialModule } from 'src/app/mat/mat.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NotificationService } from 'src/app/core/services/notificationnew.service';
 
 @Component({
   selector: 'app-vehicle-model',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, MaterialModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, MaterialModule, MatTooltipModule],
   templateUrl: './vehicle-model.component.html',
   styleUrl: './vehicle-model.component.scss',
   animations: [

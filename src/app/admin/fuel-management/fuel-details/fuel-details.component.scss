@@ -1,0 +1,193 @@
+.fuel-details-container {
+  // max-width: 1200px;
+  margin: 0 auto;
+
+  .btn-icon-back {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+      transform: translateX(-2px);
+    }
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2c7da0;
+    letter-spacing: -0.5px;
+  }
+
+  .badge-vehicle-header {
+    background: rgba(44, 125, 160, 0.1);
+    color: #2c7da0;
+    padding: 0.625rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    border: 1.5px solid rgba(44, 125, 160, 0.2);
+  }
+
+  .vehicle-icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.25rem;
+  }
+
+  .details-grid {
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.875rem 0;
+      border-bottom: 1px solid #f1f5f9;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .label {
+        color: #64748b;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .value {
+        color: #1e293b;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      &.highlight {
+        padding: 1.25rem 0;
+
+        .label {
+          font-size: 0.95rem;
+          color: #0f172a;
+        }
+
+        .value {
+          font-size: 1.1rem;
+        }
+      }
+    }
+  }
+
+  .history-card {
+    .table {
+      thead th {
+        background: #f8fafc;
+        border-top: none;
+        padding: 1.15rem 1rem;
+        color: #64748b;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.7rem;
+      }
+
+      tbody td {
+        padding: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .stat-badge {
+    border: 1px solid #e2e8f0;
+    min-width: 100px;
+  }
+
+  .custom-pagination {
+    ::ng-deep {
+      .ngx-pagination {
+        margin-bottom: 0;
+        padding-left: 0;
+        display: flex;
+        gap: 5px;
+
+        li {
+          border-radius: 8px;
+          margin: 0;
+
+          a,
+          button {
+            border-radius: 8px;
+            padding: 8px 14px;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.2s;
+
+            &:hover {
+              background: #f1f5f9;
+              color: #1e293b;
+            }
+          }
+
+          &.current {
+            background: #2c7da0;
+            border-radius: 8px;
+
+            span {
+              padding: 8px 14px;
+              color: white;
+            }
+          }
+
+          &.pagination-previous,
+          &.pagination-next {
+
+            a:after,
+            a:before {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .badge {
+    padding: 0.5rem 0.875rem;
+    font-weight: 700;
+
+    &.bg-success-subtle {
+      background-color: #f0fdf4 !important;
+      color: #166534 !important;
+    }
+
+    &.bg-primary-subtle {
+      background-color: #eff6ff !important;
+      color: #1e40af !important;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .fuel-details-container {
+    .page-title {
+      font-size: 1.25rem;
+    }
+
+    .details-card,
+    .history-card {
+      margin-bottom: 1rem;
+    }
+  }
+}

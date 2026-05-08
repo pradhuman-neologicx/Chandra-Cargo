@@ -77,21 +77,6 @@
           </div>
         </div>
 
-        <!-- Attachment -->
-        <div
-          class="attachment-box mt-2 p-3 d-flex align-items-center justify-content-between"
-        >
-          <div class="d-flex align-items-center">
-            <i class="fa-solid fa-file-pdf text-danger fs-4 me-3"></i>
-            <span class="attachment-name fw-medium">{{
-              requestDetails.attachment
-            }}</span>
-          </div>
-          <a
-            class="view-link cursor-pointer text-primary fw-medium text-decoration-none"
-            >View</a
-          >
-        </div>
 
         <!-- Approval Flow -->
         <div class="approval-flow mt-5 pt-4 border-top">
@@ -136,51 +121,21 @@
 
     <!-- Right Column: Balance & Actions -->
     <div class="col-lg-4">
-      <!-- Leave Balance -->
-      <div class="card balance-card p-4 mb-4">
+      <!-- Leave Summary -->
+      <div class="card summary-card p-4 mb-4">
         <h3 class="card-title text-muted fs-6 fw-semibold mb-4 text-uppercase">
-          Leave Balance
+          Leave Summary
         </h3>
 
-        <div class="balance-item mb-4">
-          <div class="d-flex justify-content-between mb-2">
-            <span class="leave-type fw-medium text-secondary"
-              >Annual Leave</span
-            >
-            <span class="leave-count fw-bold"
-              >{{ leaveBalance.annualUsed }} /
-              {{ leaveBalance.annualTotal }} Days</span
-            >
+        <div class="total-leaves-display text-center py-3">
+          <div class="leaves-circle mx-auto mb-3">
+            <span class="count">{{ leaveBalance.totalTaken }}</span>
+            <span class="label">Days</span>
           </div>
-          <div class="progress" style="height: 6px">
-            <div
-              class="progress-bar bg-primary"
-              role="progressbar"
-              [style.width]="leaveBalance.annualPercentage + '%'"
-            ></div>
-          </div>
+          <h4 class="mb-1 fw-bold">Total Leaves Taken</h4>
+          <p class="text-muted small">Current Financial Year</p>
         </div>
 
-        <div class="balance-item mb-4">
-          <div class="d-flex justify-content-between mb-2">
-            <span class="leave-type fw-medium text-secondary">Sick Leave</span>
-            <span class="leave-count fw-bold"
-              >{{ leaveBalance.sickUsed }} /
-              {{ leaveBalance.sickTotal }} Days</span
-            >
-          </div>
-          <div class="progress" style="height: 6px">
-            <div
-              class="progress-bar bg-warning"
-              role="progressbar"
-              [style.width]="leaveBalance.sickPercentage + '%'"
-            ></div>
-          </div>
-        </div>
-
-        <div class="balance-note text-muted small fst-italic mt-2">
-          This request will deduct 3 days from Annual Leave balance.
-        </div>
       </div>
 
       <!-- Action Panel -->
@@ -209,13 +164,6 @@
           <i class="fa-regular fa-times-circle me-2"></i> Reject Request
         </button>
 
-        <div class="text-center">
-          <a
-            class="forward-link text-muted text-decoration-none small cursor-pointer hover-primary"
-          >
-            Forward to HR
-          </a>
-        </div>
       </div>
     </div>
   </div>

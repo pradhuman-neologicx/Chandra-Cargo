@@ -41,7 +41,6 @@ import { NavbarComponent } from './website/navbar/navbar.component';
     ReportComponent,
     HomeComponent,
     NavbarComponent,
-    NavbarComponent,
   ],
   imports: [
     BrowserModule,

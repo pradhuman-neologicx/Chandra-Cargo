@@ -1,18 +1,27 @@
 <div class="container-fluid mb-4">
-  <div class="d-md-flex justify-content-between align-items-center">
-    <h1 class="text-primary table-heading-detail">Employee Management</h1>
+  <div
+    class="d-md-flex justify-content-between align-items-center flex-wrap gap-2"
+  >
     <div>
+      <h1 class="text-primary page-title">Employee Management</h1>
+      <p class="text-muted small mb-0">
+        Manage employee data, track performance, and simplify HR operations.
+      </p>
+    </div>
+    <div class="d-flex gap-2">
       <button
         (click)="bannermodal()"
-        class="btn btn-custom-primary px-4 py-2 mb-md-0 mb-2 mr-2"
+        class="btn-action-header add-btn shadow-sm"
       >
-        Create Employee
+        <div class="icon-box"><i class="fa-solid fa-user-plus"></i></div>
+        <span>Create Employee</span>
       </button>
       <button
         (click)="openUploadModal()"
-        class="btn btn-custom-primary px-4 py-2 mb-md-0 mb-2 mr-2"
+        class="btn-action-header upload-btn shadow-sm"
       >
-        Bulk Upload
+        <div class="icon-box"><i class="fa-solid fa-file-import"></i></div>
+        <span>Bulk Upload</span>
       </button>
     </div>
   </div>
@@ -423,49 +432,6 @@
                 </select>
               </div>
 
-              <!-- Employment Type -->
-              <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Employment Type</label
-                >
-                <div class="d-flex gap-3 pt-2">
-                  <div
-                    class="form-check"
-                    *ngFor="let type of employmentTypes; let i = index"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      [id]="'type' + i"
-                      [value]="type"
-                      formControlName="employment_type"
-                    />
-                    <label class="form-check-label" [for]="'type' + i">{{
-                      type
-                    }}</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Assigned Branch(es) -->
-              <div class="col-12 col-md-8 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Assigned Branch(es)</label
-                >
-                <select
-                  class="form-select form-input-custom"
-                  formControlName="branches"
-                  multiple
-                >
-                  <option *ngFor="let branch of branchesList" [value]="branch">
-                    {{ branch }}
-                  </option>
-                </select>
-                <small class="text-muted"
-                  >Hold Ctrl to select multiple branches</small
-                >
-              </div>
-
               <!-- Employment Status -->
               <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable"
@@ -485,19 +451,38 @@
                 </select>
               </div>
 
+              <!-- Assigned Branch(es) -->
+              <div class="col-12 col-md-4 mb-3">
+                <label class="form-label admin-form-lable"
+                  >Assigned Branch(es)</label
+                >
+                <select
+                  class="form-select form-input-custom"
+                  formControlName="branches"
+                  multiple
+                >
+                  <option *ngFor="let branch of branchesList" [value]="branch">
+                    {{ branch }}
+                  </option>
+                </select>
+                <small class="text-muted"
+                  >Hold Ctrl to select multiple branches</small
+                >
+              </div>
+
               <!-- Address -->
-              <div class="col-12 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable">Address</label>
                 <textarea
                   class="form-control form-input-custom"
                   formControlName="address"
-                  rows="2"
+                  rows="3"
                   placeholder="Enter complete address"
                 ></textarea>
               </div>
 
               <!-- Profile Photo -->
-              <div class="col-12 col-md-12 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable"
                   >Profile Photo (Optional)</label
                 >
@@ -679,40 +664,6 @@
                 </select>
               </div>
 
-              <!-- Employment Type -->
-              <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Employment Type</label
-                >
-                <select
-                  class="form-select form-input-custom"
-                  formControlName="employment_type"
-                >
-                  <option value="" disabled selected>
-                    Select Employment Type
-                  </option>
-                  <option *ngFor="let type of employmentTypes" [value]="type">
-                    {{ type }}
-                  </option>
-                </select>
-              </div>
-
-              <!-- Assigned Branch(es) -->
-              <div class="col-12 col-md-8 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Assigned Branch(es)</label
-                >
-                <select
-                  class="form-select form-input-custom"
-                  formControlName="branches"
-                  multiple
-                >
-                  <option *ngFor="let branch of branchesList" [value]="branch">
-                    {{ branch }}
-                  </option>
-                </select>
-              </div>
-
               <!-- Employment Status -->
               <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable"
@@ -732,14 +683,70 @@
                 </select>
               </div>
 
+              <!-- Assigned Branch(es) -->
+              <div class="col-12 col-md-4 mb-3">
+                <label class="form-label admin-form-lable"
+                  >Assigned Branch(es)</label
+                >
+                <select
+                  class="form-select form-input-custom"
+                  formControlName="branches"
+                  multiple
+                >
+                  <option *ngFor="let branch of branchesList" [value]="branch">
+                    {{ branch }}
+                  </option>
+                </select>
+              </div>
+
               <!-- Address -->
-              <div class="col-12 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable">Address</label>
                 <textarea
                   class="form-control form-input-custom"
                   formControlName="address"
-                  rows="2"
+                  rows="3"
                 ></textarea>
+              </div>
+
+              <!-- Profile Photo -->
+              <div class="col-12 col-md-4 mb-3">
+                <label class="form-label admin-form-lable"
+                  >Profile Photo (Optional)</label
+                >
+                <div class="border rounded p-3 text-center bg-light">
+                  <input
+                    type="file"
+                    (change)="onSingleFileSelected($event)"
+                    accept="image/*"
+                    class="d-none"
+                    #fileInputUpdate
+                  />
+                  <div
+                    *ngIf="selectedImages.length === 0"
+                    (click)="fileInputUpdate.click()"
+                    class="cursor-pointer"
+                  >
+                    <i class="fa-solid fa-cloud-arrow-up fs-2 text-primary"></i>
+                    <p class="mb-0">Click to upload photo</p>
+                  </div>
+                  <div
+                    *ngIf="selectedImages.length > 0"
+                    class="position-relative d-inline-block"
+                  >
+                    <img
+                      [src]="selectedImages[0].imageSrc"
+                      class="img-thumbnail"
+                      style="max-height: 100px"
+                    />
+                    <button
+                      class="btn btn-danger btn-sm position-absolute top-0 start-100 translate-middle rounded-circle"
+                      (click)="removeImage(0)"
+                    >
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -767,83 +774,145 @@
 <!-- Upload Modal -->
 <div
   *ngIf="uploadModalOpen"
-  class="your-animation-class modal-container"
+  class="modal-container"
   aria-labelledby="modal-Upload"
   role="dialog"
   aria-modal="true"
 >
-  <div class="modal-content modal-content-50 max-w-sm" [@fadeIn]>
+  <div class="modal-content modal-content-75" [@fadeIn]>
     <div (click)="ClickexamModalconent($event)">
-      <form [formGroup]="uploadForm">
-        <div class="card">
-          <div
-            class="card-header bg-white d-flex justify-content-between align-items-center"
-          >
-            <h5 class="modal-title pt-1 text-center">Upload File</h5>
-            <button
-              class="btn btn-primary main-btn bg-transparent border-0 pb-0 pt-1 text-black"
-              type="button"
-              (click)="closeUploadModal()"
-            >
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div class="modal-content-width card-body mb-0 pb-0">
-            <div class="row">
-              <div class="col-lg-12 col-md-12 mb-3">
-                <label
-                  class="d-block text-capitalize form-label admin-form-lable text-center cursor-pointer"
-                  for="upload-file"
-                >
-                  Select File
-                </label>
-                <input
-                  type="file"
-                  id="upload-file"
-                  class="form-control"
-                  formControlName="file"
-                  (change)="onUploadFileSelected($event)"
-                  accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,*/*"
-                />
-                <div
-                  class="text-danger error-message"
-                  *ngIf="
-                    uploadForm.controls['file'].errors &&
-                    (uploadForm.controls['file'].touched ||
-                      uploadForm.controls['file'].dirty)
-                  "
-                >
-                  <p
-                    class="fw-light text-danger"
-                    *ngIf="uploadForm.controls['file'].errors['required']"
-                  >
-                    File is required
+      <div class="card border-0 shadow-lg">
+        <div
+          class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="modal-title fw-bold text-primary mb-0">
+            Bulk Employee Upload
+          </h5>
+          <button class="btn-close-custom" (click)="closeUploadModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="card-body p-4">
+          <div class="row g-4">
+            <!-- Left Column: Instructions & Download -->
+            <div class="col-lg-5">
+              <div class="h-100 d-flex flex-column">
+                <div class="mb-4">
+                  <h6 class="fw-bold mb-2">Step 1: Get Template</h6>
+                  <p class="text-muted small">
+                    Download our standard template to ensure your data is
+                    formatted correctly for a successful upload.
                   </p>
                 </div>
-                <div *ngIf="selectedUploadFileName" class="mt-2">
-                  <span>Selected: {{ selectedUploadFileName }}</span>
+
+                <div
+                  class="sample-download-box p-4 rounded-4 border d-flex flex-column align-items-center text-center flex-grow-1 justify-content-center"
+                >
+                  <div class="sample-icon mb-3">
+                    <i class="fa-solid fa-file-csv fs-1 text-success"></i>
+                  </div>
+                  <h6 class="mb-2 fw-bold">Employee CSV Template</h6>
+                  <p class="small text-muted mb-4">
+                    Includes all required fields like Name, Mobile, and
+                    Department.
+                  </p>
+                  <button
+                    class="btn btn-outline-primary fw-bold w-100"
+                    (click)="downloadSampleFile()"
+                  >
+                    <i class="fa-solid fa-download me-2"></i> Download Template
+                  </button>
                 </div>
               </div>
             </div>
+
+            <!-- Right Column: Upload Zone -->
+            <div class="col-lg-7">
+              <h6 class="fw-bold mb-3">Step 2: Upload File</h6>
+              <form [formGroup]="uploadForm">
+                <div
+                  class="upload-zone p-5 text-center rounded-4 mb-4"
+                  [ngClass]="{ 'has-file': selectedUploadFile }"
+                  (click)="fileInput.click()"
+                  style="
+                    min-height: 250px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <input
+                    type="file"
+                    #fileInput
+                    class="d-none"
+                    (change)="onUploadFileSelected($event)"
+                    accept=".csv, .xlsx, .xls"
+                  />
+
+                  <div *ngIf="!selectedUploadFile">
+                    <div class="upload-icon-circle mx-auto mb-3">
+                      <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <p class="mb-1 fw-bold">Click to select file</p>
+                    <p class="small text-muted mb-0">
+                      Supports CSV, Excel (Max 5MB)
+                    </p>
+                  </div>
+
+                  <div
+                    *ngIf="selectedUploadFile"
+                    class="file-info-view animate__animated animate__fadeIn"
+                  >
+                    <i
+                      class="fa-solid fa-file-circle-check fs-1 text-success mb-2"
+                    ></i>
+                    <h6 class="fw-bold mb-0 text-truncate px-3">
+                      {{ selectedUploadFileName }}
+                    </h6>
+                    <button
+                      class="btn btn-link btn-sm text-danger mt-2"
+                      (click)="
+                        $event.stopPropagation(); selectedUploadFile = null
+                      "
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="alert alert-info border-0 small py-3 px-4 rounded-3 d-flex align-items-center mb-0"
+                >
+                  <i class="fa-solid fa-circle-info fs-5 me-3"></i>
+                  <div>
+                    <strong>Pro Tip:</strong> Ensure all mobile numbers are
+                    unique and departments match existing records.
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="modal-footer text-end me-4 mb-3">
+        </div>
+
+        <div class="card-footer bg-white border-0 p-4 pt-0">
+          <div class="d-flex gap-3 mt-2">
             <button
-              class="btn btn-secondary main-btnfs px-4 py-2 me-4 text-gray-100"
-              type="button"
+              class="btn btn-light-custom flex-grow-1 py-3 fw-bold"
               (click)="closeUploadModal()"
             >
               Cancel
             </button>
             <button
-              class="btn btn-custom-primary px-4 py-2"
-              type="submit"
+              class="btn btn-primary-custom flex-grow-1 py-3 shadow-sm"
+              [disabled]="!selectedUploadFile"
               (click)="uploadFile()"
             >
-              Upload
+              <i class="fa-solid fa-upload me-2"></i> Start Import Process
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -959,17 +1028,17 @@
 
               <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable"
-                  >Employment Type</label
+                  >Employment Status</label
                 >
                 <input
                   type="text"
                   class="form-control form-input-custom"
-                  formControlName="employment_type"
+                  formControlName="status"
                   readonly
                 />
               </div>
 
-              <div class="col-12 col-md-8 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable"
                   >Assigned Branch(es)</label
                 >
@@ -984,25 +1053,33 @@
               </div>
 
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Employment Status</label
-                >
-                <input
-                  type="text"
-                  class="form-control form-input-custom"
-                  formControlName="status"
-                  readonly
-                />
-              </div>
-
-              <div class="col-12 mb-3">
                 <label class="form-label admin-form-lable">Address</label>
                 <textarea
                   class="form-control form-input-custom"
                   formControlName="address"
-                  rows="2"
+                  rows="3"
                   readonly
                 ></textarea>
+              </div>
+
+              <!-- Profile Photo View -->
+              <div class="col-12 col-md-4 mb-3">
+                <label class="form-label admin-form-lable">Profile Photo</label>
+                <div class="text-center pt-2">
+                  <img
+                    *ngIf="staffview.get('image')?.value"
+                    [src]="staffview.get('image')?.value"
+                    class="img-thumbnail"
+                    style="max-height: 100px"
+                  />
+                  <div
+                    *ngIf="!staffview.get('image')?.value"
+                    class="text-muted"
+                  >
+                    <i class="fa-solid fa-user-slash fs-2 mb-2"></i>
+                    <p class="small">No Photo</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
