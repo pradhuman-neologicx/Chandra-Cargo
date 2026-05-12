@@ -1,42 +1,31 @@
 <div class="container-fluid attendance-detail-container mb-4">
-  <!-- Breadcrumb -->
-  <div class="breadcrumb-nav">
-    <span class="breadcrumb-link" (click)="goBack()">Attendance History</span>
-    <span class="breadcrumb-separator">
-      <i class="fa-solid fa-chevron-right"></i>
-    </span>
-    <span class="breadcrumb-current">Attendance Details</span>
-  </div>
-
   <!-- Page Header -->
-  <div class="d-md-flex justify-content-between align-items-start mb-4">
-    <div>
-      <h1 class="page-title">Attendance Details</h1>
-      <p class="page-subtitle">
-        Reviewing attendance for <strong>{{ employee.name }}</strong> ({{ employee.empId }}) - {{ employee.department }}
-      </p>
-    </div>
-    <div class="d-flex gap-2">
-      <button class="btn btn-outline-secondary px-4 py-2" (click)="goBack()">
-        <i class="fa-solid fa-arrow-left me-2"></i>Back to List
-      </button>
-    </div>
-  </div>
-
-  <!-- Today's Status Bar -->
-  <div class="status-card card border-0">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-      <div class="status-content">
-        <h3>Today's Attendance (4th May 2026)</h3>
-        <p>You have successfully checked in for the day. Remember to check out before leaving.</p>
-        <div class="time-badge">
-          <i class="fa-regular fa-clock text-primary"></i> 
-          <span>Checked in at: <strong>10:00 AM</strong></span>
+  <div class="page-header mb-4">
+    <div
+      class="d-flex align-items-center justify-content-between flex-wrap gap-3"
+    >
+      <div class="d-flex align-items-center">
+        <div class="employee-avatar-large me-3">
+          {{ employee.name.charAt(0) }}
+        </div>
+        <div>
+          <h1 class="employee-name-title mb-0">{{ employee.name }}</h1>
+          <div class="employee-meta-info">
+            <span class="info-tag id-tag"
+              ><i class="fa-solid fa-hashtag"></i> {{ employee.empId }}</span
+            >
+            <span class="info-tag dept-tag"
+              ><i class="fa-solid fa-briefcase"></i>
+              {{ employee.department }}</span
+            >
+          </div>
         </div>
       </div>
-      <button class="btn-checkout">
-        <i class="fa-solid fa-right-from-bracket"></i> Check Out
-      </button>
+      <div class="header-actions">
+        <button class="btn btn-back-custom" (click)="goBack()">
+          <i class="fa-solid fa-arrow-left-long me-2"></i>Back to History
+        </button>
+      </div>
     </div>
   </div>
 
@@ -46,8 +35,12 @@
       <div class="calendar-card border-0">
         <div class="calendar-header">
           <div class="controls">
-            <button class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
-            <button class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="nav-btn">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
             <select class="form-select-sm">
               <option>{{ getMonthName() }}</option>
             </select>
@@ -60,23 +53,20 @@
 
         <div class="calendar-grid">
           <div class="days-names">
-            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span
+            ><span>Th</span><span>Fr</span><span>Sa</span>
           </div>
           <div class="days-nums">
-            <div *ngFor="let day of daysInMonth" 
-                 class="day" 
-                 [class.empty]="day === 0"
-                 [class.active]="day === selectedDate"
-                 [class.has-record]="day > 0 && day <= 4">
-              {{ day !== 0 ? day : '' }}
+            <div
+              *ngFor="let day of daysInMonth"
+              class="day"
+              [class.empty]="day === 0"
+              [class.active]="day === selectedDate"
+              [class.has-record]="day > 0 && day <= 4"
+            >
+              {{ day !== 0 ? day : "" }}
             </div>
           </div>
-        </div>
-
-        <div class="mt-4 pt-2">
-          <button class="btn-apply-leave px-4 py-2 w-100">
-            <i class="fa-solid fa-calendar-plus me-2"></i>Apply Leave
-          </button>
         </div>
       </div>
     </div>
@@ -85,8 +75,10 @@
     <div class="col-lg-7 mb-4">
       <div class="list-card border-0">
         <h4>Attendance History</h4>
-        <p class="subtitle">Click on the edit icon next to a date to modify the record.</p>
-        
+        <p class="subtitle">
+          Click on the edit icon next to a date to modify the record.
+        </p>
+
         <div class="table-responsive">
           <table class="table">
             <thead>
@@ -108,23 +100,42 @@
                   </span>
                 </td>
                 <td>
-                  <span class="text-primary fw-medium" *ngIf="record.checkIn !== '-'">
+                  <span
+                    class="text-primary fw-medium"
+                    *ngIf="record.checkIn !== '-'"
+                  >
                     {{ record.checkIn }}
                   </span>
-                  <span class="text-muted" *ngIf="record.checkIn === '-'">--:--</span>
+                  <span class="text-muted" *ngIf="record.checkIn === '-'"
+                    >--:--</span
+                  >
                 </td>
                 <td>
-                  <span class="text-indigo fw-medium" *ngIf="record.checkOut !== '-'">
+                  <span
+                    class="text-indigo fw-medium"
+                    *ngIf="record.checkOut !== '-'"
+                  >
                     {{ record.checkOut }}
                   </span>
-                  <span class="text-muted" *ngIf="record.checkOut === '-'">--:--</span>
+                  <span class="text-muted" *ngIf="record.checkOut === '-'"
+                    >--:--</span
+                  >
                 </td>
                 <td>
-                  <span class="text-warning fw-medium" *ngIf="record.duration !== '-'">{{ record.duration }}</span>
-                  <span class="text-muted" *ngIf="record.duration === '-'">0h 0m</span>
+                  <span
+                    class="text-warning fw-medium"
+                    *ngIf="record.duration !== '-'"
+                    >{{ record.duration }}</span
+                  >
+                  <span class="text-muted" *ngIf="record.duration === '-'"
+                    >0h 0m</span
+                  >
                 </td>
                 <td>
-                  <i class="fa-solid fa-pen-to-square edit-action" (click)="openEditModal(record)"></i>
+                  <i
+                    class="fa-solid fa-pen-to-square edit-action"
+                    (click)="openEditModal(record)"
+                  ></i>
                 </td>
               </tr>
             </tbody>
@@ -136,16 +147,27 @@
 </div>
 
 <!-- Edit Attendance Modal -->
-<div class="modal-container" *ngIf="isEditModalOpen" [@overlayFade] (click)="closeEditModal()">
-  <div class="modal-content-card" [@modalFade] (click)="$event.stopPropagation()">
+<div
+  class="modal-container"
+  *ngIf="isEditModalOpen"
+  [@overlayFade]
+  (click)="closeEditModal()"
+>
+  <div
+    class="modal-content-card"
+    [@modalFade]
+    (click)="$event.stopPropagation()"
+  >
     <div class="modal-header">
       <h5>Edit Attendance</h5>
       <i class="fa-solid fa-xmark close-icon" (click)="closeEditModal()"></i>
     </div>
     <form [formGroup]="editForm" (ngSubmit)="updateAttendance()">
       <div class="modal-body">
-        <p class="text-muted small mb-4">Modifying record for <strong>{{ editingRecord?.date }}</strong></p>
-        
+        <p class="text-muted small mb-4">
+          Modifying record for <strong>{{ editingRecord?.date }}</strong>
+        </p>
+
         <div class="form-group">
           <label>Status</label>
           <select class="form-input" formControlName="status">
@@ -155,30 +177,41 @@
             <option value="Unpaid Leave">Unpaid Leave</option>
           </select>
         </div>
-        
+
         <div class="row">
           <div class="col-6">
             <div class="form-group">
               <label>Check In</label>
-              <input type="time" class="form-input" formControlName="checkIn">
+              <input type="time" class="form-input" formControlName="checkIn" />
             </div>
           </div>
           <div class="col-6">
             <div class="form-group">
               <label>Check Out</label>
-              <input type="time" class="form-input" formControlName="checkOut">
+              <input
+                type="time"
+                class="form-input"
+                formControlName="checkOut"
+              />
             </div>
           </div>
         </div>
-        
+
         <div class="form-group">
           <label>Remarks</label>
-          <textarea class="form-input" rows="3" formControlName="remarks" placeholder="Add any notes here..."></textarea>
+          <textarea
+            class="form-input"
+            rows="3"
+            formControlName="remarks"
+            placeholder="Add any notes here..."
+          ></textarea>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-delete">Delete</button>
-        <button type="button" class="btn-cancel" (click)="closeEditModal()">Cancel</button>
+        <button type="button" class="btn-cancel" (click)="closeEditModal()">
+          Cancel
+        </button>
         <button type="submit" class="btn-update">Save Changes</button>
       </div>
     </form>

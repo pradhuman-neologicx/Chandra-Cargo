@@ -81,6 +81,6 @@ export class DashboardComponent implements OnInit {
   userRole: any;
   ngOnInit(): void {
     this.name = this.jwtService.getName();
-    this.userRole = localStorage.getItem('Role');
+    this.userRole = this.jwtService.getadmiRole();
   }
 }

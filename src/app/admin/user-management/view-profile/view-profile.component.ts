@@ -124,7 +124,6 @@ export class ViewProfileComponent implements OnInit {
 
     this.uploadForm = this.fb.group({
       docName: ['', Validators.required],
-      docType: ['pdf', Validators.required],
       file: [null, Validators.required]
     });
   }
@@ -206,7 +205,7 @@ export class ViewProfileComponent implements OnInit {
   }
 
   openUploadModal() {
-    this.uploadForm.reset({ docType: 'pdf' });
+    this.uploadForm.reset();
     this.isUploadModalOpen = true;
   }
 
@@ -231,11 +230,18 @@ export class ViewProfileComponent implements OnInit {
   saveUpload() {
     if (this.uploadForm.valid) {
       const formVal = this.uploadForm.value;
+      const file = formVal.file;
+      const fileType = file.type.includes('pdf') ? 'pdf' : 'image';
+
       this.employeeDocuments.unshift({
-        name: formVal.docName + (formVal.docType === 'pdf' ? '.pdf' : '.jpg'),
-        type: formVal.docType,
-        size: '1.5 MB', // Mock size
-        uploadDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        name: formVal.docName + (fileType === 'pdf' ? '.pdf' : '.jpg'),
+        type: fileType,
+        size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
+        uploadDate: new Date().toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }),
       });
       this.closeModal();
     }

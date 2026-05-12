@@ -4,15 +4,16 @@
     class="calendar-header d-md-flex align-items-center justify-content-between mb-4"
   >
     <div class="header-left mb-3 mb-md-0">
-      <h1 class="page-title mb-1">Corporate Session Calendar</h1>
-      <p class="text-muted small mb-0">
-        Manage holidays and operational sessions for the year.
-      </p>
+      <h1 class="page-title mb-1">Calendar</h1>
+      <p class="text-muted small mb-0">Manage holidays for the year.</p>
     </div>
 
     <div class="header-actions d-flex flex-wrap gap-2">
-      <button class="btn btn-sunday" (click)="markAllSundaysAsHoliday()">
-        <i class="fa-solid fa-sun me-2"></i> Mark All Sundays
+      <button class="btn btn-sunday" (click)="openConfigModal()">
+        <i class="fa-solid fa-gear me-2"></i> Working Days
+      </button>
+      <button class="btn btn-bulk-upload" (click)="bulkUpload()">
+        <i class="fa-solid fa-file-import me-2"></i> Bulk Upload
       </button>
       <button class="btn btn-add-holiday" (click)="addHoliday()">
         <i class="fa-solid fa-calendar-plus me-2"></i> Add Holiday
@@ -20,64 +21,147 @@
     </div>
   </div>
 
-  <!-- Calendar Card -->
-  <div class="card calendar-card shadow-sm border-0">
-    <!-- Controls -->
-    <div
-      class="calendar-controls p-3 d-flex align-items-center justify-content-between border-bottom"
-    >
-      <div class="month-nav d-flex align-items-center">
-        <button class="btn btn-nav" (click)="prevMonth()">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <h2 class="current-month mx-4 mb-0">
-          {{ monthNames[currentDate.getMonth()] }}
-          {{ currentDate.getFullYear() }}
-        </h2>
-        <button class="btn btn-nav" (click)="nextMonth()">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      </div>
+  <!-- Calendar Content Grid -->
+  <div class="row g-4">
+    <!-- Left Column: Calendar -->
+    <div class="col-lg-8">
+      <div class="card calendar-card shadow-sm border-0 h-100">
+        <!-- Controls -->
+        <div
+          class="calendar-controls p-3 d-flex align-items-center justify-content-between border-bottom"
+        >
+          <div class="month-nav d-flex align-items-center">
+            <button class="btn btn-nav" (click)="prevMonth()">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <h2 class="current-month mx-3 mb-0">
+              {{ monthNames[currentDate.getMonth()] }}
+              {{ currentDate.getFullYear() }}
+            </h2>
+            <button class="btn btn-nav" (click)="nextMonth()">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
 
-      <div class="view-actions d-flex align-items-center gap-4">
-        <div class="calendar-legend d-flex align-items-center gap-3">
-          <div class="legend-item"><span class="dot today"></span> Today</div>
-          <div class="legend-item">
-            <span class="dot holiday-sunday"></span> Holiday / Sunday
+          <div class="view-actions d-flex align-items-center gap-3">
+            <div
+              class="calendar-legend d-none d-md-flex align-items-center gap-3"
+            >
+              <div class="legend-item">
+                <span class="badge-legend today"></span> Today
+              </div>
+              <div class="legend-item">
+                <span class="badge-legend sunday">S</span> Sunday
+              </div>
+              <div class="legend-item">
+                <span class="badge-legend holiday">H</span> Holiday
+              </div>
+            </div>
+            <button class="btn btn-today" (click)="goToToday()">Today</button>
           </div>
         </div>
-        <button class="btn btn-today" (click)="goToToday()">Today</button>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-grid">
+          <!-- Weekday Headers -->
+          <div class="weekday-header">
+            <div *ngFor="let day of weekDays" class="weekday-cell">
+              {{ day }}
+            </div>
+          </div>
+
+          <!-- Days Grid -->
+          <div class="days-grid">
+            <div
+              *ngFor="let day of days"
+              class="day-cell"
+              [class.other-month]="!day.isCurrentMonth"
+              [class.today]="day.isToday"
+              [class.holiday]="day.isHoliday"
+              [class.sunday]="day.isSunday"
+              [class.disabled-day]="day.isPast && !day.isHoliday"
+              (click)="onDayClick(day)"
+            >
+              <div class="day-number">{{ day.date.getDate() }}</div>
+              <div class="bg-indicator" *ngIf="day.isSunday || day.isHoliday">
+                {{ day.isSunday ? "S" : "H" }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Calendar Grid -->
-    <div class="calendar-grid">
-      <!-- Weekday Headers -->
-      <div class="weekday-header">
-        <div *ngFor="let day of weekDays" class="weekday-cell">{{ day }}</div>
-      </div>
-
-      <!-- Days Grid -->
-      <div class="days-grid">
+    <!-- Right Column: Holiday List -->
+    <div class="col-lg-4">
+      <div class="card holiday-list-card shadow-sm border-0 h-100">
         <div
-          *ngFor="let day of days"
-          class="day-cell"
-          [class.other-month]="!day.isCurrentMonth"
-          [class.today]="day.isToday"
-          [class.holiday]="day.isHoliday"
-          [class.sunday]="day.isSunday"
-          [class.disabled-day]="day.isPast && !day.isHoliday"
-          (click)="onDayClick(day)"
+          class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between"
         >
-          <div class="day-number">{{ day.date.getDate() }}</div>
-          <div class="day-events" *ngIf="day.isHoliday">
-            <span class="holiday-tag text-truncate">{{ day.holidayName }}</span>
+          <h5 class="mb-0 fw-bold">Holiday List</h5>
+          <span class="badge bg-primary-subtle text-primary rounded-pill">{{
+            holidayList.length
+          }}</span>
+        </div>
+        <div class="holiday-list-container p-3">
+          <div *ngIf="holidayList.length === 0" class="text-center py-5">
+            <div class="empty-icon mb-3">
+              <i class="fa-solid fa-calendar-day fa-3x text-light"></i>
+            </div>
+            <p class="text-muted">No holidays added yet.</p>
+          </div>
+
+          <div *ngFor="let h of holidayList" class="holiday-item mb-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <div
+                  class="holiday-date-badge me-3"
+                  [class.is-weekend]="h.name.includes('Holiday')"
+                >
+                  <span class="month">{{ getMonthShort(h.date) }}</span>
+                  <span class="day">{{ getDay(h.date) }}</span>
+                </div>
+                <div>
+                  <div class="holiday-name">{{ h.name }}</div>
+                  <div class="holiday-year small text-muted">
+                    {{ getFullDate(h.date) }}
+                  </div>
+                </div>
+              </div>
+              <button
+                class="btn btn-delete-holiday"
+                [disabled]="!canDeleteHoliday(h.date)"
+                (click)="removeHoliday(h.date, $event)"
+                [title]="canDeleteHoliday(h.date) ? 'Remove Holiday' : 'Cannot remove past or today\'s holiday'"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showDeleteConfirmModal" (click)="cancelDelete()">
+  <div class="modal-content confirm-delete-modal text-center" (click)="$event.stopPropagation()" @fadeIn>
+    <div class="modal-icon mb-3">
+      <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+    </div>
+    <h3 class="mb-2">Are you sure?</h3>
+    <p class="text-muted small mb-4">
+      You are about to remove <strong>{{ holidays[holidayToDelete || ''] }}</strong> from the holiday list. 
+      This action cannot be undone.
+    </p>
+    <div class="d-flex gap-2">
+      <button class="btn btn-cancel flex-grow-1" (click)="cancelDelete()">Cancel</button>
+      <button class="btn btn-danger-action flex-grow-1" (click)="confirmDelete()">
+        Yes, Delete
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Custom Holiday Modal -->
@@ -103,17 +187,6 @@
           [min]="minDate"
         />
       </div>
-      <div class="mb-3">
-        <label class="form-label small fw-bold text-muted text-uppercase"
-          >Holiday Name</label
-        >
-        <input
-          type="text"
-          class="form-control custom-input"
-          [(ngModel)]="modalHolidayName"
-          placeholder="e.g. Diwali, Independence Day"
-        />
-      </div>
     </div>
 
     <div class="modal-footer p-3 d-flex gap-2">
@@ -129,11 +202,203 @@
       </button>
       <button
         class="btn btn-save flex-grow-1"
-        [disabled]="!modalHolidayName || !modalDate"
+        [disabled]="!modalDate"
         (click)="saveHoliday()"
       >
         {{ isEditing ? "Update" : "Save" }}
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- Working Days Configuration Modal -->
+<div class="modal-overlay" *ngIf="showConfigModal">
+  <div class="modal-content config-modal" @fadeIn>
+    <div class="modal-header">
+      <h3 class="mb-0">Configure Working Days</h3>
+      <button
+        class="btn-close-modal"
+        (click)="showConfigModal = false"
+        *ngIf="workingDays !== 0"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body p-4 text-center">
+      <p class="text-muted mb-4">
+        Select the number of working days in a week for your organization.
+      </p>
+      <div class="d-grid gap-3">
+        <button
+          class="btn btn-outline-primary p-3 d-flex align-items-center justify-content-between"
+          [class.active]="workingDays === 6"
+          (click)="configureWorkingDays(6)"
+        >
+          <div class="text-start">
+            <div class="fw-bold">6 Days Week</div>
+            <div class="small text-muted">
+              Monday to Saturday (Sunday Holiday)
+            </div>
+          </div>
+          <i class="fa-solid fa-check" *ngIf="workingDays === 6"></i>
+        </button>
+        <button
+          class="btn btn-outline-primary p-3 d-flex align-items-center justify-content-between"
+          [class.active]="workingDays === 5"
+          (click)="configureWorkingDays(5)"
+        >
+          <div class="text-start">
+            <div class="fw-bold">5 Days Week</div>
+            <div class="small text-muted">
+              Monday to Friday (Sat & Sun Holiday)
+            </div>
+          </div>
+          <i class="fa-solid fa-check" *ngIf="workingDays === 5"></i>
+        </button>
+      </div>
+    </div>
+    <div class="modal-footer p-3" *ngIf="workingDays !== 0">
+      <button class="btn btn-cancel w-100" (click)="showConfigModal = false">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Upload Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="showBulkUploadModal"
+  (click)="closeBulkModal()"
+>
+  <div
+    class="modal-content bulk-modal"
+    (click)="$event.stopPropagation()"
+    @fadeIn
+  >
+    <div class="modal-header bulkHeader">
+      <h3 class="mb-0">Bulk Holiday Import</h3>
+      <button class="btn-close-modal" (click)="closeBulkModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body p-0">
+      <div class="row g-0">
+        <!-- Left: Instructions -->
+        <div class="col-md-5 border-end bg-light-gradient p-4">
+          <div class="step-badge mb-3">Step 1</div>
+          <h5 class="fw-bold mb-3">Download Template</h5>
+          <p class="text-muted small mb-4">
+            Use our Excel template to ensure your holiday dates are formatted
+            correctly for the system.
+          </p>
+
+          <div class="template-box mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="excel-icon">
+                <i class="fa-solid fa-file-excel"></i>
+              </div>
+              <div>
+                <div class="fw-bold small">holiday_template.xlsx</div>
+                <div class="text-muted tiny">Standard Format • 18 KB</div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            class="btn-download-sample w-100 mb-4"
+            (click)="downloadSample()"
+          >
+            <i class="fa-solid fa-cloud-arrow-down me-2"></i> Download
+          </button>
+
+          <div class="guidelines">
+            <h6 class="tiny fw-bold text-uppercase text-muted mb-2">
+              Guidelines
+            </h6>
+            <ul class="list-unstyled small mb-0">
+              <li class="mb-2">
+                <i class="fa-solid fa-circle-check text-success me-2"></i> Don't
+                change headers
+              </li>
+              <li class="mb-2">
+                <i class="fa-solid fa-circle-check text-success me-2"></i> Date
+                format: YYYY-MM-DD
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check text-success me-2"></i> Max
+                file size 5MB
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right: Upload Zone -->
+        <div class="col-md-7 p-4">
+          <div class="step-badge secondary mb-3">Step 2</div>
+          <h5 class="fw-bold mb-3">Upload your file</h5>
+
+          <div
+            class="upload-zone"
+            [class.dragging]="isDragging"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onFileDropped($event)"
+            (click)="fileInput.click()"
+          >
+            <input
+              type="file"
+              #fileInput
+              hidden
+              (change)="onFileSelected($event)"
+              accept=".xlsx, .xls, .csv"
+            />
+
+            <div class="upload-content text-center" *ngIf="!selectedFile">
+              <div class="upload-icon-pulse mb-3">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <h6 class="fw-bold mb-1">Click or drag file to upload</h6>
+              <p class="text-muted tiny mb-0">Supports XLSX, XLS, CSV</p>
+            </div>
+
+            <div class="selected-file-view text-center" *ngIf="selectedFile">
+              <div class="success-icon mb-3">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <h6 class="fw-bold mb-1 text-truncate px-3">
+                {{ selectedFile.name }}
+              </h6>
+              <p class="text-muted tiny">
+                {{ (selectedFile.size / 1024).toFixed(2) }} KB
+              </p>
+              <button
+                class="btn-remove-file"
+                (click)="removeFile(); $event.stopPropagation()"
+              >
+                <i class="fa-solid fa-trash-can me-1"></i> Remove
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-2">
+            <button
+              class="btn btn-save w-100 py-3"
+              [disabled]="!selectedFile"
+              (click)="processBulkUpload()"
+            >
+              Confirm & Start Import
+            </button>
+            <button
+              class="btn btn-link w-100 text-muted small mt-2"
+              (click)="closeBulkModal()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -73,23 +73,25 @@
                 {{ entry.mileage }} KM/L
               </span>
             </td>
-            <td class="text-center pe-4 d-flex justify-content-center gap-1">
-              <button
-                mat-icon-button
-                class="btn-action-table text-primary"
-                (click)="viewDetails(entry)"
-                matTooltip="View Details"
-              >
-                <mat-icon>visibility</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                class="btn-action-table text-primary"
-                (click)="openEditPage(entry)"
-                matTooltip="Edit Entry"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
+            <td class="text-center pe-4">
+              <div class="d-flex justify-content-center gap-1">
+                <button
+                  mat-icon-button
+                  class="btn-action-table text-primary"
+                  (click)="viewDetails(entry)"
+                  matTooltip="View Details"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  class="btn-action-table text-primary"
+                  (click)="openEditPage(entry)"
+                  matTooltip="Edit Entry"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
             </td>
           </tr>
           <tr *ngIf="filteredEntries.length === 0">

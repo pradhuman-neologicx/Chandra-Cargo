@@ -45,8 +45,7 @@ export class SidenavComponent {
   paneluserId!: String;
   roles: any;
   ngOnInit(): void {
-    this.roles = localStorage.getItem('Role');
-    console.log('Roles:', this.roles);
+    this.roles = this.jwtService.getadmiRole();
     this.menuItems = [];
 
     if (this.roles == 'admin') {
@@ -69,12 +68,12 @@ export class SidenavComponent {
               label: 'Department',
               route: '/admin/master/department',
             },
-            {
-              index: 2,
-              icon: 'badge',
-              label: 'Designation',
-              route: '/admin/master/designation',
-            },
+            // {
+            //   index: 2,
+            //   icon: 'badge',
+            //   label: 'Designation',
+            //   route: '/admin/master/designation',
+            // },
             {
               index: 3,
               icon: 'location_on',
@@ -102,7 +101,7 @@ export class SidenavComponent {
             {
               index: 7,
               icon: 'calendar_today',
-              label: 'Session Calendar',
+              label: 'Calendar',
               route: '/admin/master/session-calendar',
             },
           ],
@@ -144,6 +143,12 @@ export class SidenavComponent {
             //   route: '/admin/attendance-payroll/payroll-generator',
             // },
           ],
+        },
+        {
+          index: 5,
+          icon: 'fingerprint',
+          label: 'My Attendance',
+          route: '/admin/emp-attendance',
         },
         // {
         //   index: 5,

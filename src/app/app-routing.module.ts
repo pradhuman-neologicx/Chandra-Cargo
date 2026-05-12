@@ -44,6 +44,7 @@ import { VehicleMappingComponent } from './admin/vehicle-management/vehicle-mapp
 import { VehicleDocumentComponent } from './admin/vehicle-management/vehicle-document/vehicle-document.component';
 import { SessionCalendarComponent } from './admin/session-calendar/session-calendar.component';
 import { FuelDetailsComponent } from './admin/fuel-management/fuel-details/fuel-details.component';
+import { EmpAttendenceComponent } from './admin/emp-attendence/emp-attendence.component';
 
 const routes: Routes = [
   {
@@ -211,6 +212,11 @@ const routes: Routes = [
           { path: 'edit/:id', component: EditFuelComponent },
           { path: 'details/:id', component: FuelDetailsComponent },
         ],
+      },
+      {
+        path: 'emp-attendance',
+        component: EmpAttendenceComponent,
+        canActivate: [AuthGuard],
       },
     ],
   },

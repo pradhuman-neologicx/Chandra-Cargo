@@ -1,0 +1,248 @@
+<div class="container-fluid attendance-detail-container mb-4">
+
+  <!-- Unified Hero Section -->
+  <div class="attendance-hero-card card border-0 mb-4">
+    <div class="row align-items-center g-4">
+      <!-- Profile Side -->
+      <div class="col-xl-4 col-lg-5">
+        <div class="d-flex align-items-center">
+          <div class="employee-avatar-hero me-3">
+            {{ employee.name.charAt(0) }}
+          </div>
+          <div>
+            <h1 class="hero-name mb-1">{{ employee.name }}</h1>
+            <div class="hero-meta">
+              <span class="meta-item"><i class="fa-solid fa-hashtag"></i> {{ employee.empId }}</span>
+              <span class="meta-item"><i class="fa-solid fa-briefcase"></i> {{ employee.department }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Side -->
+      <div class="col-xl-5 col-lg-7">
+        <div class="stats-container">
+          <div class="time-hero-badge in">
+            <span class="label">Check In</span>
+            <span class="time">10:00 AM</span>
+          </div>
+          <div class="time-hero-badge out">
+            <span class="label">Check Out</span>
+            <span class="time">--:--</span>
+          </div>
+          <div class="time-hero-badge duration">
+            <span class="label">Work Hours</span>
+            <span class="time">0h 0m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Side -->
+      <div class="col-xl-3 text-xl-end mt-lg-0 mt-3">
+        <button class="btn-checkout-hero">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>Check Out Now
+        </button>
+      </div>
+    </div>
+    
+    <!-- Footer info of card -->
+    <div class="hero-footer mt-4 pt-3 border-top">
+      <div class="d-flex align-items-center text-muted small">
+        <i class="fa-regular fa-calendar-check me-2 text-primary"></i>
+        <span>Today's Date: <strong>Monday, 4th May 2026</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Left Column: Calendar -->
+    <div class="col-lg-5 mb-4">
+      <div class="calendar-card border-0">
+        <div class="calendar-header">
+          <div class="controls">
+            <button class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+            <select class="form-select-sm">
+              <option>{{ getMonthName() }}</option>
+            </select>
+            <select class="form-select-sm">
+              <option>2026</option>
+            </select>
+          </div>
+          <button class="btn-today">Today</button>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="days-names">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+          </div>
+          <div class="days-nums">
+            <div *ngFor="let day of daysInMonth" 
+                 class="day" 
+                 [class.empty]="day === 0"
+                 [class.active]="day === selectedDate"
+                 [class.has-record]="day > 0 && day <= 4">
+              {{ day !== 0 ? day : '' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-2">
+          <button class="btn-apply-leave px-4 py-2 w-100" (click)="openLeaveModal()">
+            <i class="fa-solid fa-calendar-plus me-2"></i>Apply Leave
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: List -->
+    <div class="col-lg-7 mb-4">
+      <div class="list-card border-0">
+        <h4>Attendance History</h4>
+        <p class="subtitle">Click on the edit icon next to a date to modify the record.</p>
+        
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Duration</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let record of attendanceRecords">
+                <td class="fw-medium">{{ record.date }}</td>
+                <td>
+                  <span class="status-tag" [ngClass]="record.status">
+                    {{ record.status }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-primary fw-medium" *ngIf="record.checkIn !== '-'">
+                    {{ record.checkIn }}
+                  </span>
+                  <span class="text-muted" *ngIf="record.checkIn === '-'">--:--</span>
+                </td>
+                <td>
+                  <span class="text-indigo fw-medium" *ngIf="record.checkOut !== '-'">
+                    {{ record.checkOut }}
+                  </span>
+                  <span class="text-muted" *ngIf="record.checkOut === '-'">--:--</span>
+                </td>
+                <td>
+                  <span class="text-warning fw-medium" *ngIf="record.duration !== '-'">{{ record.duration }}</span>
+                  <span class="text-muted" *ngIf="record.duration === '-'">0h 0m</span>
+                </td>
+                <td>
+                  <i class="fa-solid fa-pen-to-square edit-action" (click)="openEditModal(record)"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Attendance Modal -->
+<div class="modal-container" *ngIf="isEditModalOpen" [@overlayFade] (click)="closeEditModal()">
+  <div class="modal-content-card" [@modalFade] (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5>Edit Attendance</h5>
+      <i class="fa-solid fa-xmark close-icon" (click)="closeEditModal()"></i>
+    </div>
+    <form [formGroup]="editForm" (ngSubmit)="updateAttendance()">
+      <div class="modal-body">
+        <p class="text-muted small mb-4">Modifying record for <strong>{{ editingRecord?.date }}</strong></p>
+        
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-input" formControlName="status">
+            <option value="Present">Present</option>
+            <option value="Leave">Leave</option>
+            <option value="Half Day">Half Day</option>
+            <option value="Unpaid Leave">Unpaid Leave</option>
+          </select>
+        </div>
+        
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label>Check In</label>
+              <input type="time" class="form-input" formControlName="checkIn">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label>Check Out</label>
+              <input type="time" class="form-input" formControlName="checkOut">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea class="form-input" rows="3" formControlName="remarks" placeholder="Add any notes here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-delete">Delete</button>
+        <button type="button" class="btn-cancel" (click)="closeEditModal()">Cancel</button>
+        <button type="submit" class="btn-update">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Apply Leave Modal -->
+<div class="modal-container" *ngIf="isLeaveModalOpen" [@overlayFade] (click)="closeLeaveModal()">
+  <div class="modal-content-card" [@modalFade] (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5>Apply for leave</h5>
+      <i class="fa-solid fa-xmark close-icon" (click)="closeLeaveModal()"></i>
+    </div>
+    <form [formGroup]="leaveForm" (ngSubmit)="applyLeave()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-input" formControlName="status">
+            <option value="Full Day">Full Day</option>
+            <option value="Half Day">Half Day</option>
+          </select>
+        </div>
+        
+        <div class="row align-items-end">
+          <div class="col-5">
+            <div class="form-group mb-0">
+              <label>From</label>
+              <input type="date" class="form-input" formControlName="fromDate">
+            </div>
+          </div>
+          <div class="col-2 text-center pb-2">
+            <i class="fa-solid fa-arrow-right text-muted"></i>
+          </div>
+          <div class="col-5">
+            <div class="form-group mb-0">
+              <label>to</label>
+              <input type="date" class="form-input" formControlName="toDate">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group mt-3">
+          <label>Remarks (optional)</label>
+          <textarea class="form-input" rows="3" formControlName="remarks" placeholder="Reason for leave..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="closeLeaveModal()">Cancel</button>
+        <button type="submit" class="btn-update px-4" [disabled]="leaveForm.invalid">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

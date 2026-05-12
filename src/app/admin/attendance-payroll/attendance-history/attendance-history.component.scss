@@ -353,7 +353,7 @@
     display: inline-block;
 }
 
-.status-on-time {
+.status-present {
     background: #E6F9F0;
     color: #059669;
 
@@ -362,12 +362,21 @@
     }
 }
 
-.status-late {
+.status-half-day {
     background: #FFF3E6;
     color: #D97706;
 
     .status-dot {
         background: #F59E0B;
+    }
+}
+
+.status-on-leave {
+    background: #EBF0FF;
+    color: #2563EB;
+
+    .status-dot {
+        background: #3B82F6;
     }
 }
 

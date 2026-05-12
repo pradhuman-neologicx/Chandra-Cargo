@@ -35,7 +35,7 @@
               class="form-control search-user position-relative"
               autocomplete="off"
               formControlName="searchbar"
-              placeholder="Search by Name, Code, City"
+              placeholder="Search by Name, City, State"
               [ngClass]="{
                 'is-invalid':
                   searchbarform.controls['searchbar'].errors &&
@@ -90,7 +90,7 @@
                 {{ tableSize * (page - 1) + i + 1 > 0 ? tableSize * (page - 1) + i + 1 : i + 1 }}
               </td>
               <td><p>{{ user.name }}</p></td>
-              <td><p>{{ user.code }}</p></td>
+              <td><p>{{ user.state }}</p></td>
               <td><p>{{ user.city }}</p></td>
               <td>
                 <p
@@ -165,7 +165,7 @@
               </mat-menu>
           </div>
           <div class="mb-1"><strong>Name:</strong> {{ user.name }}</div>
-          <div class="mb-1"><strong>Code:</strong> {{ user.code }}</div>
+          <div class="mb-1"><strong>State:</strong> {{ user.state }}</div>
           <div class="mb-2"><strong>City:</strong> {{ user.city }}</div>
           <div>
             <strong>Status:</strong>
@@ -214,12 +214,18 @@
             <input type="text" class="form-control form-input-custom" formControlName="name" />
           </div>
           <div class="mb-3">
-            <label class="form-label form-lable-custom">Branch Code</label>
-            <input type="text" class="form-control form-input-custom" formControlName="code" />
+            <label class="form-label form-lable-custom">State</label>
+            <select class="form-control form-select form-input-custom" formControlName="state" (change)="onStateChange($event, 'create')">
+              <option value="" disabled selected>Select State</option>
+              <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+            </select>
           </div>
           <div class="mb-3">
             <label class="form-label form-lable-custom">City</label>
-            <input type="text" class="form-control form-input-custom" formControlName="city" />
+            <select class="form-control form-select form-input-custom" formControlName="city">
+              <option value="" disabled selected>Select City</option>
+              <option *ngFor="let city of filteredCities" [value]="city.id">{{ city.name }}</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -248,12 +254,18 @@
             <input type="text" class="form-control form-input-custom" formControlName="name" />
           </div>
           <div class="mb-3">
-            <label class="form-label form-lable-custom">Branch Code</label>
-            <input type="text" class="form-control form-input-custom" formControlName="code" />
+            <label class="form-label form-lable-custom">State</label>
+            <select class="form-control form-select form-input-custom" formControlName="state" (change)="onStateChange($event, 'update')">
+              <option value="" disabled selected>Select State</option>
+              <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+            </select>
           </div>
           <div class="mb-3">
             <label class="form-label form-lable-custom">City</label>
-            <input type="text" class="form-control form-input-custom" formControlName="city" />
+            <select class="form-control form-select form-input-custom" formControlName="city">
+              <option value="" disabled selected>Select City</option>
+              <option *ngFor="let city of filteredCities" [value]="city.id">{{ city.name }}</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -282,8 +294,8 @@
             <input type="text" formControlName="name" readonly class="form-control form-input-custom" />
           </div>
           <div class="mb-3">
-            <label class="form-label form-lable-custom">Branch Code</label>
-            <input type="text" formControlName="code" readonly class="form-control form-input-custom" />
+            <label class="form-label form-lable-custom">State</label>
+            <input type="text" formControlName="state" readonly class="form-control form-input-custom" />
           </div>
           <div class="mb-3">
             <label class="form-label form-lable-custom">City</label>

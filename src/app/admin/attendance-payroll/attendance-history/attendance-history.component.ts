@@ -31,7 +31,8 @@ export class AttendanceHistoryComponent implements OnInit {
   page: number = 1;
   selectedDepartment: string = '';
   selectedDateRange: string = 'this_week';
-  selectedStatus: string = '';
+  selectedBranch: string = '';
+  branchList: string[] = ['Jaipur', 'Delhi', 'Mumbai', 'Ahmedabad', 'Pune'];
 
   // Summary cards data (static)
   totalEmployees: number = 142;
@@ -76,7 +77,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '08:55 AM',
       clockOut: '05:30 PM',
       workHours: '8h 35m',
-      status: 'On Time',
+      status: 'Present',
     },
     {
       id: 2,
@@ -90,7 +91,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '09:15 AM',
       clockOut: '06:00 PM',
       workHours: '8h 45m',
-      status: 'Late',
+      status: 'Half Day',
     },
     {
       id: 3,
@@ -118,7 +119,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '08:30 AM',
       clockOut: '05:15 PM',
       workHours: '8h 45m',
-      status: 'On Time',
+      status: 'Present',
     },
     {
       id: 5,
@@ -132,7 +133,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '09:05 AM',
       clockOut: '06:05 PM',
       workHours: '9h 00m',
-      status: 'Late',
+      status: 'Half Day',
     },
     {
       id: 6,
@@ -146,7 +147,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '08:45 AM',
       clockOut: '05:20 PM',
       workHours: '8h 35m',
-      status: 'On Time',
+      status: 'Present',
     },
     {
       id: 7,
@@ -157,10 +158,10 @@ export class AttendanceHistoryComponent implements OnInit {
       avatarColor: '#EC4899',
       date: 'Oct 24, 2023',
       department: 'Warehouse',
-      clockIn: '09:20 AM',
-      clockOut: '06:10 PM',
-      workHours: '8h 50m',
-      status: 'Late',
+      clockIn: '--:--',
+      clockOut: '--:--',
+      workHours: '0h 0m',
+      status: 'On Leave',
     },
     {
       id: 8,
@@ -174,7 +175,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '08:50 AM',
       clockOut: '05:25 PM',
       workHours: '8h 35m',
-      status: 'On Time',
+      status: 'Present',
     },
     {
       id: 9,
@@ -202,7 +203,7 @@ export class AttendanceHistoryComponent implements OnInit {
       clockIn: '08:40 AM',
       clockOut: '05:30 PM',
       workHours: '8h 50m',
-      status: 'On Time',
+      status: 'Present',
     },
   ];
 
@@ -276,20 +277,22 @@ export class AttendanceHistoryComponent implements OnInit {
     // Future: this.GetAttendanceData();
   }
 
-  onStatusFilterChange(event: any): void {
-    this.selectedStatus = event.target.value;
+  onBranchFilterChange(event: any): void {
+    this.selectedBranch = event.target.value;
     this.page = 1;
     // Future: this.GetAttendanceData();
   }
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'On Time':
-        return 'status-on-time';
-      case 'Late':
-        return 'status-late';
+      case 'Present':
+        return 'status-present';
+      case 'Half Day':
+        return 'status-half-day';
       case 'Absent':
         return 'status-absent';
+      case 'On Leave':
+        return 'status-on-leave';
       default:
         return '';
     }

@@ -12,9 +12,6 @@
       <!-- <button class="btn btn-export" (click)="exportCSV()">
         <i class="fa-solid fa-download me-2"></i>Export CSV
       </button> -->
-      <button class="btn btn-bulk-approve" (click)="bulkApprove()" *ngIf="activeTab === 'leave'">
-        <i class="fa-solid fa-check-double me-2"></i>Bulk Approve
-      </button>
     </div>
   </div>
 
@@ -27,7 +24,6 @@
         (click)="switchTab('leave')"
       >
         Leave Management
-        <span class="tab-count">{{ leaveCount }}</span>
       </button>
       <button
         class="tab-btn"
@@ -39,35 +35,6 @@
     </div>
   </div>
 
-  <!-- Filters Row -->
-  <div
-    class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3"
-    *ngIf="activeTab === 'leave'"
-  >
-    <div class="d-flex gap-2">
-      <div class="filter-select-wrapper">
-        <select
-          class="form-select filter-select"
-          (change)="onStatusFilterChange($event)"
-        >
-          <option value="Pending">Status: Pending</option>
-          <option value="">Status: All</option>
-          <option value="Approved">Status: Approved</option>
-          <option value="Rejected">Status: Rejected</option>
-        </select>
-      </div>
-    </div>
-    <span class="showing-text">
-      Showing
-      <strong
-        >{{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }}-{{
-          tableSize * page <= totalRecords ? tableSize * page : totalRecords
-        }}</strong
-      >
-      of {{ totalRecords }} requests
-    </span>
-  </div>
-
   <!-- Table Card -->
   <div class="card table-card">
     <!-- Desktop Table -->
@@ -75,14 +42,6 @@
       <table class="table requests-table mb-0">
         <thead>
           <tr>
-            <th class="th-checkbox" *ngIf="activeTab === 'leave'">
-              <input
-                type="checkbox"
-                class="form-check-input custom-checkbox"
-                [checked]="selectAll"
-                (change)="toggleSelectAll()"
-              />
-            </th>
             <th>EMPLOYEE</th>
             <th>DATE RANGE</th>
             <th>REASON</th>
@@ -104,14 +63,6 @@
               index as i
             "
           >
-            <td class="td-checkbox" *ngIf="activeTab === 'leave'">
-              <input
-                type="checkbox"
-                class="form-check-input custom-checkbox"
-                [checked]="item.selected"
-                (change)="toggleSelect(item)"
-              />
-            </td>
             <td>
               <div class="employee-info">
                 <div
@@ -150,35 +101,37 @@
               </span>
             </td>
             <td>
-              <!-- Action for Attendance Approvals -->
-              <div class="d-flex gap-2" *ngIf="activeTab === 'attendance'">
+              <div class="d-flex gap-2">
+                <!-- View Details -->
+                <button
+                  class="btn btn-action-view"
+                  *ngIf="activeTab === 'leave'"
+                  [routerLink]="['/admin/attendance-payroll/request-details', item.id]"
+                  title="View Details"
+                >
+                  <i class="fa-solid fa-eye text-primary"></i>
+                </button>
+
+                <!-- Approve -->
                 <button
                   class="btn btn-action-approve"
                   (click)="approveRequest(item)"
                   title="Approve"
+                  *ngIf="item.status === 'Pending'"
                 >
                   <i class="fa-solid fa-check"></i>
                 </button>
+
+                <!-- Reject -->
                 <button
                   class="btn btn-action-reject"
                   (click)="rejectRequest(item)"
                   title="Reject"
+                  *ngIf="item.status === 'Pending'"
                 >
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
-
-              <!-- Action for Leave Management -->
-              <button
-                *ngIf="activeTab === 'leave'"
-                class="btn btn-view-action-text"
-                [routerLink]="[
-                  '/admin/attendance-payroll/request-details',
-                  item.id,
-                ]"
-              >
-                View
-              </button>
             </td>
           </tr>
         </tbody>
@@ -201,13 +154,6 @@
         class="mobile-request-card mb-3"
       >
         <div class="d-flex align-items-center mb-3">
-          <input
-            *ngIf="activeTab === 'leave'"
-            type="checkbox"
-            class="form-check-input custom-checkbox me-3"
-            [checked]="item.selected"
-            (change)="toggleSelect(item)"
-          />
           <div
             class="employee-avatar me-3"
             [style.background-color]="item.avatarColor"
@@ -232,7 +178,9 @@
             <div class="detail-content">
               <span class="detail-label">Dates</span>
               <div class="d-flex align-items-center gap-2">
-                <span class="detail-value">{{ item.dateFrom }} - {{ item.dateTo }}</span>
+                <span class="detail-value"
+                  >{{ item.dateFrom }} - {{ item.dateTo }}</span
+                >
                 <span class="duration-badge-small">{{ item.duration }}</span>
               </div>
             </div>
@@ -244,57 +192,82 @@
               <span class="detail-value">{{ item.reason }}</span>
             </div>
           </div>
-          
-          <div class="col-12 mt-3">
-              <!-- Action for Attendance Approvals -->
-              <div class="d-flex gap-2" *ngIf="activeTab === 'attendance'">
-                <button
-                  class="btn btn-action-approve-mobile flex-grow-1"
-                  (click)="approveRequest(item)"
-                >
-                  <i class="fa-solid fa-check me-2"></i>Approve
-                </button>
-                <button
-                  class="btn btn-action-reject-mobile flex-grow-1"
-                  (click)="rejectRequest(item)"
-                >
-                  <i class="fa-solid fa-xmark me-2"></i>Reject
-                </button>
-              </div>
 
-              <!-- Action for Leave Management -->
+          <div class="col-12 mt-3">
+            <div class="d-flex gap-2">
+              <!-- View Details -->
               <button
+                class="btn btn-view-action-mobile flex-grow-1"
                 *ngIf="activeTab === 'leave'"
-                class="btn btn-view-action-mobile w-100"
-                [routerLink]="[
-                  '/admin/attendance-payroll/request-details',
-                  item.id,
-                ]"
+                [routerLink]="['/admin/attendance-payroll/request-details', item.id]"
               >
-                View Details
+                <i class="fa-solid fa-eye me-2"></i>View
+              </button>
+
+              <!-- Approve -->
+              <button
+                *ngIf="item.status === 'Pending'"
+                class="btn btn-action-approve-mobile flex-grow-1"
+                (click)="approveRequest(item)"
+              >
+                <i class="fa-solid fa-check me-2"></i>Approve
+              </button>
+
+              <!-- Reject -->
+              <button
+                *ngIf="item.status === 'Pending'"
+                class="btn btn-action-reject-mobile flex-grow-1"
+                (click)="rejectRequest(item)"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>Reject
               </button>
             </div>
+          </div>
         </div>
-        </div>
+      </div>
+    </div>
 
-      <!-- Pagination -->
-      <div
-        class="d-md-flex justify-content-between align-items-center px-3 pb-3 pagination-row"
-      >
-        <span class="showing-text">
-          Showing
-          {{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }} to
-          {{
-            tableSize * page <= totalRecords ? tableSize * page : totalRecords
-          }}
-          of {{ totalRecords }} results
-        </span>
-        <pagination-controls
-          previousLabel="Previous"
-          nextLabel="Next"
-          [responsive]="true"
-          (pageChange)="onTableDataChange($event)"
-        ></pagination-controls>
+    <!-- Pagination -->
+    <div
+      class="d-md-flex justify-content-between align-items-center px-3 pb-3 pagination-row"
+    >
+      <span class="showing-text">
+        Showing
+        {{ tableSize * (page - 1) > 0 ? tableSize * (page - 1) + 1 : 1 }} to
+        {{
+          tableSize * page <= totalRecords ? tableSize * page : totalRecords
+        }}
+        of {{ totalRecords }} results
+      </span>
+      <pagination-controls
+        previousLabel="Previous"
+        nextLabel="Next"
+        [responsive]="true"
+        (pageChange)="onTableDataChange($event)"
+      ></pagination-controls>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal-backdrop-custom" *ngIf="showConfirmModal" (click)="closeConfirmModal()">
+    <div class="modal-content-custom" (click)="$event.stopPropagation()">
+      <div class="modal-icon-wrapper" [ngClass]="confirmAction === 'Approve' ? 'bg-success-light' : 'bg-danger-light'">
+        <i class="fa-solid" [ngClass]="confirmAction === 'Approve' ? 'fa-check text-success' : 'fa-xmark text-danger'"></i>
+      </div>
+      <h3 class="modal-title">Confirm {{ confirmAction }}</h3>
+      <p class="modal-description">
+        Are you sure you want to <strong>{{ confirmAction.toLowerCase() }}</strong> this request for 
+        <strong>{{ selectedItem?.name }}</strong>?
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" (click)="closeConfirmModal()">Cancel</button>
+        <button 
+          class="btn" 
+          [ngClass]="confirmAction === 'Approve' ? 'btn-confirm-approve' : 'btn-confirm-reject'"
+          (click)="confirmActionProcess()"
+        >
+          Yes, {{ confirmAction }}
+        </button>
       </div>
     </div>
   </div>

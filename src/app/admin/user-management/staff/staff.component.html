@@ -26,8 +26,12 @@
     </div>
   </div>
 
-  <div class="card border-0 my-4 px-2 lg:px-4 py-2 lg:py-4">
+  <div
+    class="card border-0 my-4 px-2 lg:px-4 py-2 lg:py-4"
+    style="background-color: unset"
+  >
     <div class="d-md-flex justify-content-between align-items-center my-3">
+      <!-- Show Entries -->
       <div class="d-flex align-items-center mb-md-0 mb-2">
         <span class="me-1 show-entery-text">Show</span>
         <select
@@ -40,83 +44,98 @@
         </select>
         <span class="ms-1 show-entery-text">entries</span>
       </div>
-      <div class="d-flex align-items-center me-3 mb-2">
-        <span class="me-1 show-entery-text">Department</span>
-        <select
-          class="form-control form-select show-entries-select"
-          (change)="onDepartmentFilterChange($event)"
-        >
-          <option value="">All Departments</option>
-          <option
-            *ngFor="let department of departmentTable"
-            [value]="department.id"
+
+      <!-- Filter and Search Group -->
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <!-- Department Filter -->
+        <div class="d-flex align-items-center">
+          <span class="me-2 show-entery-text">Department</span>
+          <select
+            class="form-control form-select show-entries-select"
+            (change)="onDepartmentFilterChange($event)"
           >
-            {{ department.name }}
-          </option>
-        </select>
-      </div>
-      <div class="d-flex align-items-center">
-        <form [formGroup]="searchbarform" class="d-flex align-items-center">
-          <span class="me-1">Search:</span>
-          <div
-            [ngClass]="{
-              'table-card table':
-                searchbarform.controls['searchbar'].errors?.['required'] &&
-                (searchbarform.controls['searchbar'].touched ||
-                  searchbarform.controls['searchbar'].dirty),
-            }"
+            <option value="all">All Departments</option>
+            <option
+              *ngFor="let department of departmentTable"
+              [value]="department.id"
+            >
+              {{ department.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Branch Filter -->
+        <div class="d-flex align-items-center">
+          <span class="me-2 show-entery-text">Branch</span>
+          <select
+            class="form-control form-select show-entries-select"
+            (change)="onBranchFilterChange($event)"
           >
-            <input
-              type="text"
-              class="form-control search-user position-relative"
-              autocomplete="off"
-              formControlName="searchbar"
-              [ngClass]="{
-                'is-invalid':
+            <option value="all">All Branches</option>
+            <option *ngFor="let branch of branchesList" [value]="branch">
+              {{ branch }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="d-flex align-items-center">
+          <form [formGroup]="searchbarform" class="d-flex align-items-center">
+            <span class="me-2 show-entery-text">Search:</span>
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control search-user"
+                autocomplete="off"
+                formControlName="searchbar"
+                placeholder="Search employees..."
+                [ngClass]="{
+                  'is-invalid':
+                    searchbarform.controls['searchbar'].errors &&
+                    (searchbarform.controls['searchbar'].touched ||
+                      searchbarform.controls['searchbar'].dirty),
+                }"
+              />
+              <div
+                class="invalid-tooltip"
+                *ngIf="
                   searchbarform.controls['searchbar'].errors &&
                   (searchbarform.controls['searchbar'].touched ||
-                    searchbarform.controls['searchbar'].dirty),
-              }"
-            />
-            <div
-              class="text-danger error-message d-block"
-              *ngIf="
-                searchbarform.controls['searchbar'].errors &&
-                (searchbarform.controls['searchbar'].touched ||
-                  searchbarform.controls['searchbar'].dirty)
-              "
-            >
-              <p
-                class="fw-light text-danger search-required"
-                *ngIf="searchbarform.controls['searchbar'].errors['required']"
+                    searchbarform.controls['searchbar'].dirty)
+                "
               >
-                This is required
-              </p>
+                Search is required
+              </div>
             </div>
-          </div>
-          <button class="btn btn-primary search-btn ms-2" (click)="searchfun()">
-            <span
-              ><i class="fa-solid fa-magnifying-glass form-control-feedback"></i
-            ></span>
-          </button>
-          <button
-            class="btn btn-primary search-btn ms-2"
-            (click)="resetsearchbar()"
-            type="submit"
-            *ngIf="showreset == true"
-          >
-            <span
-              ><i class="fa-solid fa-rotate-right form-control-feedback"></i
-            ></span>
-          </button>
-        </form>
+            <button
+              class="btn btn-primary search-btn ms-2"
+              (click)="searchfun()"
+            >
+              <span
+                ><i
+                  class="fa-solid fa-magnifying-glass form-control-feedback"
+                ></i
+              ></span>
+            </button>
+            <button
+              class="btn btn-primary search-btn ms-2"
+              (click)="resetsearchbar()"
+              type="submit"
+              *ngIf="showreset == true"
+            >
+              <span
+                ><i class="fa-solid fa-rotate-right form-control-feedback"></i
+              ></span>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
     <div class="table-responsive-sm">
       <div class="table-responsive-inner">
         <!-- Table View for lg+ -->
         <div class="d-none d-lg-block">
-          <table class="table table-bordered table-hover table-striped mb-0">
+          <table class="table table-hover mb-0">
             <thead class="table-header">
               <tr *ngFor="let detail of table_heading">
                 <th>
@@ -178,11 +197,11 @@
                 <td>
                   <p
                     [ngClass]="{
-                      'active-status': staff.status === 'Active',
-                      'deactive-status': staff.status !== 'Active',
+                      'active-status': staff.is_active == 1,
+                      'deactive-status': staff.is_active == 0,
                     }"
                   >
-                    {{ staff.status }}
+                    {{ staff.is_active == 1 ? "Active" : "Inactive" }}
                   </p>
                 </td>
                 <td>
@@ -258,11 +277,11 @@
                   <strong>Status:</strong>
                   <span
                     [ngClass]="{
-                      'active-status': staff.status === 'Active',
-                      'deactive-status': staff.status !== 'Active',
+                      'active-status': staff.is_active == 1,
+                      'deactive-status': staff.is_active == 0,
                     }"
                   >
-                    {{ staff.status }}
+                    {{ staff.is_active == 1 ? "Active" : "Inactive" }}
                   </span>
                 </div>
                 <div class="col-12 mobile_menu">
@@ -312,7 +331,7 @@
 <!-- Create Staff Modal -->
 <div
   *ngIf="staffcreateopen"
-  class="your-animation-class modal-container"
+  class="modal-container"
   aria-labelledby="modal-Staff"
   role="dialog"
   aria-modal="true"
@@ -320,58 +339,66 @@
   <div class="modal-content modal-content-75" [@fadeIn]>
     <div (click)="ClickexamModalconent($event)">
       <form [formGroup]="staffcreate">
-        <div class="card">
+        <div class="card border-0 shadow-lg">
           <div
-            class="card-header bg-white d-flex justify-content-between align-items-center"
+            class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
           >
-            <h5 class="modal-title pt-1">Create Employee</h5>
+            <div>
+              <h5 class="modal-title fw-bold text-dark mb-0">Create New Employee</h5>
+              <p class="text-muted small mb-0">Add a new staff member to the system</p>
+            </div>
             <button
-              class="btn btn-primary main-btn bg-transparent border-0 pb-0 pt-1"
+              class="btn-close-custom"
               type="button"
               (click)="closeModal()"
             >
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
-          <div class="modal-content-width card-body mb-0 pb-0">
+
+          <div class="card-body p-4 pt-2">
             <div class="row">
-              <!-- Full Name -->
+              <!-- Section 1: Personal Details -->
+              <div class="col-12">
+                <div class="modal-section-title">
+                  <i class="fa-solid fa-user-gear me-2 text-primary"></i>
+                  Personal Details
+                </div>
+              </div>
+
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Full Name</label>
+                <label class="admin-form-lable">Full Name</label>
                 <input
                   type="text"
                   class="form-control form-input-custom"
                   formControlName="name"
-                  placeholder="Enter full name"
+                  placeholder="e.g. Rahul Sharma"
                 />
               </div>
 
-              <!-- Mobile Number -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Mobile No</label>
+                <label class="admin-form-lable">Mobile No</label>
                 <input
                   type="text"
                   class="form-control form-input-custom"
                   formControlName="mobile"
                   maxlength="10"
-                  placeholder="10 digit mobile number"
+                  placeholder="10 digit number"
                 />
               </div>
 
-              <!-- Email ID -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Email ID</label>
+                <label class="admin-form-lable">Email ID</label>
                 <input
                   type="email"
                   class="form-control form-input-custom"
                   formControlName="email"
-                  placeholder="Enter email address"
+                  placeholder="name@example.com"
                 />
               </div>
 
-              <!-- Date of Birth -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Date of Birth</label>
+                <label class="admin-form-lable">Date of Birth</label>
                 <input
                   type="date"
                   class="form-control form-input-custom"
@@ -379,23 +406,27 @@
                 />
               </div>
 
-              <!-- Emergency Contact -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Emergency Contact</label
-                >
+                <label class="admin-form-lable">Emergency Contact</label>
                 <input
                   type="text"
                   class="form-control form-input-custom"
                   formControlName="emergency_contact"
                   maxlength="10"
-                  placeholder="Emergency contact number"
+                  placeholder="Secondary number"
                 />
               </div>
 
-              <!-- Joining Date -->
+              <!-- Section 2: Employment Information -->
+              <div class="col-12 mt-2">
+                <div class="modal-section-title">
+                  <i class="fa-solid fa-briefcase me-2 text-primary"></i>
+                  Employment & Location
+                </div>
+              </div>
+
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Joining Date</label>
+                <label class="admin-form-lable">Joining Date</label>
                 <input
                   type="date"
                   class="form-control form-input-custom"
@@ -403,9 +434,8 @@
                 />
               </div>
 
-              <!-- Department -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Department</label>
+                <label class="admin-form-lable">Department</label>
                 <select
                   class="form-select form-input-custom"
                   formControlName="department"
@@ -418,9 +448,8 @@
                 </select>
               </div>
 
-              <!-- Designation -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Designation</label>
+                <label class="admin-form-lable">Designation</label>
                 <select
                   class="form-select form-input-custom"
                   formControlName="designation"
@@ -432,61 +461,36 @@
                 </select>
               </div>
 
-              <!-- Employment Status -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Employment Status</label
-                >
-                <select
-                  class="form-select form-input-custom"
-                  formControlName="status"
-                >
-                  <option value="" disabled selected>Select Status</option>
-                  <option
-                    *ngFor="let stat of employmentStatuses"
-                    [value]="stat"
-                  >
-                    {{ stat }}
-                  </option>
-                </select>
-              </div>
-
-              <!-- Assigned Branch(es) -->
-              <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Assigned Branch(es)</label
-                >
+                <label class="admin-form-lable">Assigned Branch(es)</label>
                 <select
                   class="form-select form-input-custom"
                   formControlName="branches"
                   multiple
+                  style="min-height: 100px"
                 >
                   <option *ngFor="let branch of branchesList" [value]="branch">
                     {{ branch }}
                   </option>
                 </select>
-                <small class="text-muted"
-                  >Hold Ctrl to select multiple branches</small
+                <small class="text-muted fs-11 mt-1 d-block"
+                  ><i class="fa-solid fa-circle-info me-1"></i> Hold Ctrl to select multiple</small
                 >
               </div>
 
-              <!-- Address -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Address</label>
+                <label class="admin-form-lable">Address</label>
                 <textarea
                   class="form-control form-input-custom"
                   formControlName="address"
-                  rows="3"
-                  placeholder="Enter complete address"
+                  rows="4"
+                  placeholder="Enter complete residential address"
                 ></textarea>
               </div>
 
-              <!-- Profile Photo -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Profile Photo (Optional)</label
-                >
-                <div class="border rounded p-3 text-center bg-light">
+                <label class="admin-form-lable">Profile Photo (Optional)</label>
+                <div class="upload-zone rounded-3 p-3 text-center d-flex flex-column justify-content-center" style="min-height: 110px">
                   <input
                     type="file"
                     (change)="onSingleFileSelected($event)"
@@ -499,8 +503,8 @@
                     (click)="fileInput.click()"
                     class="cursor-pointer"
                   >
-                    <i class="fa-solid fa-cloud-arrow-up fs-2 text-primary"></i>
-                    <p class="mb-0">Click to upload photo</p>
+                    <i class="fa-solid fa-cloud-arrow-up fs-3 text-primary mb-1"></i>
+                    <p class="mb-0 small fw-bold">Upload Photo</p>
                   </div>
                   <div
                     *ngIf="selectedImages.length > 0"
@@ -509,33 +513,35 @@
                     <img
                       [src]="selectedImages[0].imageSrc"
                       class="img-thumbnail"
-                      style="max-height: 100px"
+                      style="max-height: 70px"
                     />
                     <button
-                      class="btn btn-danger btn-sm position-absolute top-0 start-100 translate-middle rounded-circle"
+                      class="btn btn-danger btn-sm position-absolute top-0 start-100 translate-middle rounded-circle p-0"
+                      style="width: 20px; height: 20px; line-height: 18px"
                       (click)="removeImage(0)"
                     >
-                      <i class="fa-solid fa-xmark"></i>
+                      <i class="fa-solid fa-xmark fs-11"></i>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="modal-footer text-end border-0 pt-0">
+
+          <div class="modal-footer border-0 p-4 pt-0">
             <button
-              class="btn btn-secondary px-4 py-2 me-2"
+              class="btn btn-light-custom px-4 py-2 me-2"
               type="button"
               (click)="closeModal()"
             >
               Cancel
             </button>
             <button
-              class="btn btn-custom-primary px-4 py-2"
+              class="btn btn-primary-custom px-5 py-2 shadow-sm"
               type="submit"
               (click)="Createstaff()"
             >
-              Create Employee
+              <i class="fa-solid fa-plus me-2"></i> Create Employee
             </button>
           </div>
         </div>
@@ -547,7 +553,7 @@
 <!-- Update Staff Modal -->
 <div
   *ngIf="staffupdateopen"
-  class="your-animation-class modal-container"
+  class="modal-container"
   aria-labelledby="modal-Staff"
   role="dialog"
   aria-modal="true"
@@ -555,56 +561,66 @@
   <div class="modal-content modal-content-75" [@fadeIn]>
     <div (click)="ClickexamModalconent($event)">
       <form [formGroup]="staffupdate">
-        <div class="card">
+        <div class="card border-0 shadow-lg">
           <div
-            class="card-header bg-white d-flex justify-content-between align-items-center"
+            class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
           >
-            <h5 class="modal-title pt-1">Update Employee</h5>
+            <div>
+              <h5 class="modal-title fw-bold text-dark mb-0">Update Employee</h5>
+              <p class="text-muted small mb-0">Modify details for an existing staff member</p>
+            </div>
             <button
-              class="btn btn-primary main-btn bg-transparent border-0 pb-0 pt-1 text-white"
+              class="btn-close-custom"
               type="button"
               (click)="closeModal()"
             >
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
-          <div class="modal-content-width card-body mb-0 pb-0">
-            <!-- Reuse Create Form Structure with [formGroup]="staffupdate" -->
+
+          <div class="card-body p-4 pt-2">
             <div class="row">
-              <!-- Full Name -->
+              <!-- Section 1: Personal Details -->
+              <div class="col-12">
+                <div class="modal-section-title">
+                  <i class="fa-solid fa-user-gear me-2 text-primary"></i>
+                  Personal Details
+                </div>
+              </div>
+
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Full Name</label>
+                <label class="admin-form-lable">Full Name</label>
                 <input
                   type="text"
                   class="form-control form-input-custom"
                   formControlName="name"
+                  placeholder="Enter full name"
                 />
               </div>
 
-              <!-- Mobile Number -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Mobile No</label>
+                <label class="admin-form-lable">Mobile No</label>
                 <input
                   type="text"
                   class="form-control form-input-custom"
                   formControlName="mobile"
                   maxlength="10"
+                  placeholder="10 digit number"
                 />
               </div>
 
-              <!-- Email -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Email ID</label>
+                <label class="admin-form-lable">Email ID</label>
                 <input
                   type="email"
                   class="form-control form-input-custom"
                   formControlName="email"
+                  placeholder="name@example.com"
                 />
               </div>
 
-              <!-- Date of Birth -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Date of Birth</label>
+                <label class="admin-form-lable">Date of Birth</label>
                 <input
                   type="date"
                   class="form-control form-input-custom"
@@ -612,22 +628,27 @@
                 />
               </div>
 
-              <!-- Emergency Contact -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Emergency Contact</label
-                >
+                <label class="admin-form-lable">Emergency Contact</label>
                 <input
                   type="text"
                   class="form-control form-input-custom"
                   formControlName="emergency_contact"
                   maxlength="10"
+                  placeholder="Secondary number"
                 />
               </div>
 
-              <!-- Joining Date -->
+              <!-- Section 2: Employment Information -->
+              <div class="col-12 mt-2">
+                <div class="modal-section-title">
+                  <i class="fa-solid fa-briefcase me-2 text-primary"></i>
+                  Employment & Location
+                </div>
+              </div>
+
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Joining Date</label>
+                <label class="admin-form-lable">Joining Date</label>
                 <input
                   type="date"
                   class="form-control form-input-custom"
@@ -635,9 +656,8 @@
                 />
               </div>
 
-              <!-- Department -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Department</label>
+                <label class="admin-form-lable">Department</label>
                 <select
                   class="form-select form-input-custom"
                   formControlName="department"
@@ -650,9 +670,8 @@
                 </select>
               </div>
 
-              <!-- Designation -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Designation</label>
+                <label class="admin-form-lable">Designation</label>
                 <select
                   class="form-select form-input-custom"
                   formControlName="designation"
@@ -664,57 +683,36 @@
                 </select>
               </div>
 
-              <!-- Employment Status -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Employment Status</label
-                >
-                <select
-                  class="form-select form-input-custom"
-                  formControlName="status"
-                >
-                  <option value="" disabled selected>Select Status</option>
-                  <option
-                    *ngFor="let stat of employmentStatuses"
-                    [value]="stat"
-                  >
-                    {{ stat }}
-                  </option>
-                </select>
-              </div>
-
-              <!-- Assigned Branch(es) -->
-              <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Assigned Branch(es)</label
-                >
+                <label class="admin-form-lable">Assigned Branch(es)</label>
                 <select
                   class="form-select form-input-custom"
                   formControlName="branches"
                   multiple
+                  style="min-height: 100px"
                 >
                   <option *ngFor="let branch of branchesList" [value]="branch">
                     {{ branch }}
                   </option>
                 </select>
+                <small class="text-muted fs-11 mt-1 d-block"
+                  ><i class="fa-solid fa-circle-info me-1"></i> Hold Ctrl to select multiple</small
+                >
               </div>
 
-              <!-- Address -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable">Address</label>
+                <label class="admin-form-lable">Address</label>
                 <textarea
                   class="form-control form-input-custom"
                   formControlName="address"
-                  rows="3"
+                  rows="4"
+                  placeholder="Enter complete residential address"
                 ></textarea>
               </div>
 
-              <!-- Profile Photo -->
               <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
-                  >Profile Photo (Optional)</label
-                >
-                <div class="border rounded p-3 text-center bg-light">
+                <label class="admin-form-lable">Profile Photo (Optional)</label>
+                <div class="upload-zone rounded-3 p-3 text-center d-flex flex-column justify-content-center" style="min-height: 110px">
                   <input
                     type="file"
                     (change)="onSingleFileSelected($event)"
@@ -727,8 +725,8 @@
                     (click)="fileInputUpdate.click()"
                     class="cursor-pointer"
                   >
-                    <i class="fa-solid fa-cloud-arrow-up fs-2 text-primary"></i>
-                    <p class="mb-0">Click to upload photo</p>
+                    <i class="fa-solid fa-cloud-arrow-up fs-3 text-primary mb-1"></i>
+                    <p class="mb-0 small fw-bold">Upload Photo</p>
                   </div>
                   <div
                     *ngIf="selectedImages.length > 0"
@@ -737,33 +735,35 @@
                     <img
                       [src]="selectedImages[0].imageSrc"
                       class="img-thumbnail"
-                      style="max-height: 100px"
+                      style="max-height: 70px"
                     />
                     <button
-                      class="btn btn-danger btn-sm position-absolute top-0 start-100 translate-middle rounded-circle"
+                      class="btn btn-danger btn-sm position-absolute top-0 start-100 translate-middle rounded-circle p-0"
+                      style="width: 20px; height: 20px; line-height: 18px"
                       (click)="removeImage(0)"
                     >
-                      <i class="fa-solid fa-xmark"></i>
+                      <i class="fa-solid fa-xmark fs-11"></i>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="modal-footer text-end border-0 pt-0">
+
+          <div class="modal-footer border-0 p-4 pt-0">
             <button
-              class="btn btn-secondary px-4 py-2 me-2"
+              class="btn btn-light-custom px-4 py-2 me-2"
               type="button"
               (click)="closeModal()"
             >
               Cancel
             </button>
             <button
-              class="btn btn-custom-primary px-4 py-2"
+              class="btn btn-primary-custom px-5 py-2 shadow-sm"
               type="submit"
               (click)="Updatestaff()"
             >
-              Update Employee
+              <i class="fa-solid fa-check me-2"></i> Update Employee
             </button>
           </div>
         </div>
@@ -1028,18 +1028,6 @@
 
               <div class="col-12 col-md-4 mb-3">
                 <label class="form-label admin-form-lable"
-                  >Employment Status</label
-                >
-                <input
-                  type="text"
-                  class="form-control form-input-custom"
-                  formControlName="status"
-                  readonly
-                />
-              </div>
-
-              <div class="col-12 col-md-4 mb-3">
-                <label class="form-label admin-form-lable"
                   >Assigned Branch(es)</label
                 >
                 <div class="d-flex flex-wrap gap-2 pt-2">
@@ -1052,7 +1040,7 @@
                 </div>
               </div>
 
-              <div class="col-12 col-md-4 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <label class="form-label admin-form-lable">Address</label>
                 <textarea
                   class="form-control form-input-custom"
@@ -1063,7 +1051,7 @@
               </div>
 
               <!-- Profile Photo View -->
-              <div class="col-12 col-md-4 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <label class="form-label admin-form-lable">Profile Photo</label>
                 <div class="text-center pt-2">
                   <img

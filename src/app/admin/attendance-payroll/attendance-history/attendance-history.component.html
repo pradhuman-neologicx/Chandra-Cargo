@@ -132,17 +132,17 @@
         </div>
       </div>
 
-      <!-- Status -->
+      <!-- Branch -->
       <div class="filter-item">
         <div class="filter-select-wrapper">
           <select
             class="form-select filter-select"
-            (change)="onStatusFilterChange($event)"
+            (change)="onBranchFilterChange($event)"
           >
-            <option value="">Status: All</option>
-            <option value="On Time">On Time</option>
-            <option value="Late">Late</option>
-            <option value="Absent">Absent</option>
+            <option value="">Branch: All</option>
+            <option *ngFor="let branch of branchList" [value]="branch">
+              {{ branch }}
+            </option>
           </select>
         </div>
       </div>

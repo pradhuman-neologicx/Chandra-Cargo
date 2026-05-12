@@ -11,230 +11,143 @@ export class JwtService {
   // admin panel
 
   getisLoggedIn(): boolean {
-    return window.localStorage['isloggedIn'];
+    return window.localStorage['cargo_isloggedIn'];
   }
   isLoggedIn(isloggedIn: boolean) {
-    window.localStorage['isloggedIn'] =
+    window.localStorage['cargo_isloggedIn'] =
       isloggedIn != undefined ? isloggedIn : false;
   }
 
   getLoginAs(): number {
-    return window.localStorage['LoginAs'];
+    return window.localStorage['cargo_LoginAs'];
   }
 
   saveLoginAs(LoginAs: number) {
-    window.localStorage['LoginAs'] = LoginAs;
+    window.localStorage['cargo_LoginAs'] = LoginAs;
   }
 
   saveRoles(roles: any) {
-    localStorage.setItem('roles', JSON.stringify(roles));
+    localStorage.setItem('cargo_roles', JSON.stringify(roles));
   }
 
   getRoles() {
-    return JSON.parse(localStorage.getItem('roles') || '[]');
+    return JSON.parse(localStorage.getItem('cargo_roles') || '[]');
   }
 
   getfirstLoggedIn(): boolean {
-    return window.localStorage['isfirstlogin'];
+    return window.localStorage['cargo_isfirstlogin'];
   }
   firstLoggedIn(isfirstlogin: boolean) {
-    window.localStorage['isfirstlogin'] =
+    window.localStorage['cargo_isfirstlogin'] =
       isfirstlogin != undefined ? isfirstlogin : false;
   }
 
   getSession(): string {
-    return window.localStorage['Session'];
+    return window.localStorage['cargo_Session'];
   }
 
   saveSession(Session: string) {
-    window.localStorage['Session'] = Session;
+    window.localStorage['cargo_Session'] = Session;
   }
   getName(): string {
-    return window.localStorage['name'];
+    return window.localStorage['cargo_name'];
   }
 
   saveName(name: string) {
-    window.localStorage['name'] = name;
+    window.localStorage['cargo_name'] = name;
   }
 
   getSessionStartdate(): string {
-    return window.localStorage['Sessionstartdate'];
+    return window.localStorage['cargo_Sessionstartdate'];
   }
 
   saveSessionStartdate(Session: string) {
-    window.localStorage['Sessionstartdate'] = Session;
+    window.localStorage['cargo_Sessionstartdate'] = Session;
   }
 
   getSessionEnddate(): string {
-    return window.localStorage['SessionEnddate'];
+    return window.localStorage['cargo_SessionEnddate'];
   }
 
   saveSessionEnddate(Session: string) {
-    window.localStorage['SessionEnddate'] = Session;
+    window.localStorage['cargo_SessionEnddate'] = Session;
   }
 
   getpanelUserId(): Number {
-    return window.localStorage['panel_user_id'];
+    return window.localStorage['cargo_panel_user_id'];
   }
 
   savepanelUserId(userid: any) {
-    window.localStorage['panel_user_id'] = userid;
+    window.localStorage['cargo_panel_user_id'] = userid;
   }
   getadminame(): String {
-    return window.localStorage['adminname'];
+    return window.localStorage['cargo_adminname'];
   }
 
   saveadminame(adminname: string) {
-    window.localStorage['adminname'] = adminname;
+    window.localStorage['cargo_adminname'] = adminname;
   }
 
   saveAdminToken(Token: String) {
-    window.localStorage['Token'] = Token;
+    window.localStorage['cargo_Token'] = Token;
   }
   saveAdminRole(Role: String) {
-    window.localStorage['Role'] = Role;
+    window.localStorage['cargo_Role'] = Role;
   }
   getadmiRole(): String {
-    return window.localStorage['Role'];
+    return window.localStorage['cargo_Role'];
   }
   getpanelPartyId(): Number {
-    return window.localStorage['Party_id'];
+    return window.localStorage['cargo_Party_id'];
   }
 
   savePartyId(Party_id: Number) {
-    window.localStorage['Party_id'] = Party_id;
+    window.localStorage['cargo_Party_id'] = Party_id;
   }
 
   getType(): String {
-    return window.localStorage['Type'];
+    return window.localStorage['cargo_Type'];
   }
 
   saveType(Type: String) {
-    window.localStorage['Type'] = Type;
+    window.localStorage['cargo_Type'] = Type;
   }
 
   getToken(): String {
-    return window.localStorage['Token'];
+    return window.localStorage['cargo_Token'];
   }
 
   saveToken(Token: String) {
-    window.localStorage['Token'] = Token;
+    window.localStorage['cargo_Token'] = Token;
   }
 
   // Profile Image of
   getImageUrl(): String {
-    return window.localStorage['ImageUrl'];
+    return window.localStorage['cargo_ImageUrl'];
   }
 
   saveImageUrl(ImageUrl: String) {
-    window.localStorage['ImageUrl'] = ImageUrl;
+    window.localStorage['cargo_ImageUrl'] = ImageUrl;
   }
 
   getUserId(): String {
-    return window.localStorage['user_id'];
+    return window.localStorage['cargo_user_id'];
   }
 
   saveUserId(user_id: String) {
-    window.localStorage['user_id'] = user_id;
-  }
-
-  // student panel
-  getstudentLoggedIn(): boolean {
-    return window.localStorage['isloggedStudent'];
-  }
-  isstudentLoggedIn(isloggedStudent: boolean) {
-    window.localStorage['isloggedStudent'] =
-      isloggedStudent != undefined ? isloggedStudent : false;
-  }
-
-  getSessionStartdateStudent(): string {
-    return window.localStorage['SessionstartdateStudent'];
-  }
-
-  saveSessionStartdateStudent(Session: string) {
-    window.localStorage['SessionstartdateStudent'] = Session;
-  }
-
-  getSessionEnddateStudent(): string {
-    return window.localStorage['SessionEnddateStudent'];
-  }
-
-  saveSessionEnddateStudent(Session: string) {
-    window.localStorage['SessionEnddateStudent'] = Session;
-  }
-
-  getSessionStudent(): string {
-    return window.localStorage['SessionStudent'];
-  }
-
-  saveSessionStudent(Session: string) {
-    window.localStorage['SessionStudent'] = Session;
-  }
-
-  getpanelUserIdStudent(): String {
-    return window.localStorage['panel_user_idStudent'];
-  }
-
-  savepanelUserIdStudent(userid: String) {
-    window.localStorage['panel_user_idStudent'] = userid;
-  }
-
-  getTokenStudent(): String {
-    return window.localStorage['TokenStudent'];
-  }
-
-  saveTokenStudent(Token: String) {
-    window.localStorage['TokenStudent'] = Token;
-  }
-
-  // Profile Image of
-  getImageUrlStudent(): String {
-    return window.localStorage['ImageUrlStudent'];
-  }
-
-  saveImageUrlStudent(ImageUrl: String) {
-    window.localStorage['ImageUrlStudent'] = ImageUrl;
-  }
-
-  getUserIdStudent(): String {
-    return window.localStorage['user_idStudent'];
-  }
-
-  saveUserIdStudent(user_id: String) {
-    window.localStorage['user_idStudent'] = user_id;
-  }
-
-  getLoginAsStudent(): number {
-    return window.localStorage['LoginAsStudent'];
-  }
-
-  saveLoginAsStudent(LoginAs: number) {
-    window.localStorage['LoginAsStudent'] = LoginAs;
+    window.localStorage['cargo_user_id'] = user_id;
   }
 
   ///call on logout
   clearStorage() {
-    window.localStorage.removeItem('isloggedIn');
-    window.localStorage.removeItem('panel_user_id');
+    window.localStorage.removeItem('cargo_isloggedIn');
+    window.localStorage.removeItem('cargo_panel_user_id');
 
-    window.localStorage.removeItem('Token');
-    window.localStorage.removeItem('Role');
-    window.localStorage.removeItem('adminname');
-    window.localStorage.removeItem('isfirstlogin');
+    window.localStorage.removeItem('cargo_Token');
+    window.localStorage.removeItem('cargo_Role');
+    window.localStorage.removeItem('cargo_adminname');
+    window.localStorage.removeItem('cargo_isfirstlogin');
 
     // window.localStorage.removeItem("isloggedStudent");
-  }
-
-  clearStorageStudent() {
-    window.localStorage.removeItem('isloggedStudent');
-    window.localStorage.removeItem('user_idStudent');
-    window.localStorage.removeItem('panel_user_idStudent');
-    window.localStorage.removeItem('LoginAsStudent');
-
-    window.localStorage.removeItem('TokenStudent');
-    window.localStorage.removeItem('SessionStudent');
-    window.localStorage.removeItem('ImageUrlStudent');
-    window.localStorage.removeItem('SessionstartdateStudent');
-    window.localStorage.removeItem('SessionEnddateStudent');
   }
 }

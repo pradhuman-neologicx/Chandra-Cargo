@@ -33,7 +33,6 @@ interface Staff {
   dob?: string;
   emergency_contact?: string;
   joining_date?: string;
-  status: string;
   branches: string[];
   department: string;
   designation: string;
@@ -129,7 +128,6 @@ export class StaffComponent implements OnInit {
   selectedUploadFileName: string = '';
 
   // Mock Data
-  employmentStatuses = ['Active', 'Probation', 'Notice Period', 'Terminated'];
   branchesList = ['Jaipur', 'Delhi', 'Mumbai', 'Ahmedabad', 'Pune'];
   designationsList = ['Manager', 'Supervisor', 'Clerk', 'Driver', 'Loader'];
 
@@ -143,7 +141,6 @@ export class StaffComponent implements OnInit {
       dob: '1995-05-15',
       emergency_contact: '9988776655',
       joining_date: '2023-01-10',
-      status: 'Active',
       branches: ['Jaipur'],
       department: 'Operations',
       designation: 'Manager',
@@ -158,7 +155,6 @@ export class StaffComponent implements OnInit {
       dob: '1992-08-20',
       emergency_contact: '7766554433',
       joining_date: '2023-02-15',
-      status: 'Active',
       branches: ['Delhi', 'Jaipur'],
       department: 'Logistics',
       designation: 'Supervisor',
@@ -173,7 +169,6 @@ export class StaffComponent implements OnInit {
       dob: '1994-03-12',
       emergency_contact: '9988112233',
       joining_date: '2023-03-01',
-      status: 'Active',
       branches: ['Mumbai'],
       department: 'Accounts',
       designation: 'Clerk',
@@ -188,7 +183,6 @@ export class StaffComponent implements OnInit {
       dob: '1988-11-30',
       emergency_contact: '8877112233',
       joining_date: '2022-12-20',
-      status: 'Active',
       branches: ['Ahmedabad'],
       department: 'Operations',
       designation: 'Supervisor',
@@ -203,7 +197,6 @@ export class StaffComponent implements OnInit {
       dob: '1996-07-25',
       emergency_contact: '7711223344',
       joining_date: '2023-05-10',
-      status: 'Probation',
       branches: ['Pune'],
       department: 'HR',
       designation: 'Manager',
@@ -218,7 +211,6 @@ export class StaffComponent implements OnInit {
       dob: '1990-01-05',
       emergency_contact: '6611223344',
       joining_date: '2023-01-20',
-      status: 'Active',
       branches: ['Jaipur'],
       department: 'Logistics',
       designation: 'Driver',
@@ -233,7 +225,6 @@ export class StaffComponent implements OnInit {
       dob: '1993-09-18',
       emergency_contact: '5511223344',
       joining_date: '2023-04-15',
-      status: 'Active',
       branches: ['Delhi'],
       department: 'Accounts',
       designation: 'Manager',
@@ -248,7 +239,6 @@ export class StaffComponent implements OnInit {
       dob: '1991-06-14',
       emergency_contact: '4411223344',
       joining_date: '2023-02-10',
-      status: 'Active',
       branches: ['Mumbai'],
       department: 'Operations',
       designation: 'Loader',
@@ -263,7 +253,6 @@ export class StaffComponent implements OnInit {
       dob: '1995-12-22',
       emergency_contact: '3311223344',
       joining_date: '2023-06-01',
-      status: 'Probation',
       branches: ['Ahmedabad'],
       department: 'HR',
       designation: 'Supervisor',
@@ -278,7 +267,6 @@ export class StaffComponent implements OnInit {
       dob: '1992-04-30',
       emergency_contact: '2211223344',
       joining_date: '2023-03-15',
-      status: 'Active',
       branches: ['Pune'],
       department: 'Logistics',
       designation: 'Clerk',
@@ -293,7 +281,6 @@ export class StaffComponent implements OnInit {
       dob: '1989-08-10',
       emergency_contact: '1111223344',
       joining_date: '2022-11-01',
-      status: 'Notice Period',
       branches: ['Jaipur'],
       department: 'Operations',
       designation: 'Manager',
@@ -308,7 +295,6 @@ export class StaffComponent implements OnInit {
       dob: '1994-10-05',
       emergency_contact: '9900112233',
       joining_date: '2023-07-01',
-      status: 'Active',
       branches: ['Delhi'],
       department: 'Accounts',
       designation: 'Supervisor',
@@ -345,7 +331,6 @@ export class StaffComponent implements OnInit {
       branches: [[], [Validators.required]],
       department: ['', [Validators.required]],
       designation: ['', [Validators.required]],
-      status: ['', [Validators.required]],
     });
     this.staffupdate = this.formBuilder.group({
       image: [''],
@@ -359,7 +344,6 @@ export class StaffComponent implements OnInit {
         [Validators.required, Validators.pattern('^[0-9]{10}$')],
       ],
       joining_date: ['', [Validators.required]],
-      status: ['', [Validators.required]],
       branches: [[], [Validators.required]],
       department: ['', [Validators.required]],
       designation: ['', [Validators.required]],
@@ -373,7 +357,6 @@ export class StaffComponent implements OnInit {
       dob: [''],
       emergency_contact: [''],
       joining_date: [''],
-      status: [''],
       branches: [[]],
       department: [''],
       designation: [''],
@@ -407,6 +390,12 @@ export class StaffComponent implements OnInit {
       );
     }
 
+    if (this.selectedBranch) {
+      filteredData = filteredData.filter((s) =>
+        s.branches.includes(this.selectedBranch as string),
+      );
+    }
+
     this.staffTable = filteredData;
     this.totalRecords = filteredData.length;
   }
@@ -426,8 +415,17 @@ export class StaffComponent implements OnInit {
   selectedDepartment: string | undefined;
   onDepartmentFilterChange(event: any): void {
     this.selectedDepartment = event.target.value || undefined;
+    if (this.selectedDepartment === 'all') this.selectedDepartment = undefined;
     this.page = 1;
     this.GetStaffByDepartment();
+  }
+
+  selectedBranch: string | undefined;
+  onBranchFilterChange(event: any): void {
+    this.selectedBranch = event.target.value || undefined;
+    if (this.selectedBranch === 'all') this.selectedBranch = undefined;
+    this.page = 1;
+    this.GetStaff();
   }
 
   onDepartmentChange(event: Event) {
@@ -811,7 +809,6 @@ export class StaffComponent implements OnInit {
       dob: staff.dob,
       emergency_contact: staff.emergency_contact,
       joining_date: staff.joining_date,
-      status: staff.status,
       branches: staff.branches,
       department: staff.department,
       designation: staff.designation,
@@ -837,7 +834,6 @@ export class StaffComponent implements OnInit {
       dob: staff.dob,
       emergency_contact: staff.emergency_contact,
       joining_date: staff.joining_date,
-      status: staff.status,
       branches: staff.branches,
       department: staff.department,
       designation: staff.designation,
@@ -1012,7 +1008,6 @@ export class StaffComponent implements OnInit {
     const index = this.mockStaffData.findIndex((s) => s.id === id);
     if (index !== -1) {
       this.mockStaffData[index].is_active = status;
-      this.mockStaffData[index].status = status ? 'Active' : 'Deactive';
       this.GetStaff();
       this.successName = status ? 'Activated' : 'Deactivated';
       this.openSecondsuccess = true;
@@ -1105,9 +1100,9 @@ export class StaffComponent implements OnInit {
   }
   downloadSampleFile() {
     const headers =
-      'Name,Email,Mobile,Address,DOB,EmergencyContact,JoiningDate,Department,Designation,Status\n';
+      'Name,Email,Mobile,Address,DOB,EmergencyContact,JoiningDate,Department,Designation\n';
     const sampleData =
-      'John Doe,john@example.com,9876543210,Sample Address,1990-01-01,9988776655,2023-01-01,Operations,Manager,Active';
+      'John Doe,john@example.com,9876543210,Sample Address,1990-01-01,9988776655,2023-01-01,Operations,Manager';
     const blob = new Blob([headers + sampleData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');

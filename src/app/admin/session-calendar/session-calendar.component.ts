@@ -9,6 +9,7 @@ interface CalendarDay {
   isToday: boolean;
   isHoliday: boolean;
   isSunday: boolean;
+  isSaturday: boolean;
   isPast: boolean;
   holidayName?: string;
 }
@@ -39,8 +40,67 @@ export class SessionCalendarComponent implements OnInit {
   
   holidays: { [key: string]: string } = {}; // Format: 'YYYY-MM-DD': 'Holiday Name'
 
+  get holidayList() {
+    return Object.keys(this.holidays)
+      .map((date) => ({ date, name: this.holidays[date] }))
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .filter(h => {
+        const d = new Date(h.date);
+        return d.getFullYear() === this.currentDate.getFullYear() && d.getMonth() === this.currentDate.getMonth();
+      });
+  }
+
+  getMonthShort(dateStr: string) {
+    const d = new Date(dateStr);
+    return d.toLocaleString('default', { month: 'short' });
+  }
+
+  getDay(dateStr: string) {
+    const d = new Date(dateStr);
+    return d.getDate();
+  }
+
+  getFullDate(dateStr: string) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('default', { weekday: 'long', year: 'numeric' });
+  }
+
+  removeHoliday(date: string, event: Event) {
+    event.stopPropagation();
+    if (this.canDeleteHoliday(date)) {
+      this.holidayToDelete = date;
+      this.showDeleteConfirmModal = true;
+    }
+  }
+
+  confirmDelete() {
+    if (this.holidayToDelete) {
+      delete this.holidays[this.holidayToDelete];
+      this.generateCalendar();
+      this.cancelDelete();
+    }
+  }
+
+  cancelDelete() {
+    this.showDeleteConfirmModal = false;
+    this.holidayToDelete = null;
+  }
+
+  canDeleteHoliday(dateStr: string): boolean {
+    const todayStr = this.formatDate(new Date());
+    // Only allow deletion for dates strictly after today
+    return dateStr > todayStr;
+  }
+
   // Modal State
   showHolidayModal: boolean = false;
+  showConfigModal: boolean = false;
+  showBulkUploadModal: boolean = false;
+  showDeleteConfirmModal: boolean = false;
+  holidayToDelete: string | null = null;
+  isDragging: boolean = false;
+  selectedFile: File | null = null;
+  workingDays: number = 0; // 5 or 6
   modalDate: string = '';
   modalHolidayName: string = '';
   isEditing: boolean = false;
@@ -48,6 +108,12 @@ export class SessionCalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.minDate = this.formatDate(new Date());
+    const storedConfig = localStorage.getItem('workingDays');
+    if (storedConfig) {
+      this.workingDays = parseInt(storedConfig);
+    } else {
+      this.showConfigModal = true;
+    }
     this.generateCalendar();
   }
 
@@ -83,30 +149,26 @@ export class SessionCalendarComponent implements OnInit {
       this.days.push(this.createDayObject(date, false));
     }
 
-    this.autoMarkSundays();
+    this.autoMarkNonWorkingDays();
   }
 
-  autoMarkSundays(): void {
-    const year = this.currentDate.getFullYear();
-    const month = this.currentDate.getMonth();
-    const lastDay = new Date(year, month + 1, 0).getDate();
+  autoMarkNonWorkingDays(): void {
+    if (this.workingDays === 0) return;
 
-    for (let i = 1; i <= lastDay; i++) {
-      const date = new Date(year, month, i);
-      if (date.getDay() === 0) {
-        const dateStr = this.formatDate(date);
-        if (!this.holidays[dateStr]) {
-          this.holidays[dateStr] = 'Sunday Holiday';
-        }
-      }
-    }
-    
-    // We need to re-assign days to reflect holiday status in createDayObject
-    // or just update the days array.
     this.days = this.days.map(day => {
-      if (day.isSunday && day.isCurrentMonth && !day.isHoliday) {
-        day.isHoliday = true;
-        day.holidayName = 'Sunday Holiday';
+      const dayOfWeek = day.date.getDay();
+      const isSunday = dayOfWeek === 0;
+      const isSaturday = dayOfWeek === 6;
+
+      if (day.isCurrentMonth) {
+        if (isSunday || (this.workingDays === 5 && isSaturday)) {
+          const dateStr = this.formatDate(day.date);
+          if (!this.holidays[dateStr]) {
+            day.isHoliday = true;
+            day.holidayName = isSunday ? 'Sunday Holiday' : 'Saturday Holiday';
+            this.holidays[dateStr] = day.holidayName;
+          }
+        }
       }
       return day;
     });
@@ -125,6 +187,7 @@ export class SessionCalendarComponent implements OnInit {
       isCurrentMonth: isCurrentMonth,
       isToday: date.toDateString() === today.toDateString(),
       isSunday: date.getDay() === 0,
+      isSaturday: date.getDay() === 6,
       isPast: checkDate < today,
       isHoliday: !!this.holidays[dateStr],
       holidayName: this.holidays[dateStr]
@@ -153,21 +216,23 @@ export class SessionCalendarComponent implements OnInit {
     this.generateCalendar();
   }
 
-  markAllSundaysAsHoliday(): void {
-    const year = this.currentDate.getFullYear();
-    const month = this.currentDate.getMonth();
-    const lastDay = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 1; i <= lastDay; i++) {
-      const date = new Date(year, month, i);
-      if (date.getDay() === 0) {
-        const dateStr = this.formatDate(date);
-        if (!this.holidays[dateStr]) {
-          this.holidays[dateStr] = 'Sunday Holiday';
-        }
+  configureWorkingDays(days: number): void {
+    this.workingDays = days;
+    localStorage.setItem('workingDays', days.toString());
+    this.showConfigModal = false;
+    
+    // Clear previously auto-marked weekend holidays to re-apply based on new config
+    Object.keys(this.holidays).forEach(key => {
+      if (this.holidays[key] === 'Sunday Holiday' || this.holidays[key] === 'Saturday Holiday') {
+        delete this.holidays[key];
       }
-    }
+    });
+
     this.generateCalendar();
+  }
+
+  openConfigModal(): void {
+    this.showConfigModal = true;
   }
 
   addHoliday(): void {
@@ -183,8 +248,9 @@ export class SessionCalendarComponent implements OnInit {
   }
 
   saveHoliday(): void {
-    if (this.modalHolidayName && this.modalDate) {
-      this.holidays[this.modalDate] = this.modalHolidayName;
+    if (this.modalDate) {
+      // Use 'Holiday' as default name since we removed the input field
+      this.holidays[this.modalDate] = this.holidays[this.modalDate] || 'Holiday';
       this.generateCalendar();
       this.closeModal();
     }
@@ -210,5 +276,61 @@ export class SessionCalendarComponent implements OnInit {
       this.modalHolidayName = '';
     }
     this.showHolidayModal = true;
+  }
+
+  bulkUpload(): void {
+    this.showBulkUploadModal = true;
+  }
+
+  closeBulkModal(): void {
+    this.showBulkUploadModal = false;
+    this.selectedFile = null;
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+  }
+
+  onFileDropped(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+    
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.selectedFile = files[0];
+    }
+  }
+
+  onFileSelected(event: any): void {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      this.selectedFile = files[0];
+    }
+  }
+
+  removeFile(): void {
+    this.selectedFile = null;
+  }
+
+  processBulkUpload(): void {
+    if (this.selectedFile) {
+      console.log('Processing file:', this.selectedFile.name);
+      // Mock processing logic
+      this.closeBulkModal();
+    }
+  }
+
+  downloadSample(): void {
+    console.log('Downloading sample template...');
+    // Logic to download Excel/CSV template
   }
 }

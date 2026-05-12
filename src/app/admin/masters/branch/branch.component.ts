@@ -101,76 +101,54 @@ export class BranchComponent implements OnInit {
   updateBranchOpen: boolean = false;
   viewBranchOpen: boolean = false;
   currentBranchId: any;
+  states: any[] = [];
+  cities: any[] = [];
+  filteredCities: any[] = [];
 
   mockBranches: any[] = [
     {
       id: '1',
       name: 'Jaipur Main Office',
-      code: 'JPR-01',
+      state: 'Rajasthan',
+      state_id: '1',
       city: 'Jaipur',
+      city_id: '101',
       is_active: 1,
     },
     {
       id: '2',
       name: 'Delhi Hub',
-      code: 'DEL-01',
+      state: 'Delhi',
+      state_id: '2',
       city: 'New Delhi',
+      city_id: '102',
       is_active: 1,
     },
     {
       id: '3',
       name: 'Mumbai Warehouse',
-      code: 'BUM-02',
+      state: 'Maharashtra',
+      state_id: '3',
       city: 'Mumbai',
+      city_id: '103',
       is_active: 0,
     },
     {
       id: '4',
       name: 'Ahmedabad Station',
-      code: 'AMD-05',
+      state: 'Gujarat',
+      state_id: '4',
       city: 'Ahmedabad',
+      city_id: '104',
       is_active: 1,
     },
     {
       id: '5',
       name: 'Pune Logistics Center',
-      code: 'PNE-03',
+      state: 'Maharashtra',
+      state_id: '3',
       city: 'Pune',
-      is_active: 1,
-    },
-    {
-      id: '6',
-      name: 'Gurgaon Branch',
-      code: 'GGN-01',
-      city: 'Gurgaon',
-      is_active: 1,
-    },
-    {
-      id: '7',
-      name: 'Bangalore North',
-      code: 'BLR-01',
-      city: 'Bangalore',
-      is_active: 1,
-    },
-    {
-      id: '8',
-      name: 'Kolkata East',
-      code: 'KOL-02',
-      city: 'Kolkata',
-      is_active: 0,
-    },
-    {
-      id: '9',
-      name: 'Chennai South',
-      code: 'CHN-04',
-      city: 'Chennai',
-      is_active: 1,
-    },
-    {
-      id: '10',
-      name: 'Hyderabad Main',
-      code: 'HYD-01',
-      city: 'Hyderabad',
+      city_id: '105',
       is_active: 1,
     },
   ];
@@ -189,22 +167,45 @@ export class BranchComponent implements OnInit {
 
     this.createBranchForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      code: ['', [Validators.required]],
+      state: ['', [Validators.required]],
       city: ['', [Validators.required]],
     });
 
     this.updateBranchForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      code: ['', [Validators.required]],
+      state: ['', [Validators.required]],
       city: ['', [Validators.required]],
     });
 
     this.viewBranchForm = this.formBuilder.group({
       name: [''],
-      code: [''],
+      state: [''],
       city: [''],
     });
     this.GetBranchFun();
+    this.getAllStates();
+  }
+
+  getAllStates() {
+    this.employeeService.GetState().subscribe((res: any) => {
+      this.states = res.data;
+    });
+  }
+
+  onStateChange(event: any, mode: string) {
+    const stateId = event.target.value;
+    if (stateId) {
+      this.employeeService.getCity(stateId).subscribe((res: any) => {
+        this.filteredCities = res.data;
+        if (mode === 'create') {
+          this.createBranchForm.get('city')?.setValue('');
+        } else if (mode === 'update') {
+          this.updateBranchForm.get('city')?.setValue('');
+        }
+      });
+    } else {
+      this.filteredCities = [];
+    }
   }
 
   branchList: any;
@@ -212,7 +213,7 @@ export class BranchComponent implements OnInit {
     {
       heading0: 'Serial No.',
       heading1: 'Branch Name',
-      heading2: 'Code',
+      heading2: 'State',
       heading3: 'City',
       heading4: 'Status',
       heading5: 'Action',
@@ -229,8 +230,8 @@ export class BranchComponent implements OnInit {
       filteredData = this.mockBranches.filter(
         (d) =>
           d.name.toLowerCase().includes(searchText) ||
-          d.code.toLowerCase().includes(searchText) ||
-          d.city.toLowerCase().includes(searchText),
+          d.city.toLowerCase().includes(searchText) ||
+          d.state.toLowerCase().includes(searchText),
       );
     }
 
@@ -287,11 +288,16 @@ export class BranchComponent implements OnInit {
     if (this.createBranchForm.valid) {
       const formValue = this.createBranchForm.value;
       const newId = (this.mockBranches.length + 1).toString();
+      const selectedState = this.states.find(s => s.id == formValue.state);
+      const selectedCity = this.filteredCities.find(c => c.id == formValue.city);
+      
       this.mockBranches.unshift({
         id: newId,
         name: formValue.name,
-        code: formValue.code,
-        city: formValue.city,
+        state: selectedState ? selectedState.name : '',
+        state_id: formValue.state,
+        city: selectedCity ? selectedCity.name : '',
+        city_id: formValue.city,
         is_active: 1,
       });
       this.closeModal();
@@ -309,11 +315,24 @@ export class BranchComponent implements OnInit {
   OpenEditModal(branch: any): void {
     this.currentBranchId = branch.id;
     this.updateBranchOpen = true;
-    this.updateBranchForm.patchValue({
-      name: branch.name,
-      code: branch.code,
-      city: branch.city,
-    });
+    
+    // Fetch cities for the branch's state before patching
+    if (branch.state_id) {
+      this.employeeService.getCity(branch.state_id).subscribe((res: any) => {
+        this.filteredCities = res.data;
+        this.updateBranchForm.patchValue({
+          name: branch.name,
+          state: branch.state_id,
+          city: branch.city_id,
+        });
+      });
+    } else {
+      this.updateBranchForm.patchValue({
+        name: branch.name,
+        state: branch.state, // Fallback if state_id not available
+        city: branch.city,
+      });
+    }
   }
 
   updateBranch() {
@@ -323,11 +342,16 @@ export class BranchComponent implements OnInit {
         (d) => d.id === this.currentBranchId,
       );
       if (index !== -1) {
+        const selectedState = this.states.find(s => s.id == formValue.state);
+        const selectedCity = this.filteredCities.find(c => c.id == formValue.city);
+
         this.mockBranches[index] = {
           ...this.mockBranches[index],
           name: formValue.name,
-          code: formValue.code,
-          city: formValue.city,
+          state: selectedState ? selectedState.name : (formValue.state || this.mockBranches[index].state),
+          state_id: formValue.state,
+          city: selectedCity ? selectedCity.name : (formValue.city || this.mockBranches[index].city),
+          city_id: formValue.city,
         };
         this.closeModal();
         this.notificationService.show(
@@ -346,7 +370,7 @@ export class BranchComponent implements OnInit {
     this.viewBranchOpen = true;
     this.viewBranchForm.patchValue({
       name: branch.name,
-      code: branch.code,
+      state: branch.state,
       city: branch.city,
     });
   }
